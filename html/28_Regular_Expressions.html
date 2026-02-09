@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>28 Regular Expressions - ABAP Cheat Sheet</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #95a5a6;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4, h5, h6 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+<p>&lt;a name=&quot;top&quot;&gt;&lt;/a&gt;</p>
+<h1>Regular Expressions in ABAP</h1>
+<ul>
+<li><a href="#regular-expressions-in-abap">Regular Expressions in ABAP</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#excursion-common-regular-expressions">Excursion: Common Regular Expressions</a></li>
+<li><a href="#characters-and-character-types">Characters and Character Types</a></li>
+<li><a href="#escaped-characters-and-special-variants">Escaped Characters and Special Variants</a></li>
+<li><a href="#quantifiers-repetitions-and-alternatives">Quantifiers, Repetitions and Alternatives</a></li>
+<li><a href="#character-sets-and-ranges">Character Sets and Ranges</a></li>
+<li><a href="#anchors-and-positions">Anchors and Positions</a></li>
+<li><a href="#capturing-groups-replacements-and-backreferences">Capturing Groups, Replacements and Backreferences</a></li>
+<li><a href="#lookarounds">Lookarounds</a></li>
+<li><a href="#case-conversions-in-replacement-patterns">Case Conversions in Replacement Patterns</a></li>
+<li><a href="#setting-options-and-control-verbs">Setting Options and Control Verbs</a></li>
+<li><a href="#callouts">Callouts</a></li>
+<li><a href="#conditional-patterns">Conditional Patterns</a></li>
+<li><a href="#abap-statements-using-regular-expressions">ABAP Statements Using Regular Expressions</a></li>
+<li><a href="#built-in-functions-in-abap-using-regular-expressions">Built-In Functions in ABAP Using Regular Expressions</a></li>
+<li><a href="#built-in-functions-in-abap-sql-and-cds-using-regular-expressions">Built-In Functions in ABAP SQL and CDS Using Regular Expressions</a></li>
+<li><a href="#system-classes-for-regular-expressions-cl_abap_regex-and-cl_abap_matcher">System Classes for Regular Expressions: CL\_ABAP\_REGEX and CL\_ABAP\_MATCHER</a></li>
+<li><a href="#executable-example">Executable Example</a></li>
+</ul>
+<h2>Introduction</h2>
+<p>Regular expressions</p>
+<ul>
+<li>Often abbreviated as regex</li>
+<li>Define a pattern of literal and special characters that describe a set of character strings</li>
+<li>Find one or more occurrences of the character strings defined by the expression</li>
+<li>Offer a powerful way to perform complex searching, replacing, and matching</li>
+<li>Can be used in ABAP in the following contexts (with a focus on PCRE):</li>
+<li><code>FIND</code> and <code>REPLACE</code> statements (with the <code>PCRE</code> addition)</li>
+<li>Built-in functions in ABAP with the <code>pcre</code> parameter, such as <code>find</code>, <code>find_end</code>, <code>count</code>, <code>match</code>, <code>matches</code>, <code>replace</code>, <code>contains</code>, <code>substring_from</code>, <code>substring_after</code>, <code>substring_before</code>, <code>substring_to</code></li>
+<li>Built-in functions in ABAP SQL and CDS (e.g. <code>like_regexpr</code>, <code>locate_regexpr</code>, <code>locate_regexpr_after</code>, <code>occurrences_regexpr</code>, <code>replace_regexpr</code>, <code>substring_regexpr</code> in ABAP SQL)</li>
+<li><code>CL_ABAP_REGEX</code> and <code>CL_ABAP_MATCHER</code> classes (note that you can also use objects of <code>CL_ABAP_REGEX</code> in <code>FIND</code> and <code>REPLACE</code> statements)</li>
+<li>Are supported in ABAP with the following syntaxes:</li>
+<li>Perl Compatible Regular Expressions (PCRE)</li>
+<li>ABAP supports PCRE syntax via the PCRE2 library in the ABAP kernel, and ABAP SQL supports PCRE by using the PCRE1 library in the SAP HANA database.</li>
+<li>XPath</li>
+<li>XSD</li>
+<li>XPath and XSD regular expressions are internally and automatically converted into PCRE syntax.</li>
+<li>The syntax of regular expressions is generally standardized but varies with different syntax flavors.</li>
+<li>POSIX</li>
+<li>Obsolete; <code>REGEX</code> and <code>regex</code> are obsolete additions/parameters</li>
+<li>PCRE regular expressions perform better</li>
+<li>A syntax warning for POSIX can be hidden with the pragma <code>##regex_posix</code></li>
+</ul>
+<div class="note">[!NOTE] - You can perform complex searches using regular expressions. For simple pattern-based searches, refer to comparison operators (`CP`, `NP`) in the [String Processing](07_String_Processing.md) cheat sheets. - The cheat sheet and examples focus on PCRE regular expressions. For other syntax types, find more information and links in the [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENREGEX_SYNTAX.html). - In a system supporting [classic ABAP](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclassic_abap_glosry.htm), you can check out the `demo_regex_toy` program for experimenting with regular expressions in ABAP.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Excursion: Common Regular Expressions</h2>
+<div class="note">[!NOTE] - The sections below provide an overview of common PCRE expressions with examples. This is not a comprehensive overview; only selected regular expressions are included. - For a complete guide to PCRE syntax, refer to the [official documentation](https://perldoc.perl.org/perlre). Note that ABAP-specific restrictions or modifications may apply to the standard syntax. - The code snippets use `replace` functions to show the effects of PCRE regular expressions. Many examples use the `occ` parameter with the assignment `occ = 0` to replace all occurrences. - When using regular expressions, note that exceptions such as of type `cx_sy_invalid_regex` or `cx_sy_regex_too_complex` can occur.</div>
+<h3>Characters and Character Types</h3>
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Represents</th>
+<th>Example Regex</th>
+<th>Example String</th>
+<th>Matches</th>
+<th>Does not Match</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>Specific character</td>
+<td><code>a</code></td>
+<td>abcdef</td>
+<td>a</td>
+<td>Anything else</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>Any character except a line break (unless in dotall mode, then any character)</td>
+<td><code>.</code></td>
+<td>ab 1#</td>
+<td>a, b, the blank, 1, #</td>
+<td>ab, 1#</td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td>Any digit (0-9), alternative: <code>[0-9]</code></td>
+<td><code>\d</code></td>
+<td>a1-b2 3-4c9</td>
+<td>1, 2, 3, 4, 9</td>
+<td>a, b, c, the blank and hyphens</td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td>Any non-digit, alternative: <code>[^0-9]</code></td>
+<td><code>\D</code></td>
+<td>a1-b2 3-4c9</td>
+<td>a, b, c, the blank and hyphens</td>
+<td>1, 2, 3, 4, 9</td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>Any whitespace character such as a blank, tab and new line</td>
+<td><code>\s</code></td>
+<td>(hi X )</td>
+<td>The blanks</td>
+<td>h, i, X, (, )</td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td>Any character that is not a whitespace</td>
+<td><code>\S</code></td>
+<td>(hi X )</td>
+<td>h, i, X, (, )</td>
+<td>The blanks</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>Any word character (letter, digit or the underscore), alternative: <code>[a-zA-Z0-9_]</code></td>
+<td><code>\w</code></td>
+<td>(ab 12_c)</td>
+<td>a, b, c, 1, 2, _</td>
+<td>(, ), the blank</td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>Any character that is not a word character, alternative: <code>[^a-zA-Z0-9_]</code></td>
+<td><code>\W</code></td>
+<td>(ab 12_c)</td>
+<td>(, ), the blank</td>
+<td>a, b, c, 1, 2, _</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<pre><code>DATA string_chars_types TYPE string.
+
+&quot;Specific character
+&quot;#bcdef
+string_chars_types = replace( val = `abcdef` pcre = `a` with = `#` occ = 0 ).
+
+&quot;Any character except a line break
+&quot;_______ (7 replacements before the line break)
+&quot;____ (4 replacements after the line break)
+string_chars_types = replace( val = |ab 1#?C\n D23| pcre = `.` with = `_` occ = 0 ).
+
+&quot;Any digit
+&quot;a#-b# #-#c#
+string_chars_types = replace( val = `a1-b2 3-4c9` pcre = `\d` with = `#` occ = 0 ).
+
+&quot;Any non-digit
+&quot;#1##2#3#4#9
+string_chars_types = replace( val = `a1-b2 3-4c9` pcre = `\D` with = `#` occ = 0 ).
+
+&quot;Any whitespace character such as a blank, tab and new line
+&quot;ab#cd#ef#gh
+string_chars_types = replace( val = |ab cd\tef\ngh| pcre = `\s` with = `#` occ = 0 ).
+
+&quot;Any character that is not a
+&quot;String template representation of the result: |## ##\t##\n##|
+string_chars_types = replace( val = |ab cd\tef\ngh| pcre = `\S` with = `#` occ = 0 ).
+
+&quot;Any word character (letter, digit or the underscore)
+&quot;(## ####)
+string_chars_types = replace( val = `(ab 12_c)` pcre = `\w` with = `#` occ = 0 ).
+
+&quot;Any character that is not a word character
+&quot;#ab#12_c#
+string_chars_types = replace( val = `(ab 12_c)` pcre = `\W` with = `#` occ = 0 ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Escaped Characters and Special Variants</h3>
+<p>Note that some of the example strings are represented by string templates.</p>
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Represents</th>
+<th>Example Regex</th>
+<th>Example String</th>
+<th>Matches</th>
+<th>Does not Match</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>\...</code></td>
+<td>To include special characters like <code>[] \ / ^</code>, use <code>\</code> to escape them. Use <code>\.</code> to match a period (&quot;.&quot;).</td>
+<td><code>.\.</code></td>
+<td>ab.cd.ef</td>
+<td>a&lt;ins&gt;<strong>b.</strong>&lt;/ins&gt;c&lt;ins&gt;<strong>d.</strong>&lt;/ins&gt;ef</td>
+<td>ab&lt;ins&gt;<strong>.c</strong>&lt;/ins&gt;d&lt;ins&gt;<strong>.e</strong>&lt;/ins&gt;f</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>Line feed (negation <code>\N</code> for non-line feeds)</td>
+<td><code>\n\D</code></td>
+<td>&lt;code&gt;\</td>
+<td>\nabc\n123\</td>
+<td>&lt;/code&gt;</td>
+<td>&lt;code&gt;\</td>
+<td>\na\</td>
+<td>&lt;/code&gt;</td>
+<td>&lt;code&gt;\</td>
+<td>\n1\</td>
+<td>&lt;/code&gt;</td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>Tab</td>
+<td><code>\t\d</code></td>
+<td>&lt;code&gt;\</td>
+<td>\tabc\t123\</td>
+<td>&lt;/code&gt;</td>
+<td>&lt;code&gt;\</td>
+<td>\t1\</td>
+<td>&lt;/code&gt;</td>
+<td>&lt;code&gt;\</td>
+<td>\ta\</td>
+<td>&lt;/code&gt;</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>Carriage return</td>
+<td><code>\r\s</code></td>
+<td>&lt;code&gt;\</td>
+<td>\rabc\r 123\</td>
+<td>&lt;/code&gt;</td>
+<td>&lt;code&gt;\</td>
+<td>\r \</td>
+<td>&lt;/code&gt;</td>
+<td>&lt;code&gt;\</td>
+<td>\ra\</td>
+<td>&lt;/code&gt;</td>
+</tr>
+<tr>
+<td><code>\R</code></td>
+<td>Line feed sequence, ensuring that regular expression matches all kinds of newlines, such as <code>\n</code>, <code>\r</code>, or <code>\r\n</code> (carriage return followed by line feed)</td>
+<td><code>\R.</code></td>
+<td>&lt;code&gt;\</td>
+<td>abc\rdef\nghi\r\njkl mno\</td>
+<td>&lt;/code&gt;</td>
+<td>&lt;code&gt;\</td>
+<td>\rd\</td>
+<td>&lt;/code&gt;, &lt;code&gt;\</td>
+<td>\ng\</td>
+<td>&lt;/code&gt;, &lt;code&gt;\</td>
+<td>\r\nj\</td>
+<td>&lt;/code&gt;</td>
+<td>&lt;code&gt;\</td>
+<td>m\</td>
+<td>&lt;/code&gt;</td>
+</tr>
+<tr>
+<td><code>\x{...}</code></td>
+<td>Character with hex code</td>
+<td><code>\x{00A0}#</code> (non-breaking space and #)</td>
+<td>&lt;code&gt;\</td>
+<td>#{ cl_abap_conv_codepage=&gt;create_in( codepage = \<code>UTF-16BE\</code> )-&gt;convert( source = CONV xstring( \<code>00A0\</code> ) ) }#\</td>
+<td>&lt;/code&gt;</td>
+<td>The non-breaking space plus the second # character</td>
+<td>The first # character</td>
+</tr>
+<tr>
+<td><code>\N{U+...}</code></td>
+<td>Character with Unicode code point</td>
+<td><code>\N{U+00A0}#</code> (non-breaking space and # as above)</td>
+<td>See the example below</td>
+<td>See the example below</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\p{..}</code></td>
+<td>Character with a specified Unicode character property; see the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/abenregex_pcre_syntax_specials.html">documentation</a> for options; among them, there are, for example, properties for lowercase (<code>Ll</code>) and uppercase (<code>Lu</code>) letters; negation: <code>\P{..}</code></td>
+<td>1. <code>\p{Ll}+</code> &lt;br&gt; 2. <code>\p{Lu}+</code> &lt;br&gt; 3. <code>\P{Lu}+</code></td>
+<td>Hello ABAP</td>
+<td>1. H&lt;ins&gt;<strong>ello</strong>&lt;/ins&gt; ABAP &lt;br&gt; 2. &lt;ins&gt;<strong>H</strong>&lt;/ins&gt;ello &lt;ins&gt;<strong>ABAP</strong>&lt;/ins&gt; &lt;br&gt; 3. H&lt;ins&gt;<strong>ello&amp;nbsp;</strong>&lt;/u&gt;&lt;/ins&gt;ABAP (the space is also matched)</td>
+<td>1. Upper case letter sequences &lt;br&gt; 2. Lower case letter sequences &lt;br&gt; 3. Upper case letter sequences</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<pre><code>DATA string_esc_chars TYPE string.
+
+&quot;Special characters
+&quot;a#b#c#d#e#f#g
+string_esc_chars = replace( val = `a[b]c\d/e^f.g` pcre = `\[|\]|\\|\/|\^|\.` with = `#` occ = 0 ).
+
+&quot;Line feeds
+&quot;a#b#c
+string_esc_chars = replace( val = |a\nb\nc| pcre = `\n` with = `#` occ = 0 ).
+
+&quot;Line feed negation
+&quot;String template representation of the result: |#\n#\n#|
+string_esc_chars = replace( val = |a\nb\nc| pcre = `\N` with = `#` occ = 0 ).
+
+&quot;Tabs
+&quot;a#b#c
+string_esc_chars = replace( val = |a\tb\tc| pcre = `\t` with = `#` occ = 0 ).
+
+&quot;Carriage return
+&quot;d#e#f
+string_esc_chars = replace( val = |d\re\rf| pcre = `\r` with = `#` occ = 0 ).
+
+&quot;Characters with hex code
+&quot;The example string includes a non-breaking space.
+&quot;#x#
+string_esc_chars = replace( 
+  val = |#{ cl_abap_conv_codepage=&gt;create_in( codepage = `UTF-16BE` )-&gt;convert( source = CONV xstring( `00A0` ) ) }#|
+  pcre = `\x{00A0}` with = `x` occ = 0 ).
+
+&quot;Characters with Unicode code point
+&quot;As above, the example string includes a non-breaking space.
+&quot;The PCRE syntax uses the control verb (*UTF) to enable UTF mode.
+&quot;#y#
+string_esc_chars = replace( 
+  val = |#{ cl_abap_conv_codepage=&gt;create_in( codepage = `UTF-16BE` )-&gt;convert( source = CONV xstring( `00A0` ) ) }#|
+  pcre = `(*UTF)\N{U+00A0}` with = `y` occ = 0 ).
+
+&quot;Characters with a specified Unicode character property
+&quot;H# ABAP
+string_esc_chars = replace( val = `Hello ABAP` pcre = `\p{Ll}+` with = `#` occ = 0 ).
+
+&quot;#ello #
+string_esc_chars = replace( val = `Hello ABAP` pcre = `\p{Lu}+` with = `#` occ = 0 ).
+
+&quot;#ello#
+string_esc_chars = replace( val = `Hello ABAP` pcre = `\P{Ll}+` with = `#` occ = 0 ).
+
+&quot;H#ABAP
+string_esc_chars = replace( val = `Hello ABAP` pcre = `\P{Lu}+` with = `#` occ = 0 ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Quantifiers, Repetitions and Alternatives</h3>
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Represents</th>
+<th>Example Regex</th>
+<th>Example String</th>
+<th>Matches</th>
+<th>Does not Match</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>x*</code></td>
+<td>Zero or more repetitions of <code>x</code></td>
+<td><code>ab*</code></td>
+<td>abc abbc abbbc a ac</td>
+<td>&lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;c &lt;ins&gt;<strong>abb</strong>&lt;/ins&gt;c &lt;ins&gt;<strong>abbb</strong>&lt;/ins&gt;c &lt;ins&gt;<strong>a</strong>&lt;/ins&gt; &lt;ins&gt;<strong>a</strong>&lt;/ins&gt;c</td>
+<td>&lt;ins&gt;<strong>abc</strong>&lt;/ins&gt; &lt;ins&gt;<strong>abbc</strong>&lt;/ins&gt; &lt;ins&gt;<strong>abbbc</strong>&lt;/ins&gt; a &lt;ins&gt;<strong>ac</strong>&lt;/ins&gt;</td>
+</tr>
+<tr>
+<td><code>x+</code></td>
+<td>One or more repetitions of <code>x</code></td>
+<td><code>ab+</code></td>
+<td>abc abbc abbbc a ac</td>
+<td>&lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;c &lt;ins&gt;<strong>abb</strong>&lt;/ins&gt;c &lt;ins&gt;<strong>abbb</strong>&lt;/ins&gt;c a ac</td>
+<td>... &lt;ins&gt;<strong>a</strong>&lt;/ins&gt; &lt;ins&gt;<strong>a</strong>&lt;/ins&gt;c</td>
+</tr>
+<tr>
+<td><code>x{m,n}</code></td>
+<td>Between <code>m</code> and <code>n</code> repetitions of <code>x</code></td>
+<td><code>ab{2,3}</code></td>
+<td>abc abbc abbbc a ac</td>
+<td>abc &lt;ins&gt;<strong>abb</strong>&lt;/ins&gt;c &lt;ins&gt;<strong>abbb</strong>&lt;/ins&gt;c a ac</td>
+<td>&lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;c ...</td>
+</tr>
+<tr>
+<td><code>x{m}</code></td>
+<td>Exactly <code>m</code> repetitions</td>
+<td><code>ab{3}</code></td>
+<td>abc abbc abbbc a ac</td>
+<td>abc abbc &lt;ins&gt;<strong>abbb</strong>&lt;/ins&gt;c a ac</td>
+<td>abc &lt;ins&gt;<strong>abb</strong>&lt;/ins&gt;c ...</td>
+</tr>
+<tr>
+<td><code>x{m,}</code></td>
+<td>Exactly <code>m</code> or more repetitions</td>
+<td><code>ab{2,}</code></td>
+<td>abc abbc abbbc a ac</td>
+<td>abc &lt;ins&gt;<strong>abb</strong>&lt;/ins&gt;c &lt;ins&gt;<strong>abbb</strong>&lt;/ins&gt;c a ac</td>
+<td>&lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;c ...</td>
+</tr>
+<tr>
+<td><code>x?</code></td>
+<td>Optional <code>x</code>, i.e. zero or one time</td>
+<td><code>ab?</code></td>
+<td>abc abbc abbbc a ac</td>
+<td>&lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;c &lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;bc &lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;bbc &lt;ins&gt;<strong>a</strong>&lt;/ins&gt; &lt;ins&gt;<strong>a</strong>&lt;/ins&gt;c</td>
+<td>... &lt;ins&gt;<strong>ac</strong>&lt;/ins&gt;</td>
+</tr>
+<tr>
+<td>`x\</td>
+<td>y`</td>
+<td>Matching alternatives, i. e. <code>x</code> or <code>y</code></td>
+<td>1. `b\</td>
+<td>2<code> &lt;br&gt; 2. </code>b(a\</td>
+<td>u)t`</td>
+<td>1. abc 123 &lt;br&gt; 2. bit bat but bet</td>
+<td>1. b, 2 &lt;br&gt; 2. bat, but</td>
+<td>1. a, c, 1, 3 &lt;br&gt; 2. bit, bet</td>
+</tr>
+<tr>
+<td><code>x*?</code></td>
+<td><code>x<em></code> captures greedily, i.e. as much as possible, while <code>x</em>?</code> captures non-greedily, i.e. as few as possible</td>
+<td>1. <code>bc<em>?</code> &lt;br&gt; 2. <code>a.</em>?#</code></td>
+<td>1. abcd abccccd ab&lt;br&gt; 2. abc#defgh#i</td>
+<td>1. a&lt;ins&gt;<strong>b</strong>&lt;/ins&gt;cd a&lt;ins&gt;<strong>b</strong>&lt;/ins&gt;ccccd a&lt;ins&gt;<strong>b</strong>&lt;/ins&gt;&lt;br&gt; 2. &lt;ins&gt;<strong>abc#</strong>&lt;/ins&gt;defgh#i</td>
+<td>1. a&lt;ins&gt;<strong>bc</strong>&lt;/ins&gt;d a&lt;ins&gt;<strong>bcccc</strong>&lt;/ins&gt;d a&lt;ins&gt;<strong>b</strong>&lt;/ins&gt; (result for <code>bc<em></code>) &lt;br&gt; 2. &lt;ins&gt;<strong>abc#defgh#</strong>&lt;/ins&gt;i (result for <code>a.</em>#</code>)</td>
+</tr>
+<tr>
+<td><code>x+?</code></td>
+<td>Same as above: <code>x+</code> (greedy), <code>x+?</code> (non-greedy)</td>
+<td>1. <code>bc+?</code> &lt;br&gt; 2. <code>&lt;.+?&gt;</code></td>
+<td>1. abcd abccccd ab&lt;br&gt; 2. &amp;lt;span&gt;Hallo&amp;lt;/span&gt; html.</td>
+<td>1. a&lt;ins&gt;<strong>bc</strong>&lt;/ins&gt;d a&lt;ins&gt;<strong>bc</strong>&lt;/ins&gt;cccd ab&lt;br&gt; 2. &lt;ins&gt;<strong>&amp;lt;span&gt;</strong>&lt;/ins&gt;Hallo&lt;ins&gt;<strong>&amp;lt;/span&gt;</strong>&lt;/ins&gt; html.</td>
+<td>1. a&lt;ins&gt;<strong>bc</strong>&lt;/ins&gt;d a&lt;ins&gt;<strong>bcccc</strong>&lt;/ins&gt;d ab (result for <code>bc+</code>) &lt;br&gt; 2. &lt;ins&gt;<strong>&amp;lt;span&gt;Hallo&amp;lt;/span&gt;</strong>&lt;/ins&gt; html.  (result for <code>&lt;.+&gt;</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<pre><code>DATA string_quan_rep_alt TYPE string.
+
+&quot;Zero or more repetitions
+&quot;#c #c #c # #c
+string_quan_rep_alt = replace( val = `abc abbc abbbc a ac` pcre = `ab*` with = `#` occ = 0 ).
+
+&quot;One or more repetitions
+&quot;#c #c #c a ac
+string_quan_rep_alt = replace( val = `abc abbc abbbc a ac` pcre = `ab+` with = `#` occ = 0 ).
+
+&quot;Between x and y repetitions
+&quot;abc #c #c a ac
+string_quan_rep_alt = replace( val = `abc abbc abbbc a ac` pcre = `ab{2,3}` with = `#` occ = 0 ).
+
+&quot;Exactly n repetitions
+&quot;abc abbc #c a ac
+string_quan_rep_alt = replace( val = `abc abbc abbbc a ac` pcre = `ab{3}` with = `#` occ = 0 ).
+
+&quot;Exactly n or more repetitions
+&quot;abc #c #c a ac
+string_quan_rep_alt = replace( val = `abc abbc abbbc a ac` pcre = `ab{2,}` with = `#` occ = 0 ).
+
+&quot;Optional matches
+&quot;#c #bc #bbc # #c
+string_quan_rep_alt = replace( val = `abc abbc abbbc a ac` pcre = `ab?` with = `#` occ = 0 ).
+
+&quot;Alternative matches
+&quot;#z#y#xdwevfu
+string_quan_rep_alt = replace( val = `azbycxdwevfu` pcre = `a|b|c` with = `#` occ = 0 ).
+
+&quot;Capturing non-greedily (zero or more repetitions)
+&quot;a#cd a#ccccd a#
+string_quan_rep_alt = replace( val = `abcd abccccd ab` pcre = `bc*?` with = `#` occ = 0 ).
+
+&quot;_defghxi
+string_quan_rep_alt = replace( val = `abcxdefghxi` pcre = `\A.*?x` with = `_` ).
+
+&quot;Example to compare with greedy capturing
+&quot;_i
+string_quan_rep_alt = replace( val = `abcxdefghxi` pcre = `\A.*x` with = `_` ).
+
+&quot;Capturing non-greedily (one or more repetitions)
+&quot;a#d a#cccd ab
+string_quan_rep_alt = replace( val = `abcd abccccd ab` pcre = `bc+?` with = `#` occ = 0 ).
+
+&quot;Example to compare with greedy capturing
+&quot;a#d a#d ab
+string_quan_rep_alt = replace( val = `abcd abccccd ab` pcre = `bc+` with = `#` occ = 0 ).
+
+&quot;#Hallo#
+string_quan_rep_alt = replace( val = `&lt;span&gt;Hallo&lt;/span&gt;` pcre = `&lt;.+?&gt;` with = `#` occ = 0 ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Character Sets and Ranges</h3>
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Represents</th>
+<th>Example Regex</th>
+<th>Example String</th>
+<th>Matches</th>
+<th>Does not Match</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>[...]</code></td>
+<td>Character set, matches a single character present in the list</td>
+<td><code>b[iu]</code></td>
+<td>bit bat but bet</td>
+<td>&lt;ins&gt;<strong>bi</strong>&lt;/ins&gt;t bat &lt;ins&gt;<strong>bu</strong>&lt;/ins&gt;t bet</td>
+<td>bit &lt;ins&gt;<strong>ba</strong>&lt;/ins&gt;t but &lt;ins&gt;<strong>be</strong>&lt;/ins&gt;t</td>
+</tr>
+<tr>
+<td><code>[x-y]</code></td>
+<td>Character range, matches a single character in the specified range, note that ranges may be locale-dependent</td>
+<td><code>a[a-c0-5]</code></td>
+<td>aa1 ab2 ba3 cac4 da56 a7</td>
+<td>&lt;ins&gt;<strong>aa</strong>&lt;/ins&gt;1 &lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;2 b&lt;ins&gt;<strong>a3</strong>&lt;/ins&gt; c&lt;ins&gt;<strong>ac</strong>&lt;/ins&gt;4 d&lt;ins&gt;<strong>a5</strong>&lt;/ins&gt;6 a7</td>
+<td>aa1 ab2 ba3 cac4 da56 &lt;ins&gt;<strong>a7</strong>&lt;/ins&gt;</td>
+</tr>
+<tr>
+<td><code>[^...]</code></td>
+<td>Negation, matches any single character not present in the list</td>
+<td><code>[^Ap]</code></td>
+<td>ABap</td>
+<td>B, a</td>
+<td>A, p</td>
+</tr>
+<tr>
+<td><code>[^x-y]</code></td>
+<td>Negation, matches any single character not within the range</td>
+<td><code>[^A-Ca-c1-4]</code></td>
+<td>ABCDabcd123456</td>
+<td>D, d, 5, 6</td>
+<td>A, B, C, a, b, c, 1, 2, 3, 4</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<pre><code>DATA string_char_sets_ranges TYPE string.
+
+&quot;Defining a character set
+&quot;#t bat #t bet
+string_char_sets_ranges = replace( val = `bit bat but bet` pcre = `b[iu]` with = `#` occ = 0 ).
+
+&quot;Defining a character range
+&quot;#1 #2 b# c#4 d#6 a7
+string_char_sets_ranges = replace( val = `aa1 ab2 ba3 cac4 da56 a7` pcre = `a[a-c0-5]` with = `#` occ = 0 ).
+
+&quot;Matching any single character not present in the list
+&quot;A##p
+string_char_sets_ranges = replace( val = `ABap` pcre = `[^Ap]` with = `#` occ = 0 ).
+
+&quot;Matching any single character not within the range
+&quot;ABC#abc#1234##
+string_char_sets_ranges = replace( val = `ABCDabcd123456` pcre = `[^A-Ca-c1-4]` with = `#` occ = 0 ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Anchors and Positions</h3>
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Represents</th>
+<th>Example Regex</th>
+<th>Example String</th>
+<th>Matches</th>
+<th>Does not Match</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>\A</code></td>
+<td>Start of a subject</td>
+<td><code>\A.</code></td>
+<td>abc def</td>
+<td>&lt;ins&gt;<strong>a</strong>&lt;/ins&gt;bc def</td>
+<td>abc &lt;ins&gt;<strong>d</strong>&lt;/ins&gt;ef</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>Start of a subject (particularly relevant in multi-line mode)</td>
+<td><code>^.</code></td>
+<td>See above and more details in the option setting section</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>\Z</code></td>
+<td>End of a subject</td>
+<td><code>.\Z</code></td>
+<td>abc def</td>
+<td>abc de&lt;ins&gt;<strong>f</strong>&lt;/ins&gt;</td>
+<td>&lt;ins&gt;<strong>a</strong>&lt;/ins&gt;bc def</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>End of a subject (particularly relevant in multi-line mode)</td>
+<td><code>.$</code></td>
+<td>See above and more details in the option setting section</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>Start or end of word</td>
+<td>1. <code>\ba.</code> &lt;br&gt;2. <code>\Dd\b</code> &lt;br&gt;3. <code>\b.d\b</code></td>
+<td>abcd a12d ed</td>
+<td>1. &lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;cd &lt;ins&gt;<strong>a1</strong>&lt;/ins&gt;2d ed &lt;br&gt;2. ab&lt;ins&gt;<strong>cd</strong>&lt;/ins&gt; a12d &lt;ins&gt;<strong>ed</strong>&lt;/ins&gt; &lt;br&gt; 3. abcd a12d &lt;ins&gt;<strong>ed</strong>&lt;/ins&gt;</td>
+<td>1. ab&lt;ins&gt;<strong>cd</strong>&lt;/ins&gt; a1&lt;ins&gt;<strong>2d</strong>&lt;/ins&gt; ed &lt;br&gt; 2. abcd a1&lt;ins&gt;<strong>2d</strong>&lt;/ins&gt; ed &lt;br&gt; 3. &lt;ins&gt;<strong>abcd</strong>&lt;/ins&gt; &lt;ins&gt;<strong>a12d</strong>&lt;/ins&gt; ed</td>
+</tr>
+<tr>
+<td><code>\B</code></td>
+<td>Negation of <code>\b</code>, not at the start or end of words</td>
+<td><code>\Be\B</code></td>
+<td>see an elefant</td>
+<td>s&lt;ins&gt;<strong>e</strong>&lt;/ins&gt;e an el&lt;ins&gt;<strong>e</strong>&lt;/ins&gt;fant</td>
+<td>s&lt;ins&gt;<strong>ee</strong>&lt;/ins&gt; an &lt;ins&gt;<strong>e</strong>&lt;/ins&gt;lefant</td>
+</tr>
+<tr>
+<td><code>\K</code></td>
+<td>Resets the starting point of a match, i.e. findings are excluded from the final match</td>
+<td><code>a.\Kc</code></td>
+<td>abcd</td>
+<td>ab&lt;ins&gt;<strong>c</strong>&lt;/ins&gt;d</td>
+<td>&lt;ins&gt;<strong>abc</strong>&lt;/ins&gt;d</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<pre><code>DATA string_anchors_pos TYPE string.
+
+&quot;Start of subject, syntax \A
+&quot;#abc def
+string_anchors_pos = replace( val = `abc def` pcre = `\A` with = `#` occ = 0 ).
+
+&quot;Start of subject, syntax ^; find more information below regarding multi-line mode
+&quot;#abc
+&quot;#def
+&quot;#ghi
+string_anchors_pos = replace( val = |abc\ndef\nghi| pcre = `(?m)^` with = `#` occ = 0 ).
+
+&quot;The following examples uses ^ without enabling the multi-line mode
+&quot;#abc
+&quot;def
+&quot;ghi
+string_anchors_pos = replace( val = |abc\ndef\nghi| pcre = `^` with = `#` occ = 0 ).
+
+&quot;End of subject, syntax \Z
+&quot;abc def#
+string_anchors_pos = replace( val = `abc def` pcre = `\Z` with = `#` occ = 0 ).
+
+&quot;End of subject, syntax $
+&quot;The example uses multi-line mode
+&quot;abc#
+&quot;def#
+&quot;ghi#
+string_anchors_pos = replace( val = |abc\ndef\nghi| pcre = `(?m)$` with = `#` occ = 0 ).
+
+&quot;Start or end of word
+&quot;#cd #2d ed
+string_anchors_pos = replace( val = `abcd a12d ed` pcre = `\ba.` with = `#` occ = 0 ).
+
+&quot;ab# a12d #
+string_anchors_pos = replace( val = `abcd a12d ed` pcre = `\Dd\b` with = `#` occ = 0 ).
+
+&quot;abcd a12d #
+string_anchors_pos = replace( val = `abcd a12d ed` pcre = `\b.d\b` with = `#` occ = 0 ).
+
+&quot;Not at the start or end of words
+&quot;s#e an el#fant
+string_anchors_pos = replace( val = `see an elefant` pcre = `\Be\B` with = `#` occ = 0 ).
+
+&quot;Resetting the starting point of a match
+&quot;ab#d
+string_anchors_pos = replace( val = `abcd` pcre = `a.\Kc` with = `#` occ = 0 ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Capturing Groups, Replacements and Backreferences</h3>
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Represents</th>
+<th>Example Regex</th>
+<th>Example String</th>
+<th>Matches</th>
+<th>Does not Match</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>(...)</code></td>
+<td>Capturing group to group parts of patterns together</td>
+<td>`b(a\</td>
+<td>u)t`</td>
+<td>bit bat but bet</td>
+<td>bat, but</td>
+<td>bit, bet</td>
+</tr>
+<tr>
+<td><code>(?&lt;name&gt;...)</code>, <code>(?&#x27;name&#x27;...)</code></td>
+<td>Named capturing group</td>
+<td><code>(?&lt;x&gt;..)(?&#x27;y&#x27;..)</code></td>
+<td>abcd</td>
+<td><code>$x</code> refers to <em>ab</em>, <code>$y</code> to <em>cd</em> &lt;br&gt; The reference can also be made using curly brackets: <code>${x}</code>, <code>${y}</code></td>
+<td><code>$x</code> refers to <em>cd</em>, <code>$y</code> to <em>ab</em></td>
+</tr>
+<tr>
+<td><code>$id</code>, <code>${id}</code></td>
+<td>Represents the substitute for a capturing group, <code>id</code> stands for a number or name of a capturing group</td>
+<td><code>(..)(..)</code></td>
+<td>abcd</td>
+<td><code>$1</code> refers to <em>ab</em>, <code>$2</code> to <em>cd</em> &lt;br&gt; <code>$0</code> refers to the content of the whole match &lt;br&gt; As above, the reference can also be made using curly brackets: <code>${0}</code>, <code>${1}</code>, <code>${2}</code></td>
+<td><code>$1</code> refers to <em>cd</em>, <code>$2</code> to <em>ab</em></td>
+</tr>
+<tr>
+<td><code>(?:...)</code></td>
+<td>Creates a group but it is not captured</td>
+<td><code>(?:ab)(ap)</code></td>
+<td>abap</td>
+<td>It matches <em>abap</em>, but in a replacement and when referring to the subgroup <code>$1</code>, it refers to <em>ap</em>.</td>
+<td>ab</td>
+</tr>
+<tr>
+<td><code>\1</code></td>
+<td>Backreference, refers to a previous capturing group; 1 represents the number of the group index (the group index starts with 1); more back reference syntax options are possible such as the specification of named groups</td>
+<td><code>(a.)(\w*)\1</code></td>
+<td>abcdefabghij</td>
+<td>&lt;ins&gt;<strong>abcdefab</strong>&lt;/ins&gt;ghij &lt;br&gt;Note: Capturing group 1 holds <code>ab</code> in the example. The second capturing group captures all word characters until <code>ab</code> is found.</td>
+<td>&lt;ins&gt;<strong>ab</strong>&lt;/ins&gt;cdefabghij</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<pre><code>DATA string_capt_group TYPE string.
+
+&quot;bit # # bet
+string_capt_group = replace( val = `bit bat but bet` pcre = `b(a|u)t` with = `#` occ = 0 ).
+
+&quot;------- Replacements with capturing groups -------
+
+&quot;ABAP
+string_capt_group = replace( val = `APAB` pcre = `(..)(..)` with = `$2$1` ).
+
+&quot;$0 representing the content of the whole match
+&quot;#abcd#
+string_capt_group = replace( val = `abcd` pcre = `(..)(..)` with = `#$0#` ).
+
+&quot;Alternative replacement syntax with the curly brackets
+&quot;ABAP
+string_capt_group = replace( val = `APAB` pcre = `(..)(..)` with = `${2}${1}` ).
+
+&quot;------- Named capturing groups -------
+
+
+&quot;PCRE syntax (?&lt;name&gt;...), replacement syntax $name
+&quot;Examplatory result: Day: 28, month: 11, year: 2024
+string_capt_group = replace( val = xco_cp=&gt;sy-&gt;date( )-&gt;as( xco_cp_time=&gt;format-&gt;abap )-&gt;value
+                              pcre = `(?&lt;yr&gt;\d{4})(?&lt;mo&gt;\d{2})(?&lt;d&gt;\d{2})`
+                              with = `Day: $d, month: $mo, year: $yr` ).
+
+
+&quot;Alternative PCRE syntax (?&#x27;name&#x27;...), replacement syntax ${name}
+&quot;Examplatory result: 28.11.2024
+string_capt_group = replace( val = xco_cp=&gt;sy-&gt;date( )-&gt;as( xco_cp_time=&gt;format-&gt;abap )-&gt;value
+                              pcre = `(?&#x27;yr&#x27;\d{4})(?&#x27;mo&#x27;\d{2})(?&#x27;d&#x27;\d{2})`
+                              with = `${d}.${mo}.${yr}` ).
+
+&quot;Creating a group but not capturing it
+&quot;#cd#
+string_capt_group = replace( val = `abcd` pcre = `(?:..)(..)` with = `#$1#` ).
+
+&quot;The following example raises an exception. $2 cannot be referred to.
+TRY.
+    string_capt_group = replace( val = `abcd` pcre = `(?:..)(..)` with = `#$1#$2#` ).
+  CATCH cx_sy_invalid_regex_format.
+ENDTRY.
+
+&quot;#abcd#
+string_capt_group = replace( val = `abcd` pcre = `(?:..)(..)` with = `#$0#` ).
+
+&quot;------- Back reference -------
+
+&quot;In the example, the capturing group 1 holds `ab`. The second capturing group captures
+&quot;all word characters until `ab` is found, including `ab`. The reference to the first
+&quot;capturing group is made using \1.
+&quot;#ghij
+string_capt_group = replace( val = `abcdefabghij` pcre = `(a.)(\w*)\1` with = `#` ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Lookarounds</h3>
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Represents</th>
+<th>Example Regex</th>
+<th>Example String</th>
+<th>Matches</th>
+<th>Does not Match</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>(?=...)</code></td>
+<td>Positive lookahead, returns characters that are followed by a specified pattern without including this pattern</td>
+<td><code>a(?=b)</code></td>
+<td>abc ade</td>
+<td>&lt;ins&gt;<strong>a</strong>&lt;/ins&gt;bc ade</td>
+<td>abc &lt;ins&gt;<strong>a</strong>&lt;/ins&gt;de</td>
+</tr>
+<tr>
+<td><code>(?!...)</code></td>
+<td>Negative lookahead, returns characters that are not followed by a specified pattern without including this pattern</td>
+<td><code>a(?!b)</code></td>
+<td>abc ade</td>
+<td>abc &lt;ins&gt;<strong>a</strong>&lt;/ins&gt;de</td>
+<td>&lt;ins&gt;<strong>a</strong>&lt;/ins&gt;bc ade</td>
+</tr>
+<tr>
+<td><code>(?&lt;=...)</code></td>
+<td>Positive lookbehind, returns characters that are preceded by a specified pattern without including this pattern</td>
+<td><code>(?&lt;=\s)c</code></td>
+<td>ab c abcd</td>
+<td>ab &lt;ins&gt;<strong>c</strong>&lt;/ins&gt; abcd (it is preceded by a blank)</td>
+<td>ab c ab&lt;ins&gt;<strong>c</strong>&lt;/ins&gt;d</td>
+</tr>
+<tr>
+<td><code>(?&lt;!...)</code></td>
+<td>Negative lookbehind, returns characters that are not preceded by a specified pattern without including this pattern</td>
+<td><code>(?&lt;!\s)c</code></td>
+<td>ab c abcd</td>
+<td>ab c ab&lt;ins&gt;<strong>c</strong>&lt;/ins&gt;d (it is not preceded by a blank)</td>
+<td>ab &lt;ins&gt;<strong>c</strong>&lt;/ins&gt; abcd</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<pre><code>DATA string_look_arounds TYPE string.
+
+&quot;Positive lookahead
+&quot;#bc ade
+string_look_arounds = replace( val = `abc ade` pcre = `a(?=b)` with = `#` occ = 0 ).
+
+&quot;Negative lookahead
+&quot;abc #de
+string_look_arounds = replace( val = `abc ade` pcre = `a(?!b)` with = `#` occ = 0 ).
+
+&quot;Positive lookbehind
+&quot;ab # abcd
+string_look_arounds = replace( val = `ab c abcd` pcre = `(?&lt;=\s)c` with = `#` occ = 0 ).
+
+&quot;Negative lookbehind
+&quot;ab c ab#d
+string_look_arounds = replace( val = `ab c abcd` pcre = `(?&lt;!\s)c` with = `#` occ = 0 ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Case Conversions in Replacement Patterns</h3>
+<p>You can use the following syntax options for case conversion in replacement patterns:</p>
+<ul>
+<li><code>\u</code>: Converts the first character after this marker to uppercase.</li>
+<li><code>\U</code>: Converts all characters to uppercase until the next <code>\L</code> or <code>\E</code> marker.</li>
+<li><code>\l</code>: Converts the first character after this marker to lowercase.</li>
+<li><code>\L</code>: Converts all characters to lowercase until the next <code>\U</code> or <code>\E</code> marker.</li>
+<li><code>\E</code>: Ends the current uppercase or lowercase transformation.</li>
+</ul>
+<p>Examples:</p>
+<pre><code>DATA string_case_conv TYPE string.
+
+&quot;\u syntax
+&quot;abcDefg
+string_case_conv = replace( val = `abcdefg` pcre = `c(.*)` with = `c\u$1` ).
+
+&quot;\U syntax
+&quot;abcDEFG
+string_case_conv = replace( val = `abcdefg` pcre = `c(.*)` with = `c\U$1` ).
+
+&quot;\l syntax
+&quot;HIJKlMNO
+string_case_conv = replace( val = `HIJKLMNO` pcre = `K(.*)` with = `K\l$1` ).
+
+&quot;\L syntax
+&quot;HIJKlmno
+string_case_conv = replace( val = `HIJKLMNO` pcre = `K(.*)` with = `K\L$1` ).
+
+&quot;\E syntax
+&quot;abcDEfg
+string_case_conv = replace( val = `abcdefg` pcre = `c(..)(..)` with = `c\U$1\E$2` ).
+
+&quot;The following example is a comparison to similar syntax without specifying \E
+&quot;abcDEFG
+string_case_conv = replace( val = `abcdefg` pcre = `c(..)(..)` with = `c\U$1$2` ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Setting Options and Control Verbs</h3>
+<p>There are various <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/abenregex_pcre_syntax_specials.html">setting options</a> for specifying PCRE syntax. The following examples demonstrate a selection:</p>
+<p><em>Multi- and single-line modes</em></p>
+<ul>
+<li><code>(?m)</code> enables multi-line mode.</li>
+<li><code>(?s)</code> enables single-line mode.</li>
+<li>Note in this context:</li>
+<li>The <code>.</code> character does not match new lines unless single-line mode is set.</li>
+<li>The anchors <code>^</code> and <code>$</code> become especially relevant in multi-line mode.</li>
+<li>These settings apply to the subsequent part of the group in which they are specified, such as the top-level pattern or a capturing group.</li>
+</ul>
+<p>Examples:</p>
+<pre><code>DATA string_opt_set TYPE string.
+
+&quot;----------- Examples with `.` and single line mode -----------
+
+&quot;`.` matches new lines feeds when the single line option is set
+&quot;Result (9 replacements):
+&quot;###
+&quot;###
+&quot;###
+string_opt_set = replace( val = |abc\ndef\nghi| pcre = `.` with = `#` occ = 0 ).
+
+&quot;Result (11 replacements including the new line feeds):
+&quot;###########
+string_opt_set = replace( val = |abc\ndef\nghi| pcre = `(?s).` with = `#` occ = 0 ).
+
+&quot;##
+string_opt_set = replace( val = |\n\n| pcre = `(?s).` with = `#` occ = 0 ).
+
+&quot;----------- Examples for the start of subjects -----------
+
+&quot;Multi-line mode not enabled
+&quot;Result:
+&quot;#bc
+&quot;def
+&quot;ghi
+string_opt_set = replace( val = |abc\ndef\nghi| pcre = `^.` with = `#` occ = 0 ).
+
+&quot;Multi-line mode enabled
+&quot;Result:
+&quot;#bc
+&quot;#ef
+&quot;#hi
+string_opt_set = replace( val = |abc\ndef\nghi| pcre = `(?m)^.` with = `#` occ = 0 ).
+
+&quot;\A for comparison
+&quot;Result:
+&quot;#bc
+&quot;def
+&quot;ghi
+string_opt_set = replace( val = |abc\ndef\nghi| pcre = `(?m)\A.` with = `#` occ = 0 ).
+
+&quot;----------- Examples for the end of subjects -----------
+
+&quot;Result:
+&quot;abc
+&quot;def
+&quot;gh#
+string_opt_set = replace( val = |abc\ndef\nghi| pcre = `.$` with = `#` occ = 0 ).
+
+&quot;Result:
+&quot;ab#
+&quot;de#
+&quot;gh#
+string_opt_set = replace( val = |abc\ndef\nghi| pcre = `(?m).$` with = `#` occ = 0 ).
+
+&quot;\Z syntax (the result is the same as with `.$`)
+string_opt_set = replace( val = |abc\ndef\nghi| pcre = `(?m).\Z` with = `#` occ = 0 ).</code></pre>
+<p><em>Extended Mode</em></p>
+<ul>
+<li>Regular expressions with PCRE can be processed in normal or extended mode.</li>
+<li>In extended mode, unescaped whitespaces in the pattern are ignored.</li>
+<li>The extended mode is the default for ABAP statements and built-in functions, but you can disable it in the regex pattern with <code>(?-x)</code>. The <code>create_pcre</code> method of the <code>CL_ABAP_REGEX</code> class includes an <code>extended</code> parameter for this purpose.</li>
+<li>To handle whitespaces in regular expressions, escape it with <code>\ </code>, match it using <code>\s</code>, or disable extended mode with <code>(?-x)</code>.</li>
+</ul>
+<p>The following code snippet shows the extended mode enabled by default and then explicitly disabled in a PCRE regular expression.</p>
+<pre><code>DATA some_string TYPE string.
+
+&quot;Extended mode is enabled by default
+&quot;No replacement in the example.
+&quot;Result: abc def
+some_string = replace( val = `abc def` pcre = `abc def` with = `#` ).
+
+&quot;The following example works because there is no whitespace in the source string.
+&quot;The whitespace in the regular expression is ignored.
+&quot;Result: #
+some_string = replace( val = `abcdef` pcre = `abc def` with = `#` ).
+
+&quot;To match whitespace characters, you can use the pattern \s
+&quot;Result: #
+some_string = replace( val = `abc def` pcre = `abc\sdef` with = `#` ).
+
+&quot;Escaping a whitespace using \
+&quot;Result: #
+some_string = replace( val = `abc def` pcre = `abc\ def` with = `#` ).
+&quot;The following example also performs the replacement as the unescaped whitespaces
+&quot;are ignored.
+some_string = replace( val = `abc def` pcre = `abc\         def` with = `#` ).
+
+&quot;Disabling the extended mode so that whitespaces are not ignored
+&quot;Result: #
+some_string = replace( val = `abc def` pcre = `(?-x)abc def` with = `#` ).</code></pre>
+<p><em>Control verbs</em></p>
+<p>Control verbs, for example, for ...</p>
+<ul>
+<li>enabling UTF mode using <code>(*UTF)</code>. In PCRE syntax, you can define UTF-16 character strings.</li>
+<li>line breaks such as the following:</li>
+<li><code>(*CR)</code>: Only carriage returns</li>
+<li><code>(*LF)</code>	Only line feed</li>
+<li><code>(*CRLF)</code>: Only carriage returns followed by a line feed</li>
+<li><code>(*ANYCRLF)</code>: All of the above-mentioned options</li>
+</ul>
+<pre><code>DATA ctrl_verb_string TYPE string.
+
+&quot;Using (*UTF); the source string contains a non-breakable space that is to be replaced
+&quot;Result: #x#
+ctrl_verb_string = replace( 
+  val = |#{ cl_abap_conv_codepage=&gt;create_in( codepage = `UTF-16BE` )-&gt;convert( source = CONV xstring( `00A0` ) ) }#|
+  pcre = `(*UTF)\N{U+00A0}` with = `x` occ = 0 ).
+
+&quot;Line breaks
+&quot;The results are demonstrated using string templates.
+&quot;In the examples, the multi-line mode is enabled in addition.
+
+&quot;|_abc\ndef\r_ghi\r_\njkl|
+ctrl_verb_string = replace( val = |abc\ndef\rghi\r\njkl|
+                            pcre = `(*CR)(?m)^` with = `_` occ = 0 ).
+
+ctrl_verb_string = replace( val = |abc\ndef\rghi\r\njkl|
+                            pcre = `(*LF)(?m)^` with = `_` occ = 0 ).
+
+&quot;|_abc\n_def\rghi\r\n_jkl|
+ctrl_verb_string = replace( val = |abc\ndef\rghi\r\njkl|
+                            pcre = `(*CRLF)(?m)^` with = `_` occ = 0 ).
+
+&quot;|_abc\n_def\r_ghi\r\n_jkl|
+ctrl_verb_string = replace( val = |abc\ndef\rghi\r\njkl|
+                            pcre = `(*ANYCRLF)(?m)^` with = `_` occ = 0 ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Callouts</h3>
+<ul>
+<li>Callouts invoke ABAP code during pattern matching.</li>
+<li>They access the current matcher state for further processing and can influence regex processing.</li>
+<li>In ABAP, object-oriented representations of PCRE regular expressions can use callouts.</li>
+<li>Relevant PCRE syntax includes <code>(?Cn)</code> (<em>n</em> is a number) and <code>(?C&quot;text&quot;)</code>.</li>
+</ul>
+<p>The following example shows how to use callouts to call an ABAP method from a PCRE regular expression. It creates an object-oriented representation of a PCRE regex using the <code>CL_ABAP_REGEX</code> class, applying different PCRE syntaxes for callout specifications. The class implements the <code>IF_ABAP_MATCHER_CALLOUT</code> interface, and the <code>callout</code> method uses a demo class instance as the callout handler. If the regex matches, the method is called for each callout position. The <code>callout</code> method populates a string table with accessible details. This demonstrates that regex processing can be influenced, and in the example, processing stops when a condition is met. As a result, <code>found</code> is false because the regex is not fully processed. For more details, refer to the class documentation.</p>
+<p>To try the example out, create a demo class named <code>zcl_demo_abap</code> and paste the code into it. After activation, choose <em>F9</em> in ADT to execute the class. The example is set up to display output in the console.</p>
+<pre><code>CLASS zcl_demo_abap DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun.
+    INTERFACES if_abap_matcher_callout.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+    CLASS-DATA callout TYPE i.
+    CLASS-DATA callout_tab TYPE string_table.
+ENDCLASS.
+
+
+
+CLASS zcl_demo_abap IMPLEMENTATION.
+
+  METHOD if_oo_adt_classrun~main.
+    DATA(text_to_search) = `abcdefghijklmnopq`.
+    DATA(regex) = cl_abap_regex=&gt;create_pcre( pattern = `(...)(?C1)(..)(?C2)(....)(?C3)(.)(?C&quot;D&quot;)(....)(?C&quot;E&quot;)(...)(?C&quot;F&quot;)` ).
+    DATA(matcher) = regex-&gt;create_matcher( text = text_to_search ).
+    DATA(handler) = NEW zcl_demo_abap( ).
+    matcher-&gt;set_callout( handler ).
+    DATA(found) = matcher-&gt;match( ).
+
+    IF found = abap_false.
+      out-&gt;write( |Pattern not found.\n\n| ).
+    ENDIF.
+
+    out-&gt;write( callout_tab ).
+
+  ENDMETHOD.
+
+  METHOD if_abap_matcher_callout~callout.
+    DATA(ts) = utclong_current( ).
+    callout += 1.
+
+    IF callout_string = `F`.
+      callout_result = if_abap_matcher_callout=&gt;c_callout_result-abort.
+    ELSE.
+      callout_result = if_abap_matcher_callout=&gt;c_callout_result-pass.
+
+      APPEND INITIAL LINE TO callout_tab.
+      APPEND |----------------- Callout { callout } -----------------| TO callout_tab.
+      APPEND INITIAL LINE TO callout_tab.
+      APPEND |callout_num: { callout_num }| TO callout_tab.
+      APPEND |callout_string: { callout_string }| TO callout_tab.
+      APPEND |regex: { regex  }| TO callout_tab.
+      APPEND |subject: { subject }| TO callout_tab.
+      APPEND |current_subject_pos: { current_subject_pos }| TO callout_tab.
+      APPEND |current_pattern_pos: { current_pattern_pos }| TO callout_tab.
+      APPEND |capture_last: { capture_last }| TO callout_tab.
+      APPEND |capture_last_len: { capture_last_len }| TO callout_tab.
+      APPEND |capture_last_off: { capture_last_off }| TO callout_tab.
+      APPEND |start_match_off: { start_match_off }| TO callout_tab.
+
+      TRY.
+          APPEND |Content of submatch: { subject+capture_last_off(capture_last_len) }| TO callout_tab.
+        CATCH cx_sy_range_out_of_bounds.
+      ENDTRY.
+      APPEND |This callout was called at { ts }| TO callout_tab.
+    ENDIF.
+
+  ENDMETHOD.
+
+ENDCLASS.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Conditional Patterns</h3>
+<ul>
+<li>Used to check whether certain capture groups are matched</li>
+<li>When matched or not matched, you can specify replacement patterns; you can also specify replacement patterns with conditions</li>
+<li>Relevant PCRE syntax for searches: <code>(?(condition)yes-pattern)</code> or <code>(?(condition)yes-pattern|no-pattern)</code></li>
+<li>The <code>condition</code> can, for example, be the number or name of a capturing group.</li>
+<li>See the code snippet for replacement patterns.</li>
+</ul>
+<pre><code>DATA string_cond_pattern TYPE string.
+
+&quot;------- Conditions in the search pattern -------
+
+&quot;Example pattern:
+&quot;- The first capturing group matches a digit.
+&quot;- The &#x27;?&#x27; character specifies that the capturing group participates
+&quot;  in the match optionally.
+&quot;- A condition is specified, introduced by &#x27;(?...&#x27; and referring to
+&quot;  the first capturing group (the digit) indicated by 1.
+&quot;- If the condition is met, i.e. a digit is found, then the yes pattern
+&quot;  is applied (&#x27;.pdf&#x27;), which participates in the match.
+&quot;- If the condition is not met, i.e. a digit is not found, then the no
+&quot;  pattern is applied (&#x27;.md&#x27;), which participates in the match.
+&quot;- As a result, &#x27;2.pdf&#x27; and the two &#x27;.md&#x27; occurrences (also the one
+&quot;  without the digit) are replaced.
+
+&quot;1.txt,a.txt,#,b.pdf,3.gif,c.gif,4#,d#,5.jpg,e.jpg
+string_cond_pattern = replace( val = `1.txt,a.txt,2.pdf,b.pdf,3.gif,c.gif,4.md,d.md,5.jpg,e.jpg`
+                                pcre = `(\d)?(?(1)\.pdf|\.md)` with = `#` occ = 0 ).
+
+&quot;------- Conditions in the replacement pattern -------
+
+&quot;Search pattern:
+&quot;- The &#x27;?&#x27; character specifies that the capturing group participates in the match optionally.
+&quot;Replacements pattern:
+&quot;- &#x27;$&#x27; followed by the specification of the capturing group that is referred to in curly brackets
+&quot;- The capturing group number is followed by a &#x27;:&#x27; and &#x27;+...&#x27; that denotes the value if true,
+&quot;  the value following the other colon denotes the value if false
+
+&quot;This is very good.
+string_cond_pattern = replace( val = `correct`   pcre = `(in)?correct` with = `This is ${1:+not:very} good.` ).
+
+&quot;This is not good.
+string_cond_pattern = replace( val = `incorrect` pcre = `(in)?correct` with = `This is ${1:+not:very} good.` ).
+
+&quot;Syntax {n:-default}
+&quot;Shortcut for the PCRE replacement pattern by specifying
+&quot;a default if the capture group does not participate in the match
+
+&quot;abcd
+&quot;&#x27;ab&#x27; participates in the match, so the default replacement pattern is not
+&quot;applied
+string_cond_pattern = replace( val = `abcd` pcre = `(ab)?cd` with = `${1:-yz}cd` ).
+
+&quot;yzcd
+&quot;&#x27;ab&#x27; does not participate in the match, so the default replacement pattern is
+&quot;applied
+string_cond_pattern = replace( val = `cd` pcre = `(ab)?cd` with = `${1:-yz}cd` ).</code></pre>
+<h2>ABAP Statements Using Regular Expressions</h2>
+<p>The following example demonstrates a selection of syntax options with <code>FIND</code> and <code>REPLACE</code>. There are multiple options as there is a rich variety of additions. For more details, refer to the <a href="07_String_Processing.md">String Processing</a> cheat sheet.</p>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; FIND
+*&amp;---------------------------------------------------------------------*
+
+DATA(str) = `Cathy&#x27;s black cat on the mat played with Matt.`.
+
+&quot;----- ALL OCCURRENCES addition: Finding all occurrences -----
+&quot;The MATCH COUNT addition stores the number of occurrences in a data object.
+
+&quot;Determining the number of letters in a string
+&quot;a: 36
+FIND ALL OCCURRENCES OF PCRE `[A-Za-z]` IN str MATCH COUNT DATA(a).
+
+&quot;----- RESULTS addition: Finding all occurrences -----
+&quot;The example also uses the ALL OCCURRENCES addition. The findings are
+&quot;stored in a table of type match_result_tab.
+FIND ALL OCCURRENCES OF PCRE `\s` IN str RESULTS DATA(b).
+
+*LINE    OFFSET    LENGTH    SUBMATCHES
+*0       7         1         OFFSET     LENGTH
+*
+*0       13        1         OFFSET     LENGTH
+*
+*0       17        1         OFFSET     LENGTH
+*
+*0       20        1         OFFSET     LENGTH
+*
+*0       24        1         OFFSET     LENGTH
+*
+*0       28        1         OFFSET     LENGTH
+*
+*0       35        1         OFFSET     LENGTH
+*
+*0       40        1         OFFSET     LENGTH
+
+&quot;----- SUBMATCHES addition: Storing capturing group content in variables -----
+&quot;Pattern: anything before and after &#x27; on &#x27;
+FIND PCRE `(.*)\son\s(.*)` IN str IGNORING CASE SUBMATCHES DATA(c) DATA(d).
+&quot;a: &#x27;Cathy&#x27;s black cat&#x27; / b: &#x27;the mat played with Matt.&#x27;.
+
+&quot;Using the RESULTS addition to get offset and length information of
+&quot;all capturing groups, among others
+FIND PCRE `(.*)\son\s(.*)` IN str IGNORING CASE RESULTS DATA(e).
+
+*LINE    OFFSET    LENGTH    SUBMATCHES
+*0       0         46        OFFSET    LENGTH
+*                            0         17
+*                            21        25
+
+&quot;----- MATCH OFFSET/LENGTH additions -----
+&quot;The following examples find the last occurrence of a comma and the following content.
+&quot;\K denotes that the comma is excluded from the result. Using the offset and length
+&quot;values, the part of the string is extracted. The examples underscore that you can
+&quot;achieve the same thing differently with different PCRE syntax patterns (which also
+&quot;applies to ABAP demonstrated with the use of the substring function and specifying
+&quot;the syntax string+off(len) to extract the substring).
+
+str = `abc,def,ghi,jkl,mno,pqr,stu,vwx,yz`.
+
+&quot;Negative lookahead
+FIND PCRE `,(?!.*,)\K.*` IN str MATCH OFFSET DATA(off_a) MATCH LENGTH DATA(len_a).
+&quot;yz
+DATA(content_a) = substring( val = str off = off_a len = len_a ).
+
+&quot;Positive lookahead
+FIND PCRE `,(?=[^,]*$)\K.*` IN str MATCH OFFSET DATA(off_b) MATCH LENGTH DATA(len_b).
+DATA(content_b) = str+off_b(len_b).
+
+ASSERT content_a = `yz`.
+ASSERT content_b = content_a.
+
+&quot;----- IN TABLE addition: Searching in internal tables  -----
+&quot;The internal table must have a character-like line type.
+
+&quot;Searching in an internal table and retrieving line, offset, length information
+&quot;The example only searches for the first occurrence. See another example below
+&quot;that uses the ALL OCCURRENCES and RESULTS additions.
+DATA(itab) = VALUE string_table( ( `Cathy&#x27;s black cat on the mat played with the friend of Matt.` ) ).
+&quot;Pattern: &#x27;t&#x27; at the beginning of a word followed by another character
+&quot;d: 1, e: 21, f: 2
+FIND FIRST OCCURRENCE OF PCRE `\bt.` IN TABLE itab
+  IGNORING CASE MATCH LINE DATA(f) MATCH OFFSET DATA(g) MATCH LENGTH DATA(h).
+
+&quot;----- Searching in internal tables  -----
+&quot;The RESULTS addition stores findings in an internal table of type match_result_tab when
+&quot;ALL OCCURRENCES is used.
+&quot;Submatches (i.e. length and offset values of the submatches) are stored in internal
+&quot;tables themselves. Therefore, the example uses nested loops and the substring function
+&quot;to retrieve the strings.
+
+&quot;The objective of the following example is to extract the content of the segments that
+&quot;are positioned within /.../ in a URL. The segments are stored in an internal table.
+DATA(url) = `https://help.sap.com/docs/abap-cloud/abap-concepts/controlled-sap-luw/`.
+DATA url_parts TYPE string_table.
+
+FIND ALL OCCURRENCES OF PCRE `(?&lt;=\/)([^\/]+)(?=\/)` IN url RESULTS DATA(res).
+
+&quot;Details on the regular expression:
+&quot;- Positive lookbehind (?&lt;=\/) that determines that the content is preceded by `/`
+&quot;- Positive lookahead (?=\/) that determines that the content is followed by `/
+&quot;- ([^\/]+) in between determines that any sequence of characters that are not `/` are matched
+&quot;- The match is put in parentheses to store the submatch
+
+LOOP AT res INTO DATA(finding).
+  LOOP AT finding-submatches INTO DATA(sub).
+    DATA(url_part) = substring( val = url off = sub-offset len = sub-length ).
+    APPEND url_part TO url_parts.
+  ENDLOOP.
+ENDLOOP.
+
+&quot;The following statement uses nested iteration expressions with FOR instead of nested
+&quot;LOOP statements.
+DATA(url_parts_for_loop) = VALUE string_table( FOR wa1 IN res
+                                               FOR wa2 IN wa1-submatches
+                                               ( substring( val = url off = wa2-offset len = wa2-length ) ) ).
+
+ASSERT url_parts = url_parts_for_loop.
+*Content:
+*help.sap.com
+*docs
+*abap-cloud
+*abap-concepts
+*controlled-sap-luw
+
+*&amp;---------------------------------------------------------------------*
+*&amp; REPLACE
+*&amp;---------------------------------------------------------------------*
+
+DATA(str_replace) = `ab apppc app`.
+DATA(str_replace_copy) = str_replace.
+
+&quot;Changing the source field directly with a REPLACE statement; same as above
+&quot;pc app#ab a
+REPLACE PCRE `(.*?)PP(.*)` IN str_replace WITH `$2#$1` IGNORING CASE.
+
+str_replace = str_replace_copy.
+
+&quot;ALL OCCURRENCES addition
+&quot;ab#apppc#app
+REPLACE ALL OCCURRENCES OF PCRE `\s` IN str_replace WITH `#`.
+
+str_replace = str_replace_copy.
+
+&quot;ab a## a#
+REPLACE ALL OCCURRENCES OF PCRE `p.` IN str_replace WITH `#`
+  REPLACEMENT COUNT DATA(repl_cnt) &quot;3
+  RESULTS DATA(repl_res).
+&quot;repl_res:
+&quot;LINE    OFFSET    LENGTH
+&quot;0       4         1
+&quot;0       5         1
+&quot;0       8         1
+
+DATA(str_table_original) = VALUE string_table( ( `a1bc2` ) ( `d3ef` ) ( `4ghi` ) ( `jkl` ) ).
+DATA(str_table) = str_table_original.
+
+&quot;Replacing all occurrences in a table
+&quot;RESULTS addition: Storing information in an internal table of type repl_result_tab
+REPLACE ALL OCCURRENCES OF PCRE `\d`
+  IN TABLE str_table
+  WITH `#`
+  RESULTS DATA(res_table).
+
+&quot;str_table: a#bc# / d#ef / #ghi / jkl
+&quot;res_table:
+&quot;LINE    OFFSET    LENGTH
+&quot;1       1         1
+&quot;1       4         1
+&quot;2       1         1
+&quot;3       0         1
+
+str_table = str_table_original.
+
+&quot;Replacing the first occurrence in a table
+&quot;RESULTS addition: Storing information in a structure of type repl_result
+REPLACE FIRST OCCURRENCE OF PCRE `\d`
+  IN TABLE str_table
+  WITH `#`
+  RESULTS DATA(res_structure).
+
+&quot;str_table: a#bc2 / d3ef / 4ghi / jkl
+&quot;res_structure:
+&quot;LINE  OFFSET  LENGTH
+&quot;1     1       1
+
+str_table = str_table_original.
+
+&quot;Restricting the search range in an internal table
+REPLACE ALL OCCURRENCES OF PCRE `\d`
+  IN TABLE str_table
+  FROM 1 TO 2
+  WITH `#`.
+
+&quot;str_table: a#bc# / d#ef / 4ghi / jkl
+
+str_table = str_table_original.
+
+&quot;Offsets can be optionally specified (also only the offset of start or end line possible)
+REPLACE ALL OCCURRENCES OF PCRE `\d`
+  IN TABLE str_table
+  FROM 1 OFFSET 3 TO 2 OFFSET 2
+  WITH `#`.
+
+&quot;str_table: a1bc# / d#ef / 4ghi / jkl</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Built-In Functions in ABAP Using Regular Expressions</h2>
+<p>Examples:</p>
+<pre><code>DATA(text) = `Pieces of cakes.`.
+
+&quot;---------------- find ----------------
+&quot;The find function searches for the subtexting specified and returns the offset
+
+&quot;15
+DATA(find) = find( val = text pcre = `\.` ).
+
+&quot;---------------- find_end ----------------
+&quot;find_end returns the sum of the offset of the occurrence plus the length of the match
+
+&quot;7 (6 + 1)
+DATA(find_end) = find_end( val = text pcre = `\s` ).
+
+&quot;---------------- count ----------------
+
+&quot;2
+DATA(count_a)  = count( val = text pcre = `\s` ).
+
+&quot;16
+DATA(count_b)  = count( val = text pcre = `.` ).
+
+&quot;---------------- match ----------------
+
+&quot;jon.doe@email.com
+DATA(match_a) = match( val = `The email address is jon.doe@email.com.`
+                        pcre = `\w+(\.\w+)*@(\w+\.)+(\w{2,4})` ).
+
+&quot;Find blank (without inlcuding it in the result indicated by \K) and
+&quot;the following 2 characters, second occurrence
+&quot;ad
+DATA(match_b) = match( val = `The email address is jon.doe@email.com.`
+                        pcre = `\s\K..`
+                        occ = 2 ).
+
+&quot;---------------- replace ----------------
+&quot;Pieces#of cakes.
+DATA(replace_a) = replace( val = text pcre = `\s` with = `#` ).
+
+&quot;Pieces of#cakes.
+DATA(replace_b) = replace( val = text pcre = `\s` occ = 2 with = `#` ).
+
+&quot;---------------- substring_* ----------------
+
+text = `Lorem ipsum dolor sit amet`.
+
+&quot;Extracting a substring ...
+&quot;... after a matching regular expression
+
+&quot;dolor sit amet
+DATA(substring_after) = substring_after( val = text pcre = `\s` occ = 2 ).
+
+
+&quot;... before a matching regular expression
+&quot;Lorem ipsum
+DATA(substring_before) = substring_before( val = text pcre = `\s` occ = 2 ).
+
+&quot;... from a matching regular expression on including the match
+&quot;&#x27; dolor sit amet&#x27;
+DATA(substring_from) = substring_from( val = text pcre = `\s` occ = 2  ).
+
+&quot;... up to a matching regular expression including the match
+&quot;&#x27;Lorem ipsum &#x27;
+DATA(substring_to) = substring_to( val = text pcre = `\s` occ = 2 ).
+
+&quot;---------------- Predicate functions: contains, matches ----------------
+&quot;The built-in functions &#x27;contains&#x27; returns a truth value. In the following
+&quot;examples, the truth value is demonstrated using the xsdbool function.
+
+&quot;X
+DATA(contains) = xsdbool( contains( val = `abc def` pcre = `\s`  ) ).
+
+&quot;The built-in functions &#x27;matches&#x27; compares a search range of the textual argument
+&quot;with a regular expression.
+
+&quot;X
+DATA(matches) = xsdbool( matches( val  = `jon.doe@email.com`
+                                  pcre = `\w+(\.\w+)*@(\w+\.)+(\w{2,4})` ) ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Built-In Functions in ABAP SQL and CDS Using Regular Expressions</h2>
+<p>The following example demonstrates <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENSQL_FUNCTIONS_STRING.html">built-in functions using regular expressions in ABAP SQL</a>. For more information on the built-in functions for ABAP CDS, refer to the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_builtin_functions.htm">ABAP Keyword Documentation</a>. The example assumes that the ABAP cheat sheet repository has been imported into the system as it uses some of its repository objects.</p>
+<pre><code>&quot;Populating demo database tables
+zcl_demo_abap_aux=&gt;fill_dbtabs( ).
+
+SELECT SINGLE
+  carrid,    &quot;LH
+  carrname,  &quot;Lufthansa
+  url,       &quot;http://www.lufthansa.com
+
+  &quot;Checks if expression contains a PCRE expression;
+  &quot;case-sensitive by default (case_sensitive parameter can be specified)
+  &quot;Notes on the 1 = found, 0 = not found
+  &quot;1
+  like_regexpr( pcre  = &#x27;\..&#x27;,         &quot;Period that is followed by any character
+                value = url ) AS like_regex,
+
+  &quot;Searches a PCRE pattern, returns offset of match;
+  &quot;many optional parameters: occurrence, case_sensitive, start, group
+  &quot;21
+  locate_regexpr( pcre = &#x27;\..&#x27;,        &quot;Period followed by any character
+                  value = url,
+                  occurrence = 2 )     &quot;2nd occurrence in the string
+                  AS locate_regexpr,
+
+  &quot;Searches a PCRE pattern, returns offset of match + 1;
+  &quot;many optional parameters: occurrence, case_sensitive, start, group
+  &quot;2
+  locate_regexpr_after( pcre = &#x27;.&#x27;,     &quot;Any character
+                        value = url,
+                        occurrence = 1 ) AS locate_regexpr_after,
+
+  &quot;Counts all occurrences of found PCRE patterns
+  &quot;2
+  occurrences_regexpr( pcre = &#x27;\..&#x27;,    &quot;Period that is followed by any character
+                        value = url ) AS occ_regex,
+
+  &quot;Replaces a found PCRE expression;
+  &quot;more parameters possible: occurrence, case_sensitive, start
+  &quot;http://www#ufthansa#om
+  replace_regexpr( pcre = &#x27;\..&#x27;,        &quot;Period that is followed by any character
+                    value = url,
+                    with = &#x27;#&#x27; ) AS replace_regex,
+
+  &quot;Searches for a PCRE expression and returns the matched substring
+  &quot;More parameters possible: occurrence, case_sensitive, start, group
+  &quot;.lu
+  substring_regexpr( pcre = &#x27;\...&#x27;, &quot;Period that is followed by any two characters
+                      value = url ) AS substring_regexpr
+
+  FROM zdemo_abap_carr
+  WHERE carrid = &#x27;LH&#x27;
+  INTO @DATA(builtin_func_regex).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>System Classes for Regular Expressions: CL_ABAP_REGEX and CL_ABAP_MATCHER</h2>
+<ul>
+<li><code>CL_ABAP_REGEX</code></li>
+<li>Creates an object-oriented representation of regular expressions.</li>
+<li>The <code>create_pcre</code> method creates instances of regular expressions with PCRE syntax.</li>
+<li>Instances of the class can be used with the ...</li>
+<li><code>CL_ABAP_MATCHER</code> class to create a matcher, which applies regular expressions or</li>
+<li><code>REGEX</code> addition (not <code>PCRE</code>) in <code>FIND</code> and <code>REPLACE</code> statements.</li>
+<li>A variety of methods and parameters can be specified to accomplish various things and to further specify the handling of the regular expression.</li>
+</ul>
+<ul>
+<li><code>CL_ABAP_MATCHER</code></li>
+<li>Applies regular expressions to strings or internal tables.</li>
+<li>Offers methods to search, replace, or match regular expressions.</li>
+<li>Instances of the class can be created with ...</li>
+<li>methods of the class itself or</li>
+<li>the <code>create_matcher</code> method of the <code>CL_ABAP_REGEX</code> class.</li>
+<li>You get access to the processing state of the regular expression using <code>get...</code> methods.</li>
+<li>Supports callouts as outlined in <a href="#callouts">this section</a>, requiring the <code>IF_ABAP_MATCHER_CALLOUT</code> interface implementation.</li>
+<li>For reusing regular expressions, use <code>CL_ABAP_MATCHER</code> instances created with <code>CL_ABAP_REGEX</code>.</li>
+</ul>
+<ul>
+<li>Find more information in the class documentation (press F2 on the class in ADT).</li>
+</ul>
+<p>Examples:</p>
+<pre><code>&quot;Example string
+DATA(str) = `a1 # B2 ? cd . E3`.
+
+&quot;----------- Creating an instance of a regular expression -----------
+
+&quot;Creating an instance of a regular expression with PCRE syntax
+&quot;using cl_abap_regex
+
+&quot;Example pattern: Any-non digit followed by a digit
+DATA(regex) = cl_abap_regex=&gt;create_pcre( pattern = `\D\d`
+                                          ignore_case = abap_true ).
+
+&quot;----------- Creating matchers -----------
+
+&quot;Two ways are possible (both ways return references of type
+&quot;ref to cl_abap_matcher):
+&quot;- create_matcher method of the cl_abap_regex class
+&quot;- create_pcre method of the cl_abap_matcher class
+&quot;Note that several importing parameters are available to enable
+&quot;further settings of the regular expression, e.g. ignoring the
+&quot;case, using the extended mode, etc. The examples pass a string
+&quot;to the &#x27;text&#x27; parameter. You can also specify internal tables
+&quot;with the &#x27;table&#x27; parameter and more.
+
+&quot;Creating a matcher using the create_matcher method of the cl_abap_regex class
+DATA(matcher_1) = regex-&gt;create_matcher( text = str ).
+&quot;Creating a matcher in one go using method chaining
+DATA(matcher_2) = cl_abap_regex=&gt;create_pcre( pattern = `\D\d`
+                                              ignore_case = abap_true
+                                            )-&gt;create_matcher( text = str ).
+
+&quot;Creating a matcher using the create_pcre method of the cl_abap_matcher class
+DATA(matcher_3) = cl_abap_matcher=&gt;create_pcre( pattern = `\D\d`
+                                                text    = str
+                                                ignore_case = abap_true ).
+
+&quot;----------- Exploring searching and replacing -----------
+
+&quot;--- Finding all occurrences using the find_all method ---
+&quot;In the example, result has the type match_result_tab containing the findings.
+DATA(result_fa1) = matcher_1-&gt;find_all( ).
+
+*LINE    OFFSET    LENGTH    SUBMATCHES
+*0       0         2         OFFSET     LENGTH
+*
+*0       5         2         OFFSET     LENGTH
+*
+*0       15        2         OFFSET     LENGTH
+
+DATA(result_fa2) = matcher_2-&gt;find_all( ).
+ASSERT result_fa2 = result_fa1.
+
+&quot;Getting the result in one go using method chaining with cl_abap_matcher
+DATA(result_fa3) = cl_abap_matcher=&gt;create_pcre( pattern = `\D\d`
+                                                text    = str
+                                                ignore_case = abap_true
+                                              )-&gt;find_all( ).
+ASSERT result_fa3 = result_fa1.
+
+&quot;--- Example with submatches ---
+
+str = `XabcdXXefgXXhXXijklmnXX`.
+
+DATA(result_fa4) = cl_abap_matcher=&gt;create_pcre( pattern = `X(.*?)X`
+                                                 text    = str
+                                                 ignore_case = abap_true
+                                               )-&gt;find_all( ).
+
+*LINE    OFFSET    LENGTH    SUBMATCHES
+*0       0         6         OFFSET    LENGTH
+*                            1         4
+*0       6         5         OFFSET    LENGTH
+*                            7         3
+*0       11        3         OFFSET    LENGTH
+*                            12        1
+*0       14        8         OFFSET    LENGTH
+*                            15        6
+
+&quot;--- Replacing all occurrences using the &#x27;replace_all&#x27; method ---
+
+DATA(matcher_repl_1) = cl_abap_regex=&gt;create_pcre( pattern = `X(.*?)X`
+                                                 )-&gt;create_matcher( text = str ).
+
+&quot;4
+DATA(repl_count_1) = matcher_repl_1-&gt;replace_all( newtext = `#$1#` ).
+
+&quot;#abcd##efg##h##ijklmn#X
+DATA(repl_result_1) = matcher_repl_1-&gt;text.
+
+&quot;Using cl_abap_matcher
+DATA(matcher_repl_2) = cl_abap_matcher=&gt;create_pcre( pattern = `X(.*?)X`
+                                                     text    = str ).
+DATA(repl_count_2) = matcher_repl_2-&gt;replace_all( newtext = `#$1#` ).
+DATA(repl_result_2) = matcher_repl_2-&gt;text.
+
+&quot;---- Sequential processing of the regular expression ---
+&quot;---- using the find_next method ------------------------
+&quot;The example explores various other methods, and writes
+&quot;information to a string table.
+
+str = `a1bc2def3ghij45klm67opqr8stuvwx90yz`.
+
+DATA(matcher_fn) = cl_abap_matcher=&gt;create_pcre( pattern = `\d(\D.)`
+                                                 text    = str ).
+
+DATA strtab TYPE string_table.
+WHILE matcher_fn-&gt;find_next( ) = abap_true.
+  APPEND |---- Finding { sy-index } -----| TO strtab.
+
+  &quot;Type match_result
+  DATA(match_result) = matcher_fn-&gt;get_match( ).
+
+  DATA(offset) = matcher_fn-&gt;get_offset( ).
+  DATA(length) = matcher_fn-&gt;get_length( ).
+  DATA(matched_content) = str+offset(length).
+
+  APPEND |Match offset: { offset }| TO strtab.
+  APPEND |Match length: { length }| TO strtab.
+  APPEND |Match content: { matched_content }| TO strtab.
+
+  &quot;Type match_result
+  DATA(subgroup) = matcher_fn-&gt;get_match( )-submatches.
+
+  LOOP AT subgroup INTO DATA(wa).
+    DATA(sub_tabix) = sy-tabix.
+    DATA(submatch_line) = wa.
+    DATA(submatch_offset) = wa-offset.
+    DATA(submatch_length) = wa-length.
+    DATA(submatch) = matcher_fn-&gt;get_submatch( sub_tabix ).
+    APPEND |Submatch { sub_tabix } offset: { submatch_offset }| TO strtab.
+    APPEND |Submatch { sub_tabix } length: { submatch_length }| TO strtab.
+    APPEND |Submatch { sub_tabix } content: { submatch }| TO strtab.
+  ENDLOOP.
+
+ENDWHILE.
+
+&quot;---- Using an object of type cl_abap_regex in ABAP ---
+&quot;---- statements with the REGEX addition --------------
+
+DATA(result_find_all_1) = cl_abap_matcher=&gt;create_pcre( pattern = `\d(\D.)`
+                                                        text = str
+                                                      )-&gt;find_all( ).
+DATA(result_find_all_2) = cl_abap_regex=&gt;create_pcre( pattern = `\d(\D.)`
+                                           )-&gt;create_matcher( text = str
+                                           )-&gt;find_all( ).
+
+DATA(reg_expr) = cl_abap_regex=&gt;create_pcre( pattern = `\d(\D.)` ).
+
+FIND ALL OCCURRENCES OF REGEX reg_expr IN str RESULTS DATA(result_find_all_3).
+
+*LINE    OFFSET    LENGTH    SUBMATCHES
+*0       1         3         OFFSET    LENGTH
+*                            2         2
+*0       4         3         OFFSET    LENGTH
+*                            5         2
+*0       8         3         OFFSET    LENGTH
+*                            9         2
+*0       14        3         OFFSET    LENGTH
+*                            15        2
+*0       19        3         OFFSET    LENGTH
+*                            20        2
+*0       24        3         OFFSET    LENGTH
+*                            25        2
+*0       32        3         OFFSET    LENGTH
+*                            33        2
+
+ASSERT result_find_all_3 = result_find_all_1.
+ASSERT result_find_all_3 = result_find_all_2.
+
+&quot;Note that the REGEX addition is obsolete when using (POSIX) syntax patterns
+&quot;A syntax warning is displayed for the following example.
+&quot;FIND ALL OCCURRENCES OF REGEX `\d(\D.)` IN str RESULTS DATA(result_8).
+
+&quot;The syntax warning can be suppressed using a pragma
+FIND ALL OCCURRENCES OF REGEX `\d(\D.)` IN str RESULTS DATA(result_find_all_4) ##REGEX_POSIX.
+
+&quot;Using PCRE instead
+FIND ALL OCCURRENCES OF PCRE `\d(\D.)` IN str RESULTS DATA(result_find_all_5).
+ASSERT result_find_all_5 = result_find_all_3.
+
+&quot;---------------- Exploring more parameters of the create_pcre method ----------------
+&quot;See the class documentation for more parameters and information.
+
+&quot;--- enable_multiline parameter ---
+
+str = |abc\ndef\nghi\njkl|.
+
+DATA(matcher_no_ml) = cl_abap_matcher=&gt;create_pcre( pattern = `^`
+                                                    text    = str ).
+&quot;1
+DATA(repl_count_no_ml) = matcher_no_ml-&gt;replace_all( newtext = `#` ).
+&quot;|#abc\ndef\nghi\njkl|
+DATA(repl_result_no_ml) = matcher_no_ml-&gt;text.
+
+DATA(matcher_w_ml) = cl_abap_matcher=&gt;create_pcre( pattern = `^`
+                                                   text    = str
+                                                   enable_multiline = abap_true ).
+&quot;4
+DATA(repl_count_w_ml) = matcher_w_ml-&gt;replace_all( newtext = `#` ).
+&quot;|#abc\n#def\n#ghi\n#jkl|
+DATA(repl_result_w_ml) = matcher_w_ml-&gt;text.
+
+&quot;--- table/ignore_case parameters ---
+
+data(str_table) = VALUE string_table( ( `abZdez` ) ( `zZfghZ` ) ( `ijkZZz` ) ( `zzzzZ` ) ).
+
+DATA(matcher_tab) = cl_abap_matcher=&gt;create_pcre( pattern = `z+`
+                                                  table   = str_table
+                                                  ignore_case = abap_true ).
+&quot;6
+DATA(repl_count_tab) = matcher_tab-&gt;replace_all( newtext = `#` ).
+&quot;ab#de# / #fgh# / ijk# / #
+DATA(repl_result_tab) = matcher_tab-&gt;table.
+
+&quot;--- extended parameter ---
+
+str = `abc def`.
+
+DATA(matcher_w_extended) = cl_abap_matcher=&gt;create_pcre( pattern = `abc def`
+                                                         text    = str ).
+
+&quot;No replacement in the following example as the extended mode is
+&quot;enabled by default.
+&quot;0
+DATA(repl_count_w_extended) = matcher_w_extended-&gt;replace_all( newtext = `#` ).
+&quot;abc def
+DATA(repl_result_w_extended) = matcher_w_extended-&gt;text.
+
+&quot;Disabling the extended mode so that whitespaces are not ignored
+DATA(matcher_not_extended) = cl_abap_matcher=&gt;create_pcre( pattern = `abc def`
+                                                           text    = str
+                                                           extended = abap_false ).
+
+&quot;1
+DATA(repl_count_not_extended) = matcher_not_extended-&gt;replace_all( newtext = `#` ).
+&quot;#
+DATA(repl_result_not_extended) = matcher_not_extended-&gt;text.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Executable Example</h2>
+<p><a href="./src/zcl_demo_abap_regex.clas.abap">zcl_demo_abap_regex</a></p>
+<div class="note">[!NOTE] - The [executable example](./src/zcl_demo_abap_string_proc.clas.abap) of the [String Processing](07_String_Processing.md) cheat sheet also includes examples with regular expressions. - The steps to import and run the code are outlined [here](README.md#-getting-started-with-the-examples). - [Disclaimer](./README.md#%EF%B8%8F-disclaimer)</div>
+</body>
+</html>

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18 Dynpro - ABAP Cheat Sheet</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #95a5a6;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4, h5, h6 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+<p>&lt;a name=&quot;top&quot;&gt;&lt;/a&gt;</p>
+<h1>Dynpro</h1>
+<ul>
+<li><a href="#dynpro">Dynpro</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#about-dynpros">About Dynpros</a></li>
+<li><a href="#dynpro-flow-logic">Dynpro Flow Logic</a></li>
+<li><a href="#dialog-modules">Dialog Modules</a></li>
+<li><a href="#transporting-data-between-dynpros-and-the-abap-program">Transporting Data between Dynpros and the ABAP Program</a></li>
+<li><a href="#dynpro-fields">Dynpro Fields</a></li>
+<li><a href="#ok-field-and-function-codes">OK Field and Function Codes</a></li>
+<li><a href="#program-controlled-data-transport">Program-Controlled Data Transport</a></li>
+<li><a href="#calling-dialog-modules-conditionally">Calling Dialog Modules Conditionally</a></li>
+<li><a href="#input-checks">Input Checks</a></li>
+<li><a href="#field-and-input-help">Field and Input Help</a></li>
+<li><a href="#dnypro-sequence-calling-and-leaving-dynpros">Dnypro Sequence, Calling and Leaving Dynpros</a></li>
+<li><a href="#dynpro-sequence">Dynpro Sequence</a></li>
+<li><a href="#abap-statements-for-calling-and-leaving-dynpros">ABAP Statements for Calling and Leaving Dynpros</a></li>
+<li><a href="#modifying-static-attributes-of-screen-elements">Modifying Static Attributes of Screen Elements</a></li>
+<li><a href="#statements-for-the-gui-status-and-title">Statements for the GUI Status and Title</a></li>
+<li><a href="#controls">Controls</a></li>
+<li><a href="#table-controls">Table Controls</a></li>
+<li><a href="#tabstrips-controls">Tabstrips Controls</a></li>
+<li><a href="#gui-controls">GUI Controls</a></li>
+<li><a href="#more-information">More Information</a></li>
+<li><a href="#executable-example">Executable Example</a></li>
+</ul>
+<h2>Introduction</h2>
+<div class="note">[!NOTE] The content of this cheat sheet and the executable example are only relevant to [classic ABAP](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenclassic_abap_glosry.htm).</div>
+<p><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenuser_interface_glosry.htm">User interfaces (UI)</a> are not limited to displaying some information, they must also allow the user to interact with the program. In modern UI technologies, this can be achieved through <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenevent_glosry.htm">events</a>, i.e. <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenuser_action_glosry.htm">user actions</a> on a UI trigger events, and UI methods register these events and react accordingly. In this way, users control the program flow through their actions. In the early days of ABAP, classes, methods, and events did not exist. Program flow control had to be achieved in other ways. This is where <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_glosry.htm">dynpros</a> (dynamic programs) representing a classic ABAP UI technology come into play.</p>
+<p>This cheat sheet provides a high-level overview of classic dynpro topics with a focus on dynpro-related statements, supported by an executable example to check the syntax in action.</p>
+<div class="note">[!NOTE] - Classic dynpros are outdated for application programs. New developments should use web-based UIs, such as SAPUI5. - Dynpros cannot be created in ABAP Cloud. - This cheat sheet ... - is not intended to encourage you to start creating classic dynpros for programming new applications. - does not cover all facets, techniques, and keywords in great detail. - is intended to cover a selection of dynpro-related topics and syntax that you may encounter in older ABAP code. If you need more information, always consult the ABAP Keyword Documentation. - The statements covered in the dynpro flow logic are specific to dynpros. - Links to the ABAP Keyword Documentation in this cheat sheet refer to the documentation for [Standard ABAP](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenstandard_abap_glosry.htm) (latest version).</div>
+<h2>About Dynpros</h2>
+<ul>
+<li>Stands for dynamic program, i.e. the program execution is dynmically controlled by user interactions</li>
+<li>Can only be defined in <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenfunction_group_glosry.htm">function groups</a>, <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenmodul_pool_glosry.htm">module pools</a> (not <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenclass_pool_glosry.htm">class pools</a>) and <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenexecutable_program_glosry.htm">executable program</a> (<em>reports</em>; the focus in the cheat sheet is on the latter)</li>
+<li>Can be identified by a unique, four-digit <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_number_glosry.htm">dynpro number</a> in an <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenabap_program_glosry.htm">ABAP program</a>. Note that leading zeros need not be specified when calling the dynpro. Number 1000 is reserved, as are other dynpro number ranges (e.g. used by SAP). The current dynpro can be retrieved using <code>sy-dynnr</code>.</li>
+<li>Are displayed in a window of <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abensap_gui_glosry.htm">SAP GUI</a></li>
+<li>Consist of the following main aspects:</li>
+<li>Specific characteristics when creating the dynpro. To name a few:</li>
+<li>Dynpro type: Defines whether the dynpro is displayed in the full GUI window (if <em>Normal</em> is selected), in a pop-up window (<em>Modal Dialog Box</em>), or as a subscreen in a specific area within another dynpro in the same ABAP program.</li>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abennext_dynpro_glosry.htm">Next dynpro</a>: Statically specifies the next dynpro to be displayed in a <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_sequence_glosry.htm">dynpro sequence</a>. Setting the next dynpro to 0 or leaving the attribute blank will make the current dynpro the last dynpro in the sequence. If the next dynpro number is the same as the current dynpro, the dynpro continues to be called. The static next dynpro can be overwritten temporarily and dynamically in the ABAP program.</li>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenscreen_glosry.htm">Screen layout</a>:</li>
+<li>Has <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenscreen_element_glosry.htm">screen elements</a> and is visible to users</li>
+<li>Screen elements are, for example, checkboxes, radio buttons, custom controls, dropdown list boxes, pushbuttons, input/output fields, subscreens, table controls, tabstrip controls, text fields, and status icons.</li>
+<li>To add screen elements, use the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenlayout_editor_glosry.htm">layout editor</a> of the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenscreen_painter_glosry.htm">screen painter</a> tool. It is available only in the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenabap_workbench_glosry.htm">ABAP Workbench</a>.</li>
+<li>For each screen element, you can define various static properties (attributes) that control its appearance. Double-clicking a screen element in the layout editor opens the attribute maintenance dialog box.</li>
+<li>Various static attributes of the screen elements can be overwritten dynamically from within the ABAP program using special statements.</li>
+<li>Have their own data objects, called <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_field_glosry.htm">dynpro fields</a> (see more below)</li>
+<li>Are called either by another dynpro (as the next dynpro), by a <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abentransaction_code_glosry.htm">transaction code</a> (<a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendialog_transaction_glosry.htm">dialog transaction</a>), or by ABAP statements (e.g. <code>CALL SCREEN</code>). Several dynpros in a single ABAP program can be called in sequence to form a dynpro sequence.</li>
+</ul>
+<div class="note">[!NOTE] There are special dynpros ([selection screens](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenselection_screen_glosry.htm), [classic lists](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenclassic_list_glosry.htm)). They are created implicitly. See the [Selection Screens and Classic Lists](20_Selection_Screens_Lists.md) cheat sheet.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Dynpro Flow Logic</h2>
+<ul>
+<li>Represents the procedural part of a dynpro</li>
+<li>Controls the dynpro processing, fills and processes the dynpro fields</li>
+<li>Is defined in the <em>Flow Logic</em> tab in the screen painter</li>
+<li>The statements in the dynpro flow logic are specific to dynpro. Nevertheless, they run in AS ABAP.</li>
+<li>Contains <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenprocessing_block_glosry.htm">processing blocks</a> introduced by special keywords</li>
+<li>The processing blocks are executed in response to the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenpai_glosry.htm">PAI</a>, <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenpbo_glosry.htm">PBO</a>, <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenpoh_glosry.htm">POH</a>, and <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenpov_glosry.htm">POV</a> events of the corresponding ABAP program, and call <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendialog_module_glosry.htm">dialog modules</a>:</li>
+</ul>
+<ul>
+<li><code>PROCESS BEFORE OUTPUT</code> (often also abbreviated as PBO):</li>
+<li>Triggered by the ABAP runtime framework and processed before the dynpro is displayed</li>
+<li>Dialog modules can be called at the PBO event. They are mainly used to prepare the dynpro display, for example, by pre-populating input/output fields.</li>
+<li>When the dynpro is presented to the user, and the user has made entries and wants to leave the dynpro, the PAI event is triggered, for example, when a button is clicked.</li>
+</ul>
+<ul>
+<li><code>PROCESS AFTER INPUT</code> (PAI):</li>
+<li>Processed after a user action on the dynpro</li>
+<li>The dialog modules called at PAI evaluate the user entries and process them.</li>
+<li>When the processing is complete, the processing of the current dynpro ends and the next dynpro is called.</li>
+</ul>
+<div class="note">[!NOTE] - The PAI processing of the current dynpro and the PBO processing of the next dynpro take place one after the other in the same [work process](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenwork_process_glosry.htm) on the application server and together form a dialog step. - As soon as the screen is ready for input again, only the presentation server is active until the next user action. During this time, the ABAP program waiting for user input does not occupy a work process on the application server.</div>
+<ul>
+<li>The other events are triggered when the user requests a field or input help for a field:</li>
+<li><code>PROCESS ON HELP-REQUEST</code> (POH)</li>
+<li><code>PROCESS ON VALUE-REQUEST</code> (POV)</li>
+</ul>
+<p>Example:</p>
+<pre><code>PROCESS BEFORE OUTPUT.
+  ... &quot;Here, for example, modules can be called.
+
+PROCESS AFTER INPUT.
+  ...
+
+&quot;When you implement field or value helps, use the following processing blocks.
+PROCESS ON HELP-REQUEST. 
+  ...
+
+PROCESS ON VALUE-REQUEST.
+  ...</code></pre>
+<p>The following statements are among the non-ABAP statements in the dynpro flow logic. They are covered briefly below.</p>
+<p>-	<code>MODULE</code> for calling dialog modules -	<code>FIELD</code> for controlling the data transport between dynpro fields and the ABAP program -	<code>CHAIN</code> and <code>ENDCHAIN</code> for combining module calls -	<code>LOOP</code> and <code>ENDLOOP</code> for processing lines of a table control (similar to the ABAP statement <code>LOOP</code>) -	<code>CALL SUBSCREEN</code> for calling the flow logic of a subscreen</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Dialog Modules</h2>
+<ul>
+<li>Are processing blocks in an ABAP program</li>
+<li>Represent the procedural link between the dynpro and the ABAP program.</li>
+<li>Are implemented between the statements <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapmodule.htm"><code>MODULE</code></a> and <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapendmodule.htm"><code>ENDMODULE</code></a>.</li>
+<li>In the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_flow_logic_glosry.htm">dynpro flow logic</a>, they are called using the <code>MODULE some_module_9000.</code> statement, which calls an ABAP processing block called <code>some_module_9000</code>.</li>
+<li>By calling dialog modules during the PBO, PAI, POH, and POV events of the dynpro, the dynpro controls the flow of the associated ABAP program.</li>
+<li>Do not have a parameter interface. The data transport between the dynpro fields and the ABAP program therefore takes place exclusively through the global variables of the ABAP program assigned to the dynpro fields (see below).</li>
+<li>Do not have a local data area. Data object declarations in dialog modules result in global variables of the program. If you really need local data declarations in this context, you can make local data declarations in a method in a local class of the program and call the method.</li>
+<li>Within the dynpro processing block(s) ...</li>
+<li><code>PROCESS BEFORE OUTPUT</code>, the dynpro statement <code>MODULE</code> can only be used to call dialog modules that were defined with the <code>OUTPUT</code> addition.</li>
+<li><code>PROCESS AFTER INPUT</code>, <code>PROCESS ON HELP-REQUEST</code>, and <code>PROCESS ON VALUE-REQUEST</code>, only the dialog modules defined with the <code>INPUT</code> addition can be called.</li>
+<li>Are not associated with a specific dynpro and can therefore be called from different dynpros.</li>
+<li>You can choose random names for the dialog modules. The name chosen in the example indicates that they are modules for a dynpro with the number 9000.</li>
+</ul>
+<pre><code>&quot;Flow Logic tab in the screen painter
+
+PROCESS BEFORE OUTPUT.
+  MODULE pbo_9000.
+
+PROCESS AFTER INPUT.
+  MODULE pai_9000.</code></pre>
+<p>Calling dialog modules in the dynpro flow logic:</p>
+<p>Implementation of the dialog modules in the ABAP program:</p>
+<pre><code>MODULE pbo_9000 OUTPUT.
+  ...
+ENDMODULE.
+
+MODULE pai_9000 INPUT.
+  ...
+ENDMODULE.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Transporting Data between Dynpros and the ABAP Program</h2>
+<h3>Dynpro Fields</h3>
+<ul>
+<li>The transport of data between dynpros and the ABAP program is performed using <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_field_glosry.htm">dynpro fields</a>.</li>
+<li>Dynpro fields are the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendata_object_glosry.htm">data objects</a> of dynpros. They are data objects in the working memory of a dynpro.</li>
+<li>All dynpro fields, except the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenok_field_glosry.htm"><em>OK field</em></a>, are linked to a screen element. See the <em>Element List</em> tab of dynpros.</li>
+<li>The data types of dynpro fields are determined either by reference to built-in <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenabap_dictionary_glosry.htm">ABAP Dictionary (DDIC)</a> data types (except <code>CLNT</code> and <code>FLTP</code>) or by reference to global data objects of the ABAP program. An advantage of DDIC types is that additional properties are available for display on the user interface, including description texts, field help, and input help.</li>
+<li>The actual transport of the data is done in the following way:</li>
+<li>As a prerequisite, ...</li>
+<li>you have created a screen element, such as an input field in a dynpro.</li>
+<li>You have assigned a name for this screen element - which is the name of the dynpro field.</li>
+<li>you have created a data object with the same name as the dynpro field in the ABAP program.</li>
+<li>During PBO: You can assign a value to the data object, such as <em>demo text</em> for the input field, to prefill that input field. Or you can make no assignment to leave the input text blank.</li>
+<li>During PAI: After the PBO, the content of data objects are passed to dynpro fields of the same name.</li>
+<li>This is a two-way street: For example, when the user enters data in an input field, the data object in the ABAP program receives the value of the dynpro field.</li>
+<li>By default, all dynpro fields are transported directly to the ABAP program at the start of the PAI event (that is, at the start of a dialog step) and before the corresponding event block is processed. The reverse transport from the ABAP program to the dynpro takes place at the end of the dialog step, in the context of the PBO event.</li>
+<li>About declaring data objects in the ABAP program in the global declaration part:</li>
+<li>You can use a global variable with <code>DATA</code> or a public static attribute of a local class with <code>CLASS-DATA</code>.</li>
+<li>You can use a <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abaptables.htm"><code>TABLES</code></a> statement:</li>
+<li>Declares a <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abentable_work_area_glosry.htm">table work area</a>, i.e. a structure whose data type is taken from the identically named structured data type from the ABAP Dictionary</li>
+<li>Since it refers to a flat structure in the ABAP Dictionary, it is used to provide all the additional semantic information that is not available when you use <code>DATA</code> or <code>CLASS-DATA</code>.</li>
+<li>A <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abencds_entity_glosry.htm">CDS entity</a> cannot be specified after <code>TABLES</code>.</li>
+<li>Note that you can control the data transport explicitly (see below).</li>
+</ul>
+<pre><code>PROGRAM some_program.
+
+&quot;Variable declarations
+DATA some_dobj TYPE abap_bool.
+TABLES some_struct.
+
+CLASS local_class DEFINITION.
+  PUBLIC SECTION.
+    CLASS-DATA: another_dobj TYPE i.
+...
+
+ENDCLASS.
+
+CLASS local_class IMPLEMENTATION.
+...
+ENDCLASS.</code></pre>
+<p>Example:</p>
+<h3>OK Field and Function Codes</h3>
+<ul>
+<li>Each dynpro contains a twenty-character <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenok_field_glosry.htm"><em>OK field</em></a>, which is a dynpro field that is not associated with a screen element.</li>
+<li>It is implicitly declared when a dynpro is created. It is the last entry in the <em>Element List</em> tab of the dynpro. Note that the <em>OK field</em> must be given a name, for example, <code>ok_code</code>.</li>
+<li>The <em>OK field</em> is relevant to <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenfunction_code_glosry.htm">function codes</a>:</li>
+<li>A function code (a sequence of up to 20 characters) can be assigned to specific control elements (for example, a pushbutton, a menu item, and so on) in SAP GUI.</li>
+<li>When a user action is performed on a control, such as clicking a button, the PAI event is triggered. If the button is linked to a function code, the function code is placed in the <em>OK field</em> and passed to a data object of the same name.</li>
+<li>You can then evaluate the value in the ABAP program, for example, in a <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapcase.htm"><code>CASE</code></a> control structure if you have multiple function codes for different control elements, and implement a response accordingly.</li>
+<li>Notes on working with the <em>OK field</em>:</li>
+<li>As with the other dynpro fields, a data object must be created in the ABAP program.</li>
+<li>The system field <code>sy-ucomm</code> automatically receives the value of the function code. However, it is recommended that you work with the <em>OK field</em> instead of <code>sy-ucomm</code>. You have full control over the fields you declare. Also, the value of an ABAP system field should not be changed.</li>
+<li>It is recommended that you store the function code in an auxiliary variable and initialize the <em>OK field</em> field in an ABAP program. This ensures that the function code of a dynpro is not filled with an unwanted value in the PBO event (for example, the next PAI event can be triggered with an empty function code). You can then read the function code from the auxiliary variable (for example, using a <code>CASE</code> structure) and control the program flow from there.</li>
+<li>The <em>OK field</em> field can have a different name on each dynpro. However, it is recommended that you use the same name for the field in each dynpro of an ABAP program. This way, you only need one field with the same name in the ABAP program, in which the function code is placed and from which you can read it.</li>
+<li>In addition to screen elements, function codes can also be linked to various things in the dynpro, e.g. the definition of the menu bar takes place in the GUI status. They also trigger a PAI event.</li>
+</ul>
+<pre><code>PROGRAM zdemo_program.
+
+&quot;OK field declaration and auxiliary variable, assuming the OK field is called
+&quot;ok_code in the Element List tab of the dynpro.
+DATA: ok_code LIKE sy-ucomm,
+      save_ok LIKE ok_code.
+
+...
+
+&quot;Dialog modules in the program
+
+&quot;PBO
+MODULE pbo_9000 OUTPUT.
+  ...
+  &quot;Prefill the value for a screen element, e.g. input field
+  some_input_field = &#x27;Hallo&#x27;.
+  ...
+ENDMODULE.
+
+&quot;PAI
+MODULE pai_9000 INPUT.
+  save_ok = ok_code.
+  CLEAR ok_code.
+
+  CASE save_ok.    
+    &quot;For example, a button is linked with a function code named PUSH
+    WHEN &#x27;PUSH&#x27;.    
+      ...
+    WHEN &#x27;ENTER&#x27;.
+      ...    
+    WHEN &#x27;CANCEL&#x27;.
+      ...  
+    WHEN OTHERS.
+      ...  
+  ENDCASE.
+ENDMODULE.
+...</code></pre>
+<p>Example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Program-Controlled Data Transport</h3>
+<ul>
+<li>In addition to the automatic data transport between the dynpro and the ABAP program, that is, between the dynpro fields and the global ABAP variables of the same name, you can also use <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_field_abexa.htm"><code>FIELD</code></a> statements for program-controlled data transport in the <em>Flow Logic</em> tab.</li>
+<li>These statements control the data transport from the dynpro to the ABAP program during the PAI event.</li>
+<li>Only those dynpro fields that are not specified after a <code>FIELD</code> statement are transported directly.</li>
+<li>In doing so, you can specify the time of the transport from the dynpro to the ABAP program.</li>
+<li>One or more <code>FIELD</code> statements are possible, that is, the contents of dynpro fields specified after <code>FIELD</code> are transported to the global ABAP data object of the same name when the corresponding <code>FIELD</code> statement is executed.</li>
+<li>In the flow logic, the statements are implemented in the processing block <code>PROCESS AFTER INPUT</code>.</li>
+</ul>
+<pre><code>&quot;Note: More syntax options are possible with the FIELD statement. 
+&quot;See some of them below and more details in the ABAP Keyword Documentation.
+
+PROCESS AFTER INPUT.
+  MODULE pai_9000.  &quot;neither field_a nor field_b are available
+  FIELD field_a.
+  MODULE module_a.  &quot;field_a is available, field_b is not
+  FIELD field_b.
+  MODULE module_b.  &quot;both field_a and field_b are available</code></pre>
+<p>Example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Calling Dialog Modules Conditionally</h3>
+<ul>
+<li>By combining the <code>FIELD</code> statement with the <code>MODULE</code> statement, you can make the call of PAI modules dependent on conditions.</li>
+<li>The following statement in the flow logic calls the dialog module <code>mod</code> only if the dynpro field <code>dynp_field</code> is not empty:</li>
+</ul>
+<pre><code>  FIELD dynp_field MODULE mod ON INPUT.</code></pre>
+<ul>
+<li>To call a module <code>mod</code> only if the value of a dynpro field <code>dynp_field</code> has been changed (or just overwritten with the same value) by the user since the last PBO, use the following:</li>
+</ul>
+<pre><code>  FIELD dynp_field MODULE mod ON REQUEST.</code></pre>
+<ul>
+<li>Conditional module calls can be combined into processing chains to make processing dependent on multiple dynpro fields.</li>
+<li>A processing chain is defined using the dynpro statements <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=dynpchain.htm"><code>CHAIN</code></a> and <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=dynpendchain.htm"><code>ENDCHAIN</code></a>:</li>
+</ul>
+<pre><code>  CHAIN.
+    FIELD dynp_field1.
+    FIELD dynp_field2.
+    ...
+    MODULE mod ON CHAIN-INPUT.  
+    &quot;Note: ON REQUEST is also possible
+  ENDCHAIN.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Input Checks</h2>
+<ul>
+<li>Automatic input checks</li>
+<li>Are performed in the PAI event before data is transported to the ABAP program and before dialog modules are called.</li>
+<li>If an error is detected, it is displayed in the status bar, and the affected input fields remain ready for input.</li>
+<li>Further PAI processing is not started until the user has successfully corrected the input.</li>
+<li>For example, automatic input checks are performed for required fields: Input fields marked as <code>required</code> in the screen painter must be filled in by the user.</li>
+</ul>
+<ul>
+<li>Exit command</li>
+<li>Since the automatic input checks are implicit, the user is always forced to make a valid input before the ABAP program can react.</li>
+<li>This is inconvenient in cases where users have changed their minds and only want to cancel processing. For this reason, there is a special function type exit command (<code>E</code>), which allows you to bypass the automatic input checks.</li>
+<li>You can choose this function type in the screen painter for screen elements with function codes, or in the menu painter for function codes.</li>
+<li>Such a function code bypasses the automatic input checks and leads directly to the call of a special dialog module using the following statement in the screen flow logic:</li>
+</ul>
+<pre><code>    MODULE mod AT EXIT-COMMAND.</code></pre>
+<ul>
+<li>Within the dialog module called in this way, you should end processing with an appropriate <code>LEAVE</code> statement. Otherwise, the normal PAI processing, which includes the automatic input checks, starts after the dialog module has been executed.</li>
+</ul>
+<ul>
+<li>Self-programmed input checks</li>
+<li>For input checks that go beyond the automatic checks, you can program special dialog modules in which you can issue a warning (message of type <code>W</code>) or error message (<code>E</code>) using the ABAP statement <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapmessage.htm"><code>MESSAGE</code></a>.</li>
+<li>These dialog modules are called in the flow logic using the <code>FIELD</code> and <code>CHAIN</code> statements.</li>
+<li>To check a single field, use the <code>FIELD</code> statement as follows:</li>
+</ul>
+<pre><code>    FIELD dynp_field MODULE mod.</code></pre>
+<ul>
+<li>Within the dialog module <code>mod</code>, program your input validation and trigger a warning or error message if an error occurs. The field in question is the only field that is ready for input again, and  users can (in the case of a warning) or must (in the case of an error message) correct their input before the dynpro can be successfully exited.</li>
+</ul>
+<pre><code>    CHAIN.
+      FIELD dynp_field1.
+      FIELD dynp_field2.
+      ...
+      MODULE mod.
+    ENDCHAIN.</code></pre>
+<ul>
+<li>To check several semantically related input fields, define a processing chain using the <code>CHAIN</code> statement:</li>
+</ul>
+<ul>
+<li>If a warning or error message is triggered in the <code>mod</code> dialog module, all fields listed in the processing chain are ready for input again. In this way, users can correct an input that consists of several closely related individual fields, and where it is not clear from the start which of the individual fields users must change in order to create a valid input as a whole.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Field and Input Help</h2>
+<pre><code>    PROCESS ON HELP-REQUEST
+      FIELD dynp_field MODULE mod.</code></pre>
+<ul>
+<li>Field help:</li>
+<li>Provides an explanation of the input field that appears when the user presses <em>F1</em> on a field on a screen layout.</li>
+<li>When you create input fields with reference to DDIC types, you can benefit from data element documentation (which you can create yourself if it does not exist). This documentation is then automatically displayed when the user requests F1 help.</li>
+<li>You can program field help yourself. You can call your own dialog modules for the POH event and program any help functions there:</li>
+<li>At this point, the <code>FIELD</code> statement does not transport any data to the ABAP program, since field help is always independent of user input. In the <code>mod</code> dialog module, you must then display the appropriate help yourself. You can do this by calling the function module <code>HELP_OBJECT_SHOW</code>, for example, or by using GUI controls.</li>
+</ul>
+<ul>
+<li>Input help:</li>
+<li>List of values displayed when <em>F4</em> is chosen for a field on the screen layout</li>
+<li>This help can either come from the ABAP Dictionary or be self-programmed.</li>
+<li>There are several ways to create helps in the ABAP Dictionary. For more information, see the topic <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenabap_dynpros_value_help_auto.htm">Input Helps in the ABAP Dictionary</a>.</li>
+<li>If the built-in input helps in the ABAP Dictionary and the search help exits are not sufficient for your purposes, you can program your own input helps. In this case, you can call your own dialog modules for the event POV and program input helps there.</li>
+</ul>
+<pre><code>    PROCESS ON VALUE-REQUEST
+      FIELD dynp_field MODULE mod.</code></pre>
+<ul>
+<li>As with the POH event, the <code>FIELD</code> dynpro statement does not transport data between the dynpro field and the ABAP variable. You must therefore program the data transport yourself by calling the function modules <code>DYNP_VALUES_READ</code> and <code>DYNP_VALUES_UPDATE</code>. The function module <code>F4IF_INT_TABLE_VALUE_REQUEST</code>, which you can call in your dialog module, receives an internal table as a value list and transfers the dialog with the user and the data transport for you.</li>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendropdown_listbox_glosry.htm">Dropdown list box</a></li>
+<li>A special form that can be linked to an input field.</li>
+<li>When an input field is linked to a dropdown list box, the input value can only be selected from the list. Dropdown list boxes are therefore suitable for cases where the list of values is not too extensive and no other values than those in the list are allowed.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Dnypro Sequence, Calling and Leaving Dynpros</h2>
+<h3>Dynpro Sequence</h3>
+<ul>
+<li>The <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_sequence_glosry.htm">dynpro sequence</a> is a sequence of different dynpros that are presented to the user one after the other.</li>
+<li>The first dynpro in a dynpro sequence is the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abeninitial_dynpro_glosry.htm">initial dynpro</a>.</li>
+<li>The flow of the dynpros is determined by the next dynpro for each dynpro involved.</li>
+<li>Each dynpro has a next dynpro.</li>
+<li>The next dynpro is defined either statically (the number you enter in the dynpro properties) or in the ABAP program using statements which temporarily and dynamically overwrite the static definition of the next dynpro.</li>
+<li>This means that the next dynpro is automatically called when the current dynpro is exited, i.e. when the PAI processing is finished, the current dynpro is also finished and the next dynpro is called.</li>
+<li>A dynpro is normally exited when the end of PAI processing is reached.</li>
+<li>If a dynpro is connected to a next dynpro with the dynpro number 0 (this dynpro does not exist), it is the last dynpro of the dynpro sequence.</li>
+<li>All dynpros in a dynpro sequence are displayed in the same GUI window.</li>
+<li>Starting a dynpro sequence: When calling transaction codes (in a dialog transaction, the dynpro associated with the transaction code) or using a <code>CALL SCREEN</code> statement (the initial dynpro is the dynpro specified in this statement).</li>
+<li>Ending a dynpro sequence: As mentioned above, a dynpro sequence is terminated when the next dynpro with a dynpro number of 0 is called.</li>
+<li>The simplest dynpro sequence consists of a single dynpro with 0 as the next dynpro.</li>
+<li>When the current dynpro sequence is finished, the system returns to the previous dynpro sequence if the current dynpro sequence was nested.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>ABAP Statements for Calling and Leaving Dynpros</h3>
+<p><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapset_screen.htm"><code>SET SCREEN dynnr.</code></a></p>
+<ul>
+<li>Sets the next dynpro</li>
+<li>Dynamically and temporarily overwrites the static definition and/or a previously set next dynpro</li>
+<li>Can also be 0</li>
+<li>The next dynpro is automatically called when the end of PAI processing for the current dynpro is reached. If the next screen number is 0, the current dynpro sequence is terminated.</li>
+</ul>
+<pre><code>&quot;Assumption: The static next dynpro is 9100.
+&quot;With the statement, the next dynpro is dynamically set and 9100 overwritten.
+
+SET SCREEN 9200.
+
+**********************************************
+
+&quot;The current dynpro sequence is terminated.
+SET SCREEN 0.
+</code></pre>
+<p><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapcall_screen.htm"><code>CALL SCREEN dynnr.</code></a></p>
+<ul>
+<li>Starts a new dynpro sequence, which is embedded in the current dynpro sequence.</li>
+<li>The dynpro that is specified is the initial dynpro of the dynpro sequence.</li>
+<li>This allows nested dynpro sequences to be created, i.e. if a dynpro sequence was already running at the time of the call, the newly started dynpro sequence is embedded in the already running one.</li>
+<li>By default, all the dynpros of the called dynpro sequence are displayed in the current GUI window.</li>
+</ul>
+<pre><code>  &quot;Starting a new dynpro sequence
+
+  CALL SCREEN 9300.</code></pre>
+<ul>
+<li>The <code>STARTING AT</code> and <code>ENDING AT</code> additions can be used to open a dynpro in a modal dialog box, i.e. a dynpro is displayed in a popup over the previous dynpro.</li>
+</ul>
+<pre><code>  &quot;Opening a dynpro in a modal dialog box
+  CALL SCREEN dynnr STARTING AT col_up_left line_up. 
+  CALL SCREEN dynnr STARTING AT col_up_left line_up ENDING AT col_up_right line_low.</code></pre>
+<ul>
+<li>The specifications (integer values) for <code>STARTING AT</code> and <code>ENDING AT</code> define the position of the dialog box with respect to the previous dynpro and its size:</li>
+</ul>
+<p><code>col_up_left</code> and <code>line_up</code> stand for values for the column for the upper left corner and the upper line of the dialog box. The values refer to the GUI window with popup level 0 (maximum popup level is 9). The right column and lower line is set automatically or explicitly by specifying <code>col_up_right</code> and <code>line_low</code>. The values of <code>col_up_left</code> and <code>line_up</code> should be less than <code>col_up_right</code> and <code>line_low</code>, otherwise the behavior will be undefined.</p>
+<p><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapleave_screen.htm"><code>LEAVE SCREEN.</code></a> and <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapleave_screen.htm"><code>LEAVE TO SCREEN dynnr.</code></a></p>
+<ul>
+<li>As mentioned earlier, a dynpro is normally exited at the end of PAI processing.</li>
+<li><code>LEAVE SCREEN.</code> exits the current dynpro and enters the next dynpro. This is either statically defined in the properties of the current dynpro or was previously set with the <code>SET SCREEN</code> statement.</li>
+<li><code>LEAVE TO SCREEN</code> does the same, but first sets the next dynpro to the specified dynpro number. This statement is a short form of the statements <code>SET SCREEN dynnr. LEAVE SCREEN.</code>.</li>
+</ul>
+<div class="note">[!NOTE] - The statements do not exit the entire dynpro sequence and instead branch to another dynpro in the same sequence. Only if the number 0 is used to branch to the next dynpro does a `LEAVE` statement terminate the dynpro sequence. - A dialog transaction can be started from an ABAP program using the [`CALL TRANSACTION`](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapcall_transaction.htm) or [`LEAVE TO TRANSACTION`](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapleave_to_transaction.htm) statements, or directly by the user by entering the transaction code in the input field of the [standard toolbar](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenstandard_toolbar_glosry.htm). When a dialog transaction is started, the associated ABAP program is loaded and the PBO processing of the initial dynpro is called. - [`LEAVE PROGRAM`](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapleave_program.htm) statements terminate the program.</div>
+<pre><code>  &quot;Assumption: The next dynpro is statically defined as 9100.
+  &quot;The following statement ends the processing of the current dynpro. 
+  &quot;Dynpro 9100 is called.
+  LEAVE SCREEN.
+
+  **************************************************************************
+
+  &quot;The following statement ends the processing of the current dynpro. 
+  &quot;The statically defined dynpro 9100 is overwritten. Dynpro 9200 is called.
+  SET SCREEN 9200.
+  LEAVE SCREEN.
+
+  **************************************************************************
+
+  &quot;The following statement is a shorter form of the one above.
+  &quot;It has the same effect.
+  LEAVE TO SCREEN 9200.
+
+  **************************************************************************
+
+  &quot;Ending the dynpro sequence
+  SET SCREEN 0.
+  LEAVE SCREEN.
+  &quot;Alternative
+  LEAVE TO SCREEN 0.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Modifying Static Attributes of Screen Elements</h2>
+<ul>
+<li>For each screen element, you can define various static attributes that control, for example, its appearance (i.e. you can hide screen elements) or status.</li>
+<li>The static attributes of the screen elements can be overwritten from within the ABAP program during the PBO processing of the dynpro.</li>
+<li>To do this, use the ABAP statements <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abaploop_at_screen.htm"><code>LOOP AT SCREEN</code></a> and <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapmodify_screen.htm"><code>MODIFY SCREEN</code></a>.</li>
+<li><code>LOOP AT SCREEN</code>:</li>
+<li>Defines a loop over all screen elements of the current dynpro to which a dynpro field is assigned.</li>
+<li>A work area of type <code>SCREEN</code> should be declared.</li>
+<li>Note: Check the ABAP Keyword Documentation for the different components. You can also check the F2 information for the work area in the <code>LOOP</code> statement below.</li>
+<li>After the <code>LOOP AT SCREEN</code> statement, the work area contains the properties of the corresponding screen element.</li>
+<li><code>MODIFY SCREEN</code>:</li>
+<li>Can only be used in the statement block after <code>LOOP AT SCREEN</code> and only makes sense during PBO processing.</li>
+<li>Expects a work area of type <code>SCREEN</code> after <code>FROM</code>.</li>
+<li>Modifies the properties of the current screen element with the values from the work area.</li>
+<li>Note the use of the values 0 and 1 by the dynpro in contrast to Boolean values in ABAP.</li>
+</ul>
+<pre><code>MODULE pbo_9000 OUTPUT.
+  &quot;Assumption: An input field is not marked as required 
+  &quot;(i.e. the value of the component is 0).
+  &quot;The example makes the input field required.
+  LOOP AT SCREEN INTO DATA(scr).
+    IF scr-name = &#x27;SOME_INPUT_FIELD&#x27;.
+      scr-required = &#x27;1&#x27;.    
+      MODIFY SCREEN FROM scr.
+    ENDIF.
+  ENDLOOP.  
+ENDMODULE.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Statements for the GUI Status and Title</h2>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abengui_status_glosry.htm">GUI status</a></li>
+<li>Groups the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenmenu_bar_glosry.htm">menu bar</a>, <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenstandard_toolbar_glosry.htm">standard toolbar</a>, and <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenapplication_toolbar_glosry.htm">application toolbar</a> of a GUI window as well as the function key settings.</li>
+<li>A GUI status is set using the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapset_pf-status_dynpro.htm"><code>SET PF-STATUS</code></a> statement and is created using the menu painter.</li>
+</ul>
+<pre><code>    &quot;Setting the GUI status (in PBO)
+    SET PF-STATUS status.
+
+    ****************************************************************************
+
+    &quot;Setting the GUI status and excluding function codes, i.e. the 
+    &quot;specified function codes are deactivated. fcode expects either 
+    &quot;a character-like data object or an internal table with a flat 
+    &quot;character-like line type.
+    SET PF-STATUS status EXCLUDING fcode.</code></pre>
+<ul>
+<li>The name of the current GUI status can be obtained from the <code>sy-pfkey</code> system field and from the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapget_pf.htm"><code>GET PF-STATUS</code></a> statement.</li>
+</ul>
+<pre><code>    &quot;Getting the GUI status
+    GET PF-STATUS status.
+    st = sy-pfkey.
+
+    ****************************************************************************
+
+    &quot;The following statement inserts the function codes which are 
+    &quot;inactive in the current GUI status line by line into the 
+    &quot;internal table fcode
+    GET PF-STATUS status EXCLUDING fcode.</code></pre>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abengui_title_glosry.htm">GUI title</a></li>
+<li>Text that can be displayed in the title bar of a GUI window.</li>
+<li>A GUI title is set using the statement <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapset_titlebar_dynpro.htm"><code>SET TITLEBAR</code></a> and created using the menu painter.</li>
+</ul>
+<pre><code>    &quot;Setting a title (in PBO)
+    &quot;Here, title is not the text content itself, but the name of a GUI title, 
+    &quot;a further UI component of the program.
+    SET TITLEBAR title.
+
+    &quot;The name of the current GUI title is displayed in the system field sy-title.
+    gui_title = sy-title.
+
+    ****************************************************************************
+
+    &quot;WITH addition
+    &quot;The placeholders of a GUI title can be replaced by the formatted 
+    &quot;content of data objects text1, and so on.
+    SET TITLEBAR title WITH text1 ... text9.</code></pre>
+<div class="note">[!NOTE] By separating the GUI status and title from the dynpro itself, the screen layout can remain constant when switching dynpros, and only the title and available functions can be changed.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Controls</h2>
+<ul>
+<li>Dynpro <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abencontrol_glosry.htm">controls</a></li>
+<li>Complex screen elements with built-in functions that go beyond simple screen elements</li>
+<li>Require additional variables and a <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapcontrols.htm"><code>CONTROLS</code></a> statement in the ABAP program (note that wizards are available)</li>
+<li>There are two types of dynpro controls:</li>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abentable_control_glosry.htm">Table control</a> for the input and output of tabular data</li>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abentabstrip_control_glosry.htm">Tabstrip control</a> for grouping screen elements on different tab pages</li>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abengui_control_glosry.htm">GUI controls</a></li>
+<li>External GUI controls that are included visually in dynpros</li>
+</ul>
+<h3>Table Controls</h3>
+<pre><code>  CONTROLS contr TYPE TABLEVIEW USING SCREEN dynnr.</code></pre>
+<ul>
+<li>Used to display screen elements in tabular form</li>
+<li>Allows users to display or edit not only individual values, but the contents of entire (internal) tables</li>
+<li>Declaring a table control in the ABAP program:</li>
+<li>Result: A structure with the name of the control is created in the ABAP program. The structure components contain the properties of the table control and allow you to process the control in the ABAP program, e.g. to change and read the properties of the corresponding table control.</li>
+<li>For the table controls, loops must be implemented in the dynpro flow logic using <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=dynploop.htm"><code>LOOP WITH CONTROL</code></a> statements that process table controls.</li>
+<li>The loop sequentially processes the displayed lines of the table control by performing one loop pass for each table control line.</li>
+<li>The implementation of the loop must be done for each table control for both the PBO processing block and in the PAI processing block.</li>
+<li>In the loop, you can call dialog modules to process the relevant data objects in the ABAP program. For example, you can read data from an internal table at PBO and write it back to the table at PAI after processing it in the dynpro.</li>
+</ul>
+<pre><code>PROCESS BEFORE OUTPUT.
+...
+LOOP WITH CONTROL contr.
+  MODULE mod_fill_table.
+ENDLOOP.
+...
+
+PROCESS AFTER INPUT.
+...
+LOOP WITH CONTROL contr.
+  MODULE mod_read_table.
+ENDLOOP.
+...</code></pre>
+<div class="note">[!NOTE] - In a modern program, it is more comfortable to use an ALV Grid control. - More additions are available for the statement.</div>
+<p>The ABAP statement <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abaprefresh_control.htm"><code>REFRESH CONTROL</code></a> initializes the properties of a table control.</p>
+<pre><code>&quot;Code in an ABAP Program
+...
+REFRESH CONTROL contr FROM SCREEN dynnr.
+...</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Tabstrips Controls</h3>
+<pre><code>  CONTROLS tabstr TYPE TABSTRIP.</code></pre>
+<ul>
+<li>Allow tab pages to be displayed on dynpros</li>
+<li>Represent one of several available <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abensubscreen_glosry.htm">subscreens</a> in dynpros. Users select the subscreen to be displayed using tab pages.</li>
+<li>Declaring a tabstrip control in the ABAP program:</li>
+<li>Result: A structure with the name of the control is created in the ABAP program. From this structure, only the component <code>activetab</code> is required in the program.</li>
+<li>For the tabstrip controls, suitable subscreens must be called using <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=dynpcall.htm"><code>CALL SUBSCREEN</code></a> statements in the flow logic.</li>
+<li>In PBO processing, the active tab page is set by assigning the function code of a tab title to the <code>activetab</code> component. By default, the first tab page is active.</li>
+<li>For <code>CALL SUBSCREEN</code>, there is one variant for the PBO and one variant for the PAI event.</li>
+<li>PBO: <code>CALL SUBSCREEN sub_area INCLUDING prog dynnr.</code></li>
+<li>Includes the subscreen dynpro of the program and the dynpro number in a subscreen area of the current dynpro. It also processes its PBO flow logic at this point. After PBO processing of the subscreen dynpro, the flow logic of the current dynpro is continued after the <code>CALL SUBSCREEN</code> statement.</li>
+<li>PAI: <code>CALL SUBSCREEN sub_area.</code></li>
+<li>Calls the PAI flow logic of the subscreen dynpro included in the subscreen area.</li>
+</ul>
+<pre><code>&quot;Code in a PBO dialog module 
+...
+&quot;Providing a dynpro number
+dynnr = &#x27;9400&#x27;.
+&quot;Assign the activetab component
+tabstr-activetab = &#x27;SOME_TAB&#x27;.
+&quot;Providing the prgram name
+prog = sy-repid.
+...
+
+****************************************************************************
+
+&quot;Code in the flow logic
+
+PROCESS BEFORE OUTPUT.
+ ...
+ CALL SUBSCREEN sub_area INCLUDING prog dynnr.
+ ...
+
+PROCESS AFTER INPUT.
+  ...
+  CALL SUBSCREEN sub_area.
+  ...
+</code></pre>
+<p>Example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>GUI Controls</h3>
+<ul>
+<li>Are components of the presentation view of an AS ABAP.</li>
+<li>They are not directly integrated into the ABAP language and are therefore not part of the classic ABAP interfaces. However, they are part of the SAP GUI and are designed to integrate seamlessly with classic dynpros.</li>
+<li>Are relatively modern UI elements that are used, for example, to display different types of data (images, HTML pages, hierarchical trees, and so on) in different ways or to enable user input.</li>
+<li>Are integrated into a dynpro interface using container controls that provide a screen area for the actual GUI control (e.g. by a custom container).</li>
+<li>Examples of GUI controls</li>
+<li>Toolbar control (<code>CL_GUI_TOOLBAR</code>): Implements an application toolbar that is independent of the GUI status. The input elements are created by method calls (for example, <code>ADD_BUTTON</code>). User actions are signaled by raising ABAP Objects events (for example, <code>FUNCTION_SELECTED</code>).</li>
+<li>Picture control (<code>CL_GUI_PICTURE</code>): Allows to display images in BMP, JPG, or GIF format. The dynpro to be displayed is loaded using the <code>LOAD_PICTURE_FROM_URL</code> method. Events such as <code>PICTURE_DBLCLICK</code> signal user actions.</li>
+<li>Browser control (<code>CL_GUI_HTML_VIEWER</code>): A browser for HTML pages or XML documents on the dynpro. Special links in the document trigger the <code>SAPEVENT</code> event when the user clicks, which can then be evaluated in the ABAP program.</li>
+<li>Edit control (<code>CL_GUI_TEXTEDIT</code>): A simple text editor with the basic functions such as select, find, and replace on the dynpro. These functions can also be called in a program-controlled way using methods such as <code>FIND_AND_REPLACE</code>.</li>
+<li>Tree control: Are available in different versions (for example, <code>CL_GUI_SIMPLE_TREE</code>). They allow hierarchical relationships to be displayed in tree structures.</li>
+<li>ALV Grid control: Is the replacement for classic lists. It provides functions such as searching, sorting, and printing the content of the list. However, the associated class <code>CL_GUI_ALV_GRID</code> should no longer be used directly for new developments. Classes such as <code>CL_SALV_TABLE</code> encapsulate the use of the ALV Grid control and simplify the integration.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>More Information</h2>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenabap_screens.htm">SAP GUI User Dialogs</a> in the ABAP Keyword Documentation as the entry topic for dynpro-related topics</li>
+<li>Documentation about the <a href="https://help.sap.com/docs/ABAP_PLATFORM_NEW/bd833c8355f34e96a6e83096b38bf192/d1801b50454211d189710000e8322d00">screen painter in the Help Portal</a></li>
+<li>Documentation about the <a href="https://help.sap.com/docs/ABAP_PLATFORM_NEW/bd833c8355f34e96a6e83096b38bf192/d1801ce8454211d189710000e8322d00">menu painter in the Help Portal</a></li>
+<li>Find more dynpro examples in the ABAP Keyword Documentation. In ADT, in your system, choose <code>CTRL + SHIFT + A</code> to open the search. Insert <code>demo_dynpro*</code> to get a list of dynpro examples.</li>
+</ul>
+<h2>Executable Example</h2>
+<p>After the import of the repository, proceed as follows:</p>
+<ul>
+<li>Find the program in ADT using the search by choosing <code>CTRL + SHIFT + A</code>.</li>
+<li>Enter <code>zdemo_abap_dynpro</code> and open the program.</li>
+<li>Run the program by choosing <code>F8</code>.</li>
+</ul>
+<div class="note">[!NOTE] - The examples in the *main* branch of the ABAP cheat sheet repository are designed to be imported into the SAP BTP ABAP Environment. For Standard ABAP, you can find examples (such as `zdemo_abap_dynpro`) in the other branches of the repository. - The executable example ... - covers the following topics: - Dynpro flow logic and related statements (`MODULE`, `FIELD`, `CHAIN`/`ENDCHAIN`, `LOOP`/`ENDLOOP`, `CALL SUBSCREEN`) - ABAP statements for calling and leaving dynpros (`SET SCREEN`, `CALL SCREEN`, `LEAVE SCREEN`) - Modifying static attributes (`LOOP AT SCREEN`, `MODIFY SCREEN`), - Statements related to the GUI status and title (`GET`/`SET PF-STATUS`, `SET TITLEBAR`) - Controls (table and tabstrip controls) - does not claim to include meaningful dynpros with meaningful dynpro sequences (the branching to new dynpro sequences occurs through using appropriate statements). - is not intended to be a role model for proper dynpro design. - is not intended to solve concrete programming tasks. You should always work out your own solution for each individual case. - is only intended to demonstrate a selection of keywords and visualize dynpro-related syntax in action on a high level. - is explained in more detail below in the expandable section below. Click to view the details. - The steps to import and run the code are outlined [here](README.md#-getting-started-with-the-examples). - [Disclaimer](./README.md#%EF%B8%8F-disclaimer)</div>
+<p>&lt;br&gt; &lt;details&gt; &lt;summary&gt;🟢 Click to expand for more information&lt;/summary&gt; &lt;!-- --&gt; &lt;br&gt; The example demonstrates dynpro-related statements. In the dynpros, you can select various options for checking out the effect of the syntax. It covers the following aspects:</p>
+<ul>
+<li>Dynpro flow logic and related statements (<code>MODULE</code>, <code>FIELD</code>, <code>CHAIN</code>/<code>ENDCHAIN</code>, <code>LOOP</code>/<code>ENDLOOP</code>, <code>CALL SUBSCREEN</code>)</li>
+<li>ABAP statements for calling and leaving dynpros (<code>SET SCREEN</code>, <code>CALL SCREEN</code>, `LEAVE</li>
+</ul>
+<p>SCREEN`)</p>
+<ul>
+<li>Modifying static attributes (<code>LOOP AT SCREEN</code>, <code>MODIFY SCREEN</code>),</li>
+<li>Statements related to the GUI status and title (<code>GET</code>/<code>SET PF-STATUS</code>, <code>SET TITLEBAR</code>)</li>
+<li>Controls (table and tabstrip controls)</li>
+</ul>
+<p><strong>First dynpro</strong> (the &quot;home page&quot;):</p>
+<ul>
+<li>Selection options for what can be explored in other dynpros</li>
+<li>Choose the <em>Go</em> button to switch to another dynpro</li>
+</ul>
+<p><strong>Dynpro &quot;Example of screen elements&quot;</strong>:</p>
+<ul>
+<li>Demonstrates several screen elements</li>
+<li>Pushbuttons, input field, boxes, checkboxes, radio buttons</li>
+</ul>
+<p><strong>Dynpro &quot;Statements I&quot;</strong>:</p>
+<ul>
+<li>Selection options for various dynpro-related ABAP statements</li>
+<li>When you choose a radio button and <em>Go</em>, a message is displayed providing some information.</li>
+</ul>
+<p><strong>Dynpro &quot;Statements II&quot;</strong>:</p>
+<ul>
+<li>Covers statements in the flow logic</li>
+<li>The option <code>MODULE ... AT EXIT-COMMAND</code> opens another dynpro. It demonstrates the exit command. The input field is required to be filled. This denies the processing after choosing the <em>Close 1</em> and <em>Cancel</em> buttons. This is not true for the <em>Close 2</em> button.</li>
+</ul>
+<p><strong>Dynpro &quot;Controls&quot;</strong>:</p>
+<ul>
+<li>Shows several controls: Table and tabstrip controls as well as an ALV Grid control as an example for a GUI control</li>
+</ul>
+<p>&lt;/details&gt;</p>
+</body>
+</html>
