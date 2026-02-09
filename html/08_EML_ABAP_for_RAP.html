@@ -1,0 +1,2658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>08 EML ABAP for RAP - ABAP Cheat Sheet</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #95a5a6;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4, h5, h6 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+<p>&lt;a name=&quot;top&quot;&gt;&lt;/a&gt;</p>
+<h1>ABAP for RAP: Entity Manipulation Language (ABAP EML)</h1>
+<ul>
+<li><a href="#abap-for-rap-entity-manipulation-language-abap-eml">ABAP for RAP: Entity Manipulation Language (ABAP EML)</a></li>
+<li><a href="#rap-terms">RAP Terms</a></li>
+<li><a href="#rap-behavior-definition-bdef">RAP Behavior Definition (BDEF)</a></li>
+<li><a href="#abap-behavior-pools-abp">ABAP Behavior Pools (ABP)</a></li>
+<li><a href="#rap-handler-classes-and-methods">RAP Handler Classes and Methods</a></li>
+<li><a href="#parameters-of-handler-methods">Parameters of Handler Methods</a></li>
+<li><a href="#rap-saver-class-and-saver-methods">RAP Saver Class and Saver Methods</a></li>
+<li><a href="#abp-auxiliary-classes">ABP Auxiliary Classes</a></li>
+<li><a href="#bdef-derived-types">BDEF Derived Types</a></li>
+<li><a href="#bdef-derived-type-syntax-and-declaring-data-types-and-data-objects">BDEF Derived Type Syntax and Declaring Data Types and Data Objects</a></li>
+<li><a href="#components-of-bdef-derived-types">Components of BDEF Derived Types</a></li>
+<li><a href="#constants-for-bdef-derived-type-components">Constants for BDEF Derived Type Components</a></li>
+<li><a href="#secondary-table-keys-of-bdef-derived-types">Secondary Table Keys of BDEF Derived Types</a></li>
+<li><a href="#type-mapping-for-rap">Type Mapping for RAP</a></li>
+<li><a href="#rap-specific-additions-to-the-corresponding-operator">RAP-Specific Additions to the CORRESPONDING Operator</a></li>
+<li><a href="#abap-sql-statements-with-bdef-derived-types">ABAP SQL Statements with BDEF Derived Types</a></li>
+<li><a href="#abap-eml-syntax">ABAP EML Syntax</a></li>
+<li><a href="#abap-eml-syntax-for-modifying-operations">ABAP EML Syntax for Modifying Operations</a></li>
+<li><a href="#create-operation-using-the-short-form-of-abap-eml-modify-statements">Create Operation Using the Short Form of ABAP EML MODIFY Statements</a></li>
+<li><a href="#create-operation-using-the-long-form-of-abap-eml-modify-statements">Create Operation Using the Long Form of ABAP EML MODIFY Statements</a></li>
+<li><a href="#update-operations">Update Operations</a></li>
+<li><a href="#delete-operations">Delete Operations</a></li>
+<li><a href="#dynamic-form-of-abap-eml-modify-statements">Dynamic Form of ABAP EML MODIFY Statements</a></li>
+<li><a href="#executing-actions">Executing Actions</a></li>
+<li><a href="#excursions">Excursions</a></li>
+<li><a href="#specifying-control-component-values-in-the-short-form-of-value-constructor-expressions">Specifying %control Component Values in the Short Form of VALUE Constructor Expressions</a></li>
+<li><a href="#combining-multiple-operations-in-one-abap-eml-request">Combining Multiple Operations in One ABAP EML Request</a></li>
+<li><a href="#creating-instances-for-the-root-and-child-entity-deep-create">Creating Instances for the Root and Child Entity (Deep Create)</a></li>
+<li><a href="#abap-eml-syntax-for-reading-operations">ABAP EML Syntax for Reading Operations</a></li>
+<li><a href="#reading-operations">Reading Operations</a></li>
+<li><a href="#read-by-association-operations">Read-by-Association Operations</a></li>
+<li><a href="#dynamic-abap-eml-read-statements">Dynamic ABAP EML READ Statements</a></li>
+<li><a href="#accessing-change-information">Accessing Change Information</a></li>
+<li><a href="#commit-entities-persisting-to-the-database">COMMIT ENTITIES: Persisting to the Database</a></li>
+<li><a href="#rollback-entities">ROLLBACK ENTITIES</a></li>
+<li><a href="#get-permissions-retrieving-information-about-rap-bo-permissions">GET PERMISSIONS: Retrieving Information about RAP BO Permissions</a></li>
+<li><a href="#raising-rap-business-events">Raising RAP Business Events</a></li>
+<li><a href="#additions-to-abap-eml-statements-in-abap-behavior-pools">Additions to ABAP EML Statements in ABAP Behavior Pools</a></li>
+<li><a href="#in-local-mode-addition">IN LOCAL MODE Addition</a></li>
+<li><a href="#augmenting-addition-to-abap-eml-modify-statements">AUGMENTING Addition to ABAP EML MODIFY Statements</a></li>
+<li><a href="#rap-excursions">RAP Excursions</a></li>
+<li><a href="#using-keys-and-identifying-rap-bo-instances-in-a-nutshell">Using Keys and Identifying RAP BO Instances in a Nutshell</a></li>
+<li><a href="#assignment-of-key-component-groups">Assignment of Key Component Groups</a></li>
+<li><a href="#rap-concepts">RAP Concepts</a></li>
+<li><a href="#late-numbering-and-key-identification-in-the-late-phase-of-the-rap-save-sequence">Late Numbering and Key Identification in the Late Phase of the RAP Save Sequence</a></li>
+<li><a href="#ensuring-data-consistency-in-a-rap-transaction">Ensuring Data Consistency in a RAP Transaction</a></li>
+<li><a href="#phases-of-a-rap-transaction">Phases of a RAP Transaction</a></li>
+<li><a href="#commit-and-rollback-in-a-rap-transaction">Commit and Rollback in a RAP Transaction</a></li>
+<li><a href="#allowedforbidden-operations-in-a-behavior-implementation-in-a-rap-transaction">Allowed/Forbidden Operations in a Behavior Implementation in a RAP Transaction</a></li>
+<li><a href="#rap-additional-and-unmanaged-save">RAP Additional and Unmanaged Save</a></li>
+<li><a href="#handling-dependencies-on-rap-business-objects-in-abap-unit">Handling Dependencies on RAP Business Objects in ABAP Unit</a></li>
+<li><a href="#rap-related-system-classes-and-functionality">RAP-Related System Classes and Functionality</a></li>
+<li><a href="#more-information">More Information</a></li>
+<li><a href="#executable-examples">Executable Examples</a></li>
+</ul>
+<h2>RAP Terms</h2>
+<p><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenaeml_glosry.htm">ABAP Entity Manipulation Language</a> (or EML for short) is a subset of ABAP that allows you to access the data of <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenarap_glosry.htm">RAP</a> business objects in an ABAP program. The following points cover RAP-related terms such as <em>RAP business objects</em> and others for setting the context:</p>
+<p>&lt;table&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; Terms &lt;/td&gt; &lt;td&gt; Notes &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>RAP business objects (RAP BO)</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>A RAP BO is based on a special, tree-like hierarchical structure</li>
+</ul>
+<p>of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_entity_glosry.htm">CDS entities</a> of a data model</p>
+<ul>
+<li>Such a structure of entities can consist of [parent</li>
+</ul>
+<p>entities](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenparent_entity_glosry.htm &quot;Glossary Entry&quot;) and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenchild_entity_glosry.htm">child entities</a> that are themselves defined using <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_composition_glosry.htm">CDS compositions</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abento_parent_association_glosry.htm">to-parent associations</a>.</p>
+<ul>
+<li>The top parent entity of a [CDS composition</li>
+</ul>
+<p>tree](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_composition_tree_glosry.htm &quot;Glossary Entry&quot;) is the root entity that represents the business object. With a large composition tree, RAP BOs can be fairly complex. Or they can be very simple by just consisting of one root entity alone.</p>
+<ul>
+<li>Note: There is a special syntax for the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenroot_entity_glosry.htm">CDS root entity</a> of a RAP BO: <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_define_root_view_v2.htm"><code>define root view entity</code></a></li>
+</ul>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_behavior_definition_glosry.htm">RAP behavior definition</a> (BDEF)</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>RAP BOs are described by the definitions specified in a special</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_glosry.htm">DDIC</a> artifact: RAP behavior definition (BDEF)</p>
+<ul>
+<li>A BDEF defines the [RAP business object</li>
+</ul>
+<p>behavior](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_behavior_glosry.htm &quot;Glossary Entry&quot;) (i. e. the transactional behavior of a RAP BO)</p>
+<ul>
+<li>Transactional behavior means a BDEF defines [behavior</li>
+</ul>
+<p>characteristics](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_entity_properties_glosry.htm &quot;Glossary Entry&quot;) and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_operation_glosry.htm">RAP BO operations</a> i. e. <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_standard_operation_glosry.htm">RAP BO standard operations</a> (<a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencrud_glosry.htm">CRUD operations</a>), <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_nstandard_operation_glosry.htm">non-standard operations</a> like specific <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_action_glosry.htm">RAP actions</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_function_glosry.htm">functions</a>, and more.</p>
+<ul>
+<li>There are many other things that can be included impacting the</li>
+</ul>
+<p>RAP BO behavior like <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_feature_control_glosry.htm">RAP feature control</a>, for example, defining which data is mandatory and which is read-only, or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_determination_glosry.htm">determinations</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_validation_glosry.htm">validations</a>.</p>
+<ul>
+<li>BDEFs use [Behavior Definition</li>
+</ul>
+<p>Language](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_glosry.htm &quot;Glossary Entry&quot;) (BDL) for the definitions. Find more information on the topic and various options to define the transactional behavior in section <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl.htm">BDL for Behavior Definitions</a> in the ABAP Keyword Documentation.</p>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Transactional buffer and implementation types</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>A BDEF defines the behavior of a RAP BO and, thus, how to handle</li>
+</ul>
+<p>its data. This data is available in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abentransactional_buffer_glosry.htm">RAP transactional buffer</a>.</p>
+<ul>
+<li>It is a storage for a RAP BO&#x27;s data that is used and worked on</li>
+</ul>
+<p>during an <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensap_luw_glosry.htm">SAP LUW</a>.</p>
+<ul>
+<li>This data includes [RAP BO</li>
+</ul>
+<p>instances](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_instance_glosry.htm &quot;Glossary Entry&quot;) (i. e. concrete data sets of an entity). This is where EML enters the picture: EML is used, among others, to access this data in the transactional buffer.</p>
+<ul>
+<li>Currently, there are two kinds of RAP BOs:</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenmanaged_rap_bo_glosry.htm">managed</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenunmanaged_rap_bo_glosry.htm">unmanaged RAP BOs</a>.</p>
+<ul>
+<li>Managed and unmanaged are implementation types that are also</li>
+</ul>
+<p>specified in the BDEF.</p>
+<ul>
+<li>The implementation type determines the [RAP BO</li>
+</ul>
+<p>provider](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_provider_glosry.htm &quot;Glossary Entry&quot;), i. e. how the transactional buffer is provided and how the behavior of a RAP BO is implemented.</p>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Managed RAP BOs</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>The managed RAP BO provider fully or partly provides the</li>
+</ul>
+<p>transactional buffer and RAP BO behavior (for standard operations only). In this case, the developers need not cater for the transactional buffer and implement the standard operations. This implementation is mostly relevant for greenfield scenarios when starting from scratch.</p>
+<ul>
+<li>Example: Regarding CRUD operations in managed RAP BOs,</li>
+</ul>
+<p>developers need not cater for an implementation at all. The standard operations work out of the box. For example, in case of an update operation, RAP BO instance data that is to be updated is automatically read into the transactional buffer, and then updated accordingly there. Finally, when triggering the saving, the updated instance in the transactional buffer is automatically saved to the database without any custom development needed.</p>
+<ul>
+<li>The transactional buffer is provided, too. You do not need to</li>
+</ul>
+<p>create the buffer yourself.</p>
+<ul>
+<li>Note: Usually, the behavior of a RAP BO requires some</li>
+</ul>
+<p>additional implementations also in the context of managed RAP BOs. For example, non-standard operations or feature controls must be self-implemented in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbehavior_pool_glosry.htm">ABAP behavior pools</a> (see the details further down).</p>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Unmanaged RAP BOs</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>Everything must be provided by the [unmanaged RAP BO</li>
+</ul>
+<p>provider](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenunmanaged_rap_bo_prov_glosry.htm &quot;Glossary Entry&quot;), i. e. the transactional buffer and all RAP BO operations must be provided or self-implemented by developers in an ABAP behavior implementation</p>
+<ul>
+<li>Unmanaged RAP BOs are, for example, relevant for brownfield</li>
+</ul>
+<p>scenarios, i. e. in scenarios in which transactional buffers and application logic is already available and should be embedded in the RAP world. Note that it is possible to have a managed RAP BO with unmanaged parts, e.g. unmanaged save or additional save. Find more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_rap_bo.htm">here</a>.</p>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>ABAP behavior implementation in an ABAP behavior pool (ABP)</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>An [ABAP behavior</li>
+</ul>
+<p>pool](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbehavior_pool_glosry.htm &quot;Glossary Entry&quot;) is a special <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclass_pool_glosry.htm">class pool</a> for an ABAP behavior implementation that implements the unmanaged RAP BO provider based on definitions in a BDEF. The class pool&#x27;s name is specified in the BDEF.</p>
+<ul>
+<li>The [global</li>
+</ul>
+<p>class](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenglobal_class_glosry.htm &quot;Glossary Entry&quot;) of a behavior pool does not implement the behavior itself. It is empty on creation apart from the declaration and implementation part skeletons. The behavior implementation is coded in local <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_handler_class_glosry.htm">RAP handler classes</a> and a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_saver_class_glosry.htm">RAP saver class</a> in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenccimp_glosry.htm">CCIMP include</a> of the behavior pool. These classes are called by the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_runtime_engine_glosry.htm">RAP runtime engine</a> when the RAP BO is accessed. This is covered in more detail further down.</p>
+<ul>
+<li>Usually, saver classes are not needed in managed RAP BOs (except</li>
+</ul>
+<p>for special variants of managed RAP BOs such as <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_add_save_glosry.htm">RAP additional save</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_unman_save_glosry.htm">RAP unmanaged save</a>). Local handler classes are usually needed in managed RAP BOs if implementations are required that go beyond standard operations.</p>
+<ul>
+<li>Note: In more complex scenarios, with RAP BOs that</li>
+</ul>
+<p>consist of many entities, you can define behavior pools for individual entities by adding the syntax to the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_define_beh.htm"><code>define behavior for</code></a> notation. There is not a saver class for each entity but only one saver class for the BO as a whole. Any number of behavior pools can be assigned to a BDEF allowing applications a structuring into multiple units.</p>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<div class="note">[!NOTE] - Find more terms in the [RAP Glossary](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_glossary.htm) of the ABAP Keyword Documentation. - There are more artifacts and concepts related to RAP that go way beyond the scope of this cheat sheet. For example, a RAP BO can be exposed as a [business service](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbusiness_service_glosry.htm "Glossary Entry") to be accessed from outside [AS ABAP](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenas_abap_sys_environ_glosry.htm "Glossary Entry") and consumed. A [RAP BO</div>
+<div class="note">- The cheat sheet and the examples focus on a minimal number of artifacts - from database table and view entity, to BDEF and ABAP behavior pool, including an ABAP class as consumer. Many other RAP-related artifacts and aspects are beyond the scope. Get a more thorough insight in the [Development guide for the ABAP RESTful Application Programming Model](https://help.sap.com/docs/ABAP_PLATFORM_NEW/fc4c71aa50014fd1b43721701471913d/289477a81eec4d4e84c0302fb6835035.html). - You can create all RAP service-related repository objects from scratch using a wizard in ADT. The wizard lets you manually input your RAP BO requirements or use the Joule chat. Find more information [here](https://help.sap.com/docs/abap-cloud/abap-rap/odata-ui-service-from-scratch).</div>
+<p>consumer](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_consumer_glosry.htm &quot;Glossary Entry&quot;) is either the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_transac_engine_glosry.htm">RAP transactional engine</a> that handles requests from outside the AS ABAP or, from inside AS ABAP, an ABAP program using ABAP EML (which this cheat sheet and the examples focus on).</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>RAP Behavior Definition (BDEF)</h2>
+<ul>
+<li>As the name implies, a RAP behavior definition describes a RAP business object (RAP BO) by defining its behavior for all of its RAP BO entities.</li>
+<li>BDL source code is used in a BDEF.</li>
+<li>Once you have created ...</li>
+<li>the CDS root entity of a RAP BO, ADT helps you create the skeleton of a BDEF (e.g., right-click on the CDS root entity and choose <em>New Behavior Definition</em> from the pop-up).</li>
+<li>the BDEF, ADT helps you create the skeleton of an ABAP behavior pool, as well as RAP handler and saver method declarations and the skeleton of implementations via ADT quick fixes.</li>
+<li>Find more information in the <a href="36_RAP_Behavior_Definition_Language.md">RAP Behavior Definition Language</a> cheat sheet.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>ABAP Behavior Pools (ABP)</h2>
+<p>You can access RAP BO data from inside AS ABAP using EML. Among other things, EML allows you to read or modify RAP BOs by accessing the RAP BO data (the RAP BO instances) in the transactional buffer and trigger the persistent storage or reset changes. More precisely, when EML statements are executed, the calling of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_handler_method_glosry.htm">RAP handler methods</a> is triggered to access the transactional buffer of a RAP BO. As mentioned, for unmanaged RAP BOs or unmanaged parts of managed RAP BOs, the handler methods that are called are part of an ABAP behavior pool.</p>
+<p>The global class of an ABP has the addition <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapclass_for_behavior_of.htm"><code>FOR BEHAVIOR OF bdef</code></a> to the definition while <code>bdef</code> stands for the name of the BDEF. This class is (initially) empty apart from the declaration and implementation part skeleton.</p>
+<pre><code>CLASS zbp_demo_abap_rap_draft_m DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zdemo_abap_rap_draft_m.
+ENDCLASS.
+
+CLASS zbp_demo_abap_rap_draft_m IMPLEMENTATION.
+ENDCLASS.</code></pre>
+<p>The actual implementation is done in local classes in the CCIMP include (<em>Local Types</em> tab in ADT) of the behavior pool. There, two kinds of local classes are to be defined and implemented that are related to the RAP BO&#x27;s runtime: one or more <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_handler_class_glosry.htm">handler classes</a> to implement the RAP BO behavior (in RAP handler methods) during the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_int_phase_glosry.htm">RAP interaction phase</a> (the data reading and modification phase) and a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_saver_class_glosry.htm">saver class</a> to implement the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_save_seq_glosry.htm">RAP save sequence</a> (in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_saver_method_glosry.htm">saver methods</a> to save data from the transactional buffer to the database).</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>RAP Handler Classes and Methods</h3>
+<ul>
+<li>One or more handler classes implement the RAP interaction phase. For</li>
+</ul>
+<p>modularization purposes, one behavior pool can define multiple handler classes. For example, each entity can have its own handler class, or individual handler classes can be defined to distinguish between reading and changing RAP BO entities.</p>
+<ul>
+<li>A handler class inherits from class</li>
+</ul>
+<p><code>CL_ABAP_BEHAVIOR_HANDLER</code>.</p>
+<ul>
+<li>These classes are implicitly <code>ABSTRACT</code> and <code>FINAL</code></li>
+</ul>
+<p>since instantiating and calling only happens through the RAP runtime engine.</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenadt_glosry.htm">ADT</a></li>
+</ul>
+<p>helps you create the classes and methods (and basically the ABP as such) when creating the BDEF. A quick fix is available that creates the method definitions and a skeleton of the implementations automatically.</p>
+<pre><code>CLASS lhc_root DEFINITION INHERITING FROM cl_abap_behavior_handler.
+...
+ENDCLASS.</code></pre>
+<p>Example: Handler class definition</p>
+<ul>
+<li>Handler method definitions include the additions `... FOR ... FOR</li>
+</ul>
+<p>...` followed by the kinds of operations. There are various options depending on the RAP BO operation.</p>
+<ul>
+<li>Depending on the definition in the BDEF, there might be more additions</li>
+</ul>
+<p>with dedicated method parameters. For example, an action might be defined with a result parameter, hence, the method must be defined with the addition <code>RESULT</code> and a parameter.</p>
+<ul>
+<li>The <code>FOR MODIFY</code> handler method can handle multiple entities</li>
+</ul>
+<p>and operations, i. e. not only create but also update or delete might be integrated in the method definition. However, it might be useful to split the handler method into separate methods for better readability.</p>
+<ul>
+<li>See more details on the handler method definitions in the topic</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmethods_for_rap_behv.htm"><code>METHODS, FOR</code></a>.</p>
+<pre><code>&quot;Create
+METHODS create FOR MODIFY
+      IMPORTING entities FOR CREATE bdef.
+
+&quot;Read: Specifying a read result is mandatory.
+METHODS read FOR READ
+      IMPORTING keys FOR READ bdef RESULT result.
+
+&quot;Action: action name is preceded by the BDEF name and a tilde after FOR ACTION
+METHODS some_action FOR MODIFY
+      IMPORTING keys FOR ACTION bdef~some_action.</code></pre>
+<p>Example: Handler method definitions</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Parameters of Handler Methods</h4>
+<ul>
+<li>The handler method definitions contain RAP-specific additions like</li>
+</ul>
+<p><code>FOR MODIFY</code>, <code>FOR CREATE</code> or <code>FOR READ</code> as well as mandatory or optional additions like <code>RESULT</code> that are followed by parameters.</p>
+<ul>
+<li>The parameters are typed with [BDEF derived</li>
+</ul>
+<p>types](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_derived_type_glosry.htm &quot;Glossary Entry&quot;) that have special RAP-related components as covered further down.</p>
+<ul>
+<li>The parameters&#x27; names can be chosen freely. This is also true for</li>
+</ul>
+<p>the method names except for some predefined names.</p>
+<ul>
+<li>Each handler method must have at least one importing parameter.</li>
+</ul>
+<p>Specifying the addition <code>IMPORTING</code> explicitly is optional since it is used implicitly. In most cases, entire instances or just key values of instances are imported.</p>
+<ul>
+<li>All handler methods have changing parameters that are usually not</li>
+</ul>
+<p>explicitly specified in the definition but implicitly used. The explicit specification of the <code>CHANGING</code> addition is not needed. In most cases, these are <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_response_param_glosry.htm">RAP response parameters</a>. The following image shows the F2 information in ADT for the create handler method. !<a href="./files/rap_handler_method_parameters.png">RAP_handler_method_parameters</a></p>
+<ul>
+<li>The response parameters <code>mapped</code>, <code>failed</code> and</li>
+</ul>
+<p><code>reported</code> (the names are predefined) can be considered as containers for information - information a RAP BO consumer is provided with by a RAP BO provider, for example, an SAP Fiori app displays an error message if something went wrong. The availability of the parameters depends on the handler method used (e. g. <code>mapped</code> is only available for operations creating instances).</p>
+<ul>
+<li><code>mapped</code>: Used to provide mapping information on RAP BO</li>
+</ul>
+<p>instances, for example, which key values were created for given content IDs ( <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_cid.htm"><code>%cid</code></a>).</p>
+<ul>
+<li><code>failed</code>: Information for identifying the data set for</li>
+</ul>
+<p>which an error occurred in a RAP operation</p>
+<ul>
+<li><code>reported</code>: Used, for example, to exchange error messages for each</li>
+</ul>
+<p>entity defined in the BDEF and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_other.htm">not related to a specific entity</a>.</p>
+<ul>
+<li>Example: Technically, the <code>reported</code> parameter is a</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendeep_structure_glosry.htm">deep structure</a> containing, for example, the messages of the root entity and child entities. For example, if a create operation fails for a RAP BO instance of the root entity, a message, information about the instance key and other things can be included in this parameter which is passed to a RAP BO consumer. You could imagine that such an error message is displayed on an SAP Fiori UI if something goes wrong to inform the user.</p>
+<div class="note">[!NOTE] It is essential to implement RAP handler methods correctly to ensure the stability and consistency of RAP business objects, particularly in populating the RAP response parameters. For more details on best practices for implementation, refer to the [documentation](https://help.sap.com/docs/abap-cloud/abap-rap/general-rap-bo-implementation-contract).</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>RAP Saver Class and Saver Methods</h3>
+<ul>
+<li>A RAP saver class implements the [RAP save</li>
+</ul>
+<p>sequence](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_save_seq_glosry.htm &quot;Glossary Entry&quot;). A saver class is usually only available in unmanaged RAP BOs (except for special variants of managed RAP BOs that are not outlined here).</p>
+<ul>
+<li>The saver class is implicitly <code>ABSTRACT</code> and <code>FINAL</code></li>
+</ul>
+<p>since the instantiating and calling only happens through the RAP runtime engine.</p>
+<ul>
+<li>A saver class can be defined in the CCIMP include (<em>Local Types</em> tab in ADT) of an ABAP</li>
+</ul>
+<p>behavior pool. It includes the definitions and implementations of RAP saver methods.</p>
+<ul>
+<li>The saver methods consist of a set of predefined methods having</li>
+</ul>
+<p>predefined names. Some of them are mandatory to implement, some are optional. The <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_adjust_numbers.htm"><code>adjust_numbers</code></a> method is only available in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_late_numbering_glosry.htm">late numbering</a> scenarios.</p>
+<ul>
+<li>A saver class inherits from class</li>
+</ul>
+<p><code>CL_ABAP_BEHAVIOR_SAVER</code>. The saver methods are declared by redefining predefined methods of the superclass. They implicitly have response parameters.</p>
+<ul>
+<li>In contrast to RAP handler methods, saver methods do not have data</li>
+</ul>
+<p>of RAP BO instances as import parameter. Therefore, instance data must be handled via the transactional buffer when self-implementing the saver methods.</p>
+<ul>
+<li>Saver methods are called when the RAP save sequence has been triggered by a [`COMMIT</li>
+</ul>
+<p>ENTITIES<code>](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcommit_entities.htm) statement. Note that in natively supported RAP scenarios, for example, an SAP Fiori app using OData, the </code>COMMIT ENTITIES` call is performed implicitly and automatically by the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_runtime_engine_glosry.htm">RAP runtime engine</a>.</p>
+<ul>
+<li>Find more information on RAP saver methods</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_saver_class.htm">here</a>.</p>
+<pre><code>CLASS lsc_bdef DEFINITION INHERITING FROM cl_abap_behavior_saver.
+  PROTECTED SECTION.
+
+    &quot;For final calculations and data modifications involving all
+    &quot;BOs in the current RAP transaction
+    METHODS finalize REDEFINITION.
+
+    &quot;Checks the consistency of the transactional buffer before
+    &quot;the save method saves data to the database
+    METHODS check_before_save REDEFINITION.
+
+    &quot;Preliminary IDs are mapped to final keys. Only for late numbering.
+    METHODS adjust_numbers REDEFINITION.
+
+    &quot;Saves the current state of the transactional buffer to the database
+    METHODS save REDEFINITION.
+
+    &quot;Clear the transactional buffer
+    METHODS cleanup REDEFINITION.
+    METHODS cleanup_finalize REDEFINITION.
+
+ENDCLASS.</code></pre>
+<p>Example: Definition of a RAP saver class and saver methods</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>ABP Auxiliary Classes</h3>
+<ul>
+<li>You can optionally define auxiliary classes for ABPs using the syntax <code>... FOR BEHAVIOR OF bdef_name ...</code>.</li>
+<li>These classes are implicitly final global classes and reference a RAP business object.</li>
+<li>They have enhanced access rights to RAP BOs, and ABAP EML statements with the <code>IN LOCAL MODE</code> and <code>PRIVILEGED</code> can be used.</li>
+<li>Their main function is to support implementation in an ABAP behavior pool. They achieve this by offering reusable methods and enabling developers to implement RAP behavior simultaneously. Furthermore, they can be used to provide utility methods for raising <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_entity_event_glosry.htm">RAP business events</a>.</li>
+<li>Note that RAP handler, saver, and event handler methods as such can only be implemented in a behavior pool, but they can delegate tasks to methods in ABP auxiliary classes. It is not recommended to completely outsource the handler and saver method implementations to auxiliary classes to prevent unnecessary overhead.</li>
+<li>As a prerequisite, the ABAP auxiliary class name is specified in the BDEF using the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENBDL_AUXILIARY_CLASS.html"><code>auxiliary class ...</code> notation</a>. Multiple ABAP auxiliary classes can be specified.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>BDEF Derived Types</h2>
+<p>The operands of EML statements and parameters of handler and saver methods are mainly special messenger tables for passing data and receiving results or messages, i. e. the communication between a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_consumer_glosry.htm">RAP BO consumer</a> and the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_provider_glosry.htm">RAP BO provider</a> using EML consists (in most cases) of exchanging data stored in internal tables that have special ABAP types - <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_derived_type_glosry.htm">BDEF derived types</a>. These types are tailor-made for RAP purposes.</p>
+<p>As the name implies, the types are derived by the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_runtime_frmwk_glosry.htm">ABAP runtime framework</a> from CDS entities and their behavior definition in the BDEF. With these special types, a type-safe access to RAP BOs is guaranteed.</p>
+<div class="note">[!NOTE] - To explore BDEF derived types in your RAP BO, you can access the CCIMP include (*Local Types* tab in ADT) of your ABAP behavior pool, position the cursor on the methods, choose F2 and check the parameters typed with BDEF derived types. - As mentioned, CRUD operations are implicitly supported in managed scenarios (when specified in the BDEF). So, there will not be method declarations and implementations for CRUD operation methods.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>BDEF Derived Type Syntax and Declaring Data Types and Data Objects</h3>
+<ul>
+<li>For all operations and behavior characteristics defined in the BDEF, you can derive types. For example, if you enable create operations (using the <code>create</code> specification in the BDEF), you can create respective BDEF derived types. If you do not enable delete operations, you cannot create respective types.</li>
+<li>The syntax, similar to method definitions mentioned earlier, uses the addition <code>FOR</code> followed by further RAP-related additions (such as <code>CREATE</code> for create operations).</li>
+<li>These additions include the name of an entity and, if necessary, a specific name (e.g., the action name for a BDEF derived type related to an action).</li>
+<li>The following syntax options are available in the context of BDEF derived types:</li>
+</ul>
+<table>
+<thead><tr>
+<th>Syntax</th>
+<th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaptype_table_for.htm"><code>TYPE TABLE FOR</code></a></td>
+<td>For creating internal tables with BDEF derived types. Most RAP handler method parameters use tabular BDEF derived types.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaptype_structure_for.htm"><code>TYPE STRUCTURE FOR</code></a></td>
+<td>In many cases, structures of type <code>TYPE STRUCTURE FOR</code> serve as both the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenwork_area_glosry.htm">work area</a> and the line type of the internal tables. There are also structured BDEF derived types that function as types for RAP handler method parameters.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaptype_response_for.htm"><code>TYPE RESPONSE FOR</code></a></td>
+<td>These types refer to the RAP response parameters <code>mapped</code>, <code>failed</code>, and <code>reported</code>. They are deep structures containing information for individual RAP BO entities. The components of these structures are internal tables of appropriate types with <code>TYPE TABLE FOR</code>.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaptype_request_for.htm"><code>TYPE REQUEST FOR</code></a></td>
+<td>The types <code>TYPE REQUEST FOR CHANGE</code> and <code>TYPE REQUEST FOR DELETE</code> are relevant for importing parameters of the <code>save_modified</code> RAP saver method in the context of RAP additional and unmanaged save. These BDEF derived types are deep structures containing internal tables with RAP BO instance keys and/or data for create, update, or delete operations.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Find an overview of available BDEF derived types <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrpm_derived_types.htm">here</a>.</li>
+<li>You can use <code>TYPES</code> and <code>DATA</code> statements to declare data types and objects with BDEF derived types.</li>
+<li>Both long and short forms are available to declare data types and objects. Example:</li>
+<li>Create an internal table typed with a BDEF derived type for create operations in ADT: <code>DATA d1 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.</code></li>
+<li>Position the cursor on <code>d1</code> and press F2 to get type information. The long form shows the root entity plus the concrete entity (which is the root entity itself, an alias name is specified for the root entity in the example): <code>d1 type table for create zdemo_abap_rap_ro_m\\root.</code></li>
+<li>The following specification options are available:</li>
+<li>Long form: Specifying the name of the RAP BO root entity followed by <code>\\</code> and an entity of the composition tree.</li>
+<li>If an alias is defined for the entity, you must specify it; otherwise, you can specify the entity name.</li>
+<li>If no alias name was specified for the example entity, the long form would be: <code>DATA d2 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\\zdemo_abap_rap_ro_m.</code></li>
+<li>Short form: For convenience, you can specify RAP BO entities such as the RAP BO root entity or other CDS entities of a CDS composition tree. Examples: <code>DATA d1 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.</code> (root entity), <code>DATA d3 TYPE TABLE FOR UPDATE zdemo_abap_rap_ch_m.</code> (child entity). Note that most example codes in the cheat sheet and in the executable example use the short form.</li>
+<li>Specifying associations defined in a BDEF preceded by <code>\</code>: For example, <code>DATA d4 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\_child.</code>. The long form with <code>\\</code> followed by an entity name, <code>\</code>, and an association is also possible.</li>
+</ul>
+<div class="note">[!NOTE] Certain types derived from the BDEF can only be specified and used within implementation classes, not beyond. These types include the following: `FOR CHANGE`, `FOR DETERMINATION`, `FOR VALIDATION`, `FOR ... FEATURES`, `FOR ... AUTHORIZATION`.</div>
+<p>BDEF derived type examples:</p>
+<div class="note">[!NOTE] The demo BDEF `zdemo_abap_rap_ro_m` ... - specifies the alias name `root` for the RAP BO root entity `zdemo_abap_rap_ro_m`. - specifies the association `_child`. - includes the child entity `zdemo_abap_rap_ch_m`, for which an alias name `child` is specified and which specifies the association `_parent`.</div>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; BDEF derived types demonstrating long and short forms
+*&amp;---------------------------------------------------------------------*
+
+&quot;Short forms
+&quot;Specifying the RAP BO root entity
+TYPES t1 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.
+DATA d1 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.
+&quot;Specifying child entity
+TYPES t2 TYPE TABLE FOR UPDATE zdemo_abap_rap_ch_m.
+DATA d2 TYPE TABLE FOR UPDATE zdemo_abap_rap_ch_m.
+
+&quot;Long form: Specifying the name of the RAP BO root entity, followed
+&quot;by \\ and an entity of the composition tree
+&quot;Since an alias name is specified for the example entities, it must
+&quot;be specified after \\. Otherwise, the entity name can be specified.
+&quot;t3/d3 are the same as t1/d1.
+TYPES t3 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\\root.
+DATA d3 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\\root.
+&quot;In this example, t4/d4 are the same as t2/d2.
+TYPES t4 TYPE TABLE FOR UPDATE zdemo_abap_rap_ro_m\\child.
+DATA d4 TYPE TABLE FOR UPDATE zdemo_abap_rap_ro_m\\child.
+
+&quot;Specifying associations that are declared in the BDEF preceded by \
+&quot;with both short and long forms
+&quot;In this example, t5/d5 are the same as t6/d6.
+TYPES t5 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\_child.
+DATA d5 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\_child.
+TYPES t6 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\\root\_child.
+DATA d6 TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\\root\_child.
+&quot;In this example, t7/d7 are the same as t8/d8.
+TYPES t7 TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ro_m\\child\_parent.
+DATA d7 TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ro_m\\child\_parent.
+TYPES t8 TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ch_m\_parent.
+DATA d8 TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ch_m\_parent.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Miscellaneous BDEF derived types
+*&amp;---------------------------------------------------------------------*
+
+&quot;The examples show a selection of possible types. The types mostly use
+&quot;the short form.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Table types
+*&amp;---------------------------------------------------------------------*
+
+&quot;Create
+DATA create_tab TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.
+
+&quot;Update
+DATA update_tab TYPE TABLE FOR UPDATE zdemo_abap_rap_ro_m.
+
+&quot;Create-by-association operation specifying the name of the entity
+&quot;and the association
+DATA cba_tab TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\_child.
+
+&quot;Action; the name of the action is preceded by a tilde
+DATA action_import TYPE TABLE FOR ACTION IMPORT zdemo_abap_rap_ro_m~multiply_by_2.
+&quot;The example action does not specify a result parameter, therefore the following
+&quot;type is not available.
+&quot;DATA action_result TYPE TABLE FOR ACTION RESULT zdemo_abap_rap_ro_m~multiply_by_2.
+
+&quot;Read
+DATA read_import TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ro_m.
+DATA read_result TYPE TABLE FOR READ RESULT zdemo_abap_rap_ro_m.
+
+&quot;The previous examples use the RAP BO root entity. The following ones
+&quot;use a child entity specified in the example BDEF.
+&quot;Update
+DATA update_tab_ch TYPE TABLE FOR UPDATE zdemo_abap_rap_ch_m.
+&quot;Which corresponds to the long form sepcifying the RAP BO root entity
+&quot;name and the (alias) name of the child entity followed by \\
+DATA update_tab_ch_2 TYPE TABLE FOR UPDATE zdemo_abap_rap_ro_m\\child.
+DATA delete_tab_ch TYPE TABLE FOR DELETE zdemo_abap_rap_ch_m.
+&quot;Read-by-association
+DATA rba_import_child_to_parent TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ch_m\_parent.
+DATA rba_import_child_to_parent_2 TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ro_m\\child\_parent.
+DATA rba_result_child_to_parent TYPE TABLE FOR READ RESULT zdemo_abap_rap_ch_m\_parent.
+DATA rba_result_child_to_parent_2 TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ro_m\\child\_parent.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Structured types
+*&amp;---------------------------------------------------------------------*
+
+DATA create_wa TYPE STRUCTURE FOR CREATE zdemo_abap_rap_ro_m.
+DATA update_wa TYPE STRUCTURE FOR UPDATE zdemo_abap_rap_ro_m.
+TYPES delete_wa TYPE STRUCTURE FOR DELETE zdemo_abap_rap_ro_m.
+DATA update_child_wa TYPE STRUCTURE FOR UPDATE zdemo_abap_rap_ch_m.
+TYPES delete_child_wa TYPE STRUCTURE FOR DELETE zdemo_abap_rap_ch_m.
+
+&quot;Retrieving permissions
+DATA perm_req TYPE STRUCTURE FOR PERMISSIONS REQUEST zdemo_abap_rap_ro_m.
+
+&quot;Retrieving global features
+&quot;... FOR ... FEATURES ... can only be used within implementation classes
+&quot;DATA feat_req TYPE STRUCTURE FOR GLOBAL FEATURES RESULT zdemo_abap_rap_ro_m.
+
+&quot;The same applies to validations and determinations
+&quot;DATA validate TYPE TABLE FOR VALIDATION zdemo_abap_rap_ro_m~val.
+&quot;DATA determine TYPE TABLE FOR DETERMINATION zdemo_abap_rap_ro_m~det_add_text.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; BDEF derived types relating to RAP response parameters
+*&amp;---------------------------------------------------------------------*
+
+&quot;Response parameters
+&quot;Note: The addition EARLY or no addition is relevant in the context of the
+&quot;RAP interaction phase. The addition LATE is relevant in the context of the
+&quot;save phase.
+DATA map TYPE RESPONSE FOR MAPPED zdemo_abap_rap_ro_m.
+DATA fail TYPE RESPONSE FOR FAILED zdemo_abap_rap_ro_m.
+DATA resp TYPE RESPONSE FOR REPORTED zdemo_abap_rap_ro_m.
+&quot;Same as resp
+DATA resp_2 TYPE RESPONSE FOR REPORTED EARLY zdemo_abap_rap_ro_m.
+&quot;Relevant for the late RAP save phase
+DATA map_late TYPE RESPONSE FOR MAPPED LATE zdemo_abap_rap_ro_m.
+DATA fail_late TYPE RESPONSE FOR FAILED LATE zdemo_abap_rap_ro_m.
+DATA resp_late TYPE RESPONSE FOR REPORTED LATE zdemo_abap_rap_ro_m.
+
+&quot;You can check the F2 information in ADT for the types. The types above
+&quot;are deep structures, containing tables typed with TYPE TABLE FOR MAPPED
+&quot;and so on.
+DATA map_tab_early_1 TYPE TABLE FOR MAPPED zdemo_abap_rap_ro_m.
+DATA map_tab_early_2 TYPE TABLE FOR MAPPED EARLY zdemo_abap_rap_ro_m.
+DATA map_tab_late TYPE TABLE FOR MAPPED LATE zdemo_abap_rap_ro_m.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; BDEF derived types relating to the save phase in RAP additional
+*&amp; and unmanaged save scenarios
+*&amp;---------------------------------------------------------------------*
+
+&quot;REQUEST FOR ... can only be used within implementation classes
+&quot;For create and update operations
+&quot;DATA req_change TYPE REQUEST FOR CHANGE zdemo_abap_rap_ro_m_as.
+&quot;For delete operations
+&quot;DATA req_delete TYPE REQUEST FOR DELETE zdemo_abap_rap_ro_m_as.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Excursion: Typing method parameters with BDEF derived types
+*&amp;---------------------------------------------------------------------*
+
+&quot;TYPES tab_type TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.
+&quot;METHODS some_meth IMPORTING itab TYPE tab_type.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Components of BDEF Derived Types</h3>
+<p>Many of the BDEF derived types contain components of CDS entities like key and data fields that retain their original data type, for example, a messenger table typed with <code>TYPE TABLE FOR CREATE</code>. Certainly, if an instance is to be created, key and field values of a RAP BO instance are of relevance.</p>
+<p>Yet, all BDEF derived types contain special RAP components serving a dedicated purpose. The names of these RAP components begin with <code>%</code> to avoid naming conflicts with components of the CDS entities. The following image shows the F2 information of a BDEF derived type containing the <code>%</code> components and fields from the CDS entity.</p>
+<p>!<a href="./files/bdef_derived_types.png">BDEF_derived_types</a></p>
+<p>Some of the <code>%</code> components are <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencomponent_group_glosry.htm">component groups</a> summarizing groups of table columns under a single name. In doing so, they simplify the handling of derived types for developers. For example, the component group <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_data.htm"><code>%data</code></a> contains all primary key and data fields of a RAP BO entity (actually, by containing the keys, it also contains the component group <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_key.htm"><code>%key</code></a> in the case above). The F2 information in ADT helps you find out about the available components in a variable. The image below shows the details of <code>%data</code> when clicking the <em>derived type</em> link in the first ADT F2 information screen.</p>
+<p>!<a href="./files/bdef_derived_type_components.png">BDEF_derived_type_components</a></p>
+<p>The availability of <code>%</code> components depends on definitions in the BDEF. Their availability also depends on more criteria, for example, the scenario. For example, the component <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_pid.htm"><code>%pid</code></a> that represents a preliminary ID for a RAP BO instance is only available in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_late_numbering_glosry.htm">late numbering</a> scenarios. The draft indicator <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_is_draft.htm"><code>%is_draft</code></a> is only relevant in the context of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_with_draft.htm">draft</a>.</p>
+<p>The following table covers a selection of available BDEF derived type components. Find more details on the available components in section <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_comp.htm">Components of BDEF Derived Types</a> of the ABAP Keyword Documentation.</p>
+<p>&lt;table&gt;</p>
+<p>&lt;tr&gt; &lt;th&gt; Component &lt;/th&gt; &lt;th&gt; Notes &lt;/th&gt; &lt;th&gt; Code Snippet &lt;/th&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_cid.htm"><code>%cid</code></a>, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_cid_ref.htm"><code>%cid_ref</code></a></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_cid.htm"><code>%cid</code></a> is a string to define a content ID.</li>
+<li>Content IDs are used as a unique and preliminary identifier for</li>
+</ul>
+<p>RAP BO operations in which instances are created and especially in cases where the key values of RAP BO instances are not yet determined</p>
+<ul>
+<li>Assume that you create a RAP BO instance with an EML create</li>
+</ul>
+<p>request and the key value has not yet been determined. In the same request - a save has not yet been triggered - an update is requested for this RAP BO instance. Using the content ID, it is guaranteed that the update operation happens for the desired instance. For this purpose, derived types for operations like update or delete include the component <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_cid_ref.htm"><code>%cid_ref</code></a> to refer to the content ID <code>%cid</code> as the name implies.</p>
+<ul>
+<li>Note: You should always fill <code>%cid</code> even if not</li>
+</ul>
+<p>needed. The specified content ID is only valid within one ABAP EML request. You can use the optional addition <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_fields.htm#!ABAP_ONE_ADD@1@"><code>AUTO FILL CID</code></a> in EML modify operations to create <code>%cid</code> automatically. However, if you use this addition, you cannot refer to <code>%cid</code> in subsequent operations.</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<pre><code>MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+    ENTITY root
+    CREATE FROM VALUE #(
+        %control-key_field = if_abap_behv=&gt;mk-on
+        %control-field1 = if_abap_behv=&gt;mk-on
+        %control-field2 = if_abap_behv=&gt;mk-on
+        %control-field3 = if_abap_behv=&gt;mk-on
+        %control-field4 = if_abap_behv=&gt;mk-on
+        ( %cid = &#x27;cid5&#x27;
+          key_field = 5
+          field1    = &#x27;iii&#x27;
+          field2    = &#x27;jjj&#x27;
+          field3    = 50
+          field4    = 51 ) )
+    UPDATE FIELDS ( field1 field3 field4 )
+        WITH VALUE #( ( %cid_ref = &#x27;cid5&#x27;
+                        field1   = &#x27;up_kkk&#x27;
+                        field2   = &#x27;up_lll&#x27; &quot;Value not considered
+                        field3   = 500
+                        field4   = 501 ) )
+    MAPPED FINAL(mapped)
+    FAILED FINAL(failed)
+    REPORTED FINAL(reported).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_key.htm"><code>%key</code></a>, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_tky.htm"><code>%tky</code></a></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>Both are component groups summarizing all primary keys of a RAP</li>
+</ul>
+<p>BO instance.</p>
+<ul>
+<li>Where possible, it is recommended that you use <code>%tky</code></li>
+</ul>
+<p>instead of <code>%key</code>. <code>%tky</code> includes <code>%key</code> and also the draft indicator <code>%is_draft</code>. When using <code>%tky</code> in non-draft scenarios, you are prepared for a potential, later switch to a draft scenario. In doing so, you can avoid lots of adaptations in your code by manually adding the indicator.</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<p>The code snippet visualizes various specification options regarding <code>%key</code> and <code>%tky</code> as component groups, emphasizing how contained components may be accessed and that these component groups can contain further component groups.</p>
+<pre><code>MODIFY ENTITY zdemo_abap_rap_ro_m
+      CREATE FROM VALUE #(
+         %control = VALUE #( key_field = if_abap_behv=&gt;mk-on
+                             field1 = if_abap_behv=&gt;mk-on
+                             field2 = if_abap_behv=&gt;mk-on
+                             field3 = if_abap_behv=&gt;mk-on
+                             field4 = if_abap_behv=&gt;mk-on )
+        ( %cid = &#x27;cid1&#x27; %key-key_field = 1
+          field1 = &#x27;aaa&#x27; field2 = &#x27;bbb&#x27; field3 = 10 field4 = 11 )
+        ( %cid = &#x27;cid2&#x27; %key = VALUE #( key_field = 2 )
+          field1 = &#x27;ccc&#x27; field2 = &#x27;ddd&#x27; field3 = 20 field4 = 21 )
+        ( %cid = &#x27;cid3&#x27; key_field = 3
+          field1 = &#x27;eee&#x27; field2 = &#x27;fff&#x27; field3 = 30 field4 = 31 )
+        ( %cid = &#x27;cid4&#x27; %data-%key-key_field = 4
+          field1 = &#x27;ggg&#x27; field2 = &#x27;hhh&#x27; field3 = 40 field4 = 41 )
+        ( %cid = &#x27;cid5&#x27; %data-key_field = 5
+          field1 = &#x27;iii&#x27; field2 = &#x27;jjj&#x27; field3 = 50 field4 = 51 ) )
+      &quot;Other options for referring to the key besides using %key
+      &quot;are demonstrated.
+      UPDATE FIELDS ( field2 ) WITH VALUE #(
+        ( %key-key_field = 1 field2 = &#x27;up1&#x27; )
+        ( key_field = 2 field2 = &#x27;up2&#x27; )
+        ( %tky-%key-key_field = 3 field2 = &#x27;up3&#x27; )
+        ( %tky-key_field = 4 field2 = &#x27;up4&#x27; )
+        ( %tky-%pky-%key-key_field = 5 field2 = &#x27;up5&#x27; )
+        ( %tky-%pky-key_field = 6 field2 = &#x27;up6&#x27; )
+        ( %pky-key_field = 7 field2 = &#x27;up7&#x27; )
+        ( %pky-%key-key_field = 8 field2 = &#x27;up8&#x27; )
+        ( %data-%key-key_field = 9 field2 = &#x27;up9&#x27; )
+        ( %data-key_field = 10 field2 = &#x27;up10&#x27; ) )
+       MAPPED FINAL(mapped)
+       FAILED FINAL(failed)
+       REPORTED FINAL(reported).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_control.htm"><code>%control</code></a></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>Structured component that is a component of many BDEF derived types. It contains the names of all key</li>
+</ul>
+<p>and data fields of a RAP BO instance, which indicate flags.</p>
+<ul>
+<li>For example, it is used to get information on which fields are provided or set a</li>
+</ul>
+<p>flag for which fields are requested by RAP BO providers or RAP BO consumers respectively during the current EML request.</p>
+<ul>
+<li>For this purpose, the value of each field in the</li>
+</ul>
+<p><code>%control</code> structure is of type <code>ABP_BEHV_FLAG</code>. For the value setting, you can use the structured constant <code>mk</code> of interface <code>IF_ABAP_BEHV</code>. Note that the technical type is <code>x length 1</code>.</p>
+<ul>
+<li>Example: If you want to read data from a RAP BO instance and</li>
+</ul>
+<p>particular non-key fields in <code>%control</code> are set to <code>if_abap_behv=&gt;mk-off</code>, the values of these fields are not returned in the result.</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<pre><code>MODIFY ENTITY zdemo_abap_rap_ro_m 
+  CREATE FROM VALUE #(  %control-key_field = if_abap_behv=&gt;mk-on 
+                        %control-field1 = if_abap_behv=&gt;mk-on 
+                        %control-field2 = if_abap_behv=&gt;mk-on 
+                        %control-field3 = if_abap_behv=&gt;mk-on 
+                        %control-field4 = if_abap_behv=&gt;mk-on 
+                        ( %cid = &#x27;cid1&#x27; 
+                          key_field = 1 
+                          field1 = &#x27;aaa&#x27; 
+                          field2 = &#x27;bbb&#x27; 
+                          field3 = 10 
+                          field4 = 11 ) 
+                        ( %cid = &#x27;cid2&#x27; 
+                          key_field = 2 
+                          field1 = &#x27;ccc&#x27; 
+                          field2 = &#x27;ddd&#x27; 
+                          field3 = 20 
+                          field4 = 21 ) ) 
+      MAPPED FINAL(mapped) 
+      FAILED FINAL(failed) 
+      REPORTED FINAL(reported). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_is_draft.htm">%is_draft</a></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>Represents the draft indicator</li>
+<li>Used in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENRAP_DRAFT_HANDLING_GLOSRY.html">RAP draft handling</a> and indicates whether a RAP BO instance is active or not. A RAP BO instance with the draft indicator set to true represents a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_draft_instance_glosry.htm">RAP draft instance</a>, e.g. created by a create operation. A commit triggers the saving of the instance to a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendraft_table_glosry.htm">draft table</a>.</li>
+<li>Is contained in <code>%tky</code></li>
+<li>Is of type <code>ABP_BEHV_FLAG</code></li>
+</ul>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<pre><code>MODIFY ENTITY zdemo_abap_rap_draft_m
+    CREATE AUTO FILL CID
+    FIELDS ( num1 arithm_op num2 )
+    WITH VALUE #( ( %is_draft = if_abap_behv=&gt;mk-on
+                    num1 = 1 arithm_op = &#x27;+&#x27; num2 = 2 )
+                  ( %is_draft = if_abap_behv=&gt;mk-on
+                    num1 = 2 arithm_op = &#x27;*&#x27; num2 = 4 )
+                  ( %is_draft = if_abap_behv=&gt;mk-on
+                    num1 = 3 arithm_op = &#x27;-&#x27; num2 = 5 )
+                  ( %is_draft = if_abap_behv=&gt;mk-on
+                    num1 = 1 arithm_op = &#x27;/&#x27; num2 = 4 )
+                  ( %is_draft = if_abap_behv=&gt;mk-on
+                    num1 = 2 arithm_op = &#x27;P&#x27; num2 = 5 ) )
+    FAILED FINAL(f)
+    REPORTED FINAL(r)
+    MAPPED FINAL(m).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_target.htm">%target</a></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>Used to address compositions such as child entities in create operations.</li>
+<li>Includes the target&#x27;s primary key and data fields.</li>
+</ul>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<pre><code>MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+    ENTITY root
+    CREATE FIELDS ( key_field field1 field2 field3 field4 )
+    WITH VALUE #( ( %cid      = &#x27;cid_cba&#x27;
+                    key_field = 9
+                    field1    = &#x27;qqq&#x27;
+                    field2    = &#x27;rrr&#x27;
+                    field3    = 90
+                    field4    = 91 ) )
+    CREATE BY \_child
+    FIELDS ( key_ch field_ch1 field_ch2 ) WITH VALUE #(      
+      ( %cid_ref = &#x27;cid_cba&#x27;
+        %target = VALUE #( ( %cid      = &#x27;cid_ch1&#x27;
+                             key_ch    = 9
+                             field_ch1 = &#x27;aaa_ch&#x27;
+                             field_ch2 = 99 )
+                           ( %cid      = &#x27;cid_ch2&#x27;
+                             key_ch    = 10
+                             field_ch1 = &#x27;bbb_ch&#x27;
+                             field_ch2 =  100 ) ) ) )
+      MAPPED FINAL(mapped)
+      FAILED FINAL(failed)
+      REPORTED FINAL(reported).  </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>The following code snippet illustrates the importance of careful component access and value assignment with component groups in BDEF derived types:</p>
+<ul>
+<li>It uses the key component of a demo RAP BO and an internal table of type <code>FOR CREATE</code> as an example.</li>
+<li>The type includes the component groups <code>%data</code> and <code>%key</code>.</li>
+<li><code>%data</code> contains <code>%key</code> as a component.</li>
+<li>Component access may be done in various ways.</li>
+<li>Especially in value assignments, make sure that there is only one assignment per component.</li>
+</ul>
+<pre><code>DATA cr_tab TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.
+cr_tab = VALUE #( ( key_field = 1 ) ).
+
+DATA(a) = cr_tab[ 1 ]-key_field.
+DATA(b) = cr_tab[ 1 ]-%key-key_field.
+DATA(c) = cr_tab[ 1 ]-%data-key_field.
+DATA(d) = cr_tab[ 1 ]-%data-%key-key_field.
+
+&quot;Even more specification options with another BDEF derived type.
+&quot;This is only to visualize the variety of component groups in BDEF 
+&quot;derived types.
+DATA upd_tab TYPE TABLE FOR UPDATE zdemo_abap_rap_ro_m.
+upd_tab = VALUE #( ( key_field = 1 ) ).
+
+DATA(e) = upd_tab[ 1 ]-key_field.
+DATA(f) = upd_tab[ 1 ]-%key-key_field.
+DATA(g) = upd_tab[ 1 ]-%tky-%key-key_field.
+DATA(h) = upd_tab[ 1 ]-%tky-key_field.
+DATA(i) = upd_tab[ 1 ]-%tky-%pky-%key-key_field.
+DATA(j) = upd_tab[ 1 ]-%tky-%pky-key_field.
+DATA(k) = upd_tab[ 1 ]-%pky-key_field.
+DATA(l) = upd_tab[ 1 ]-%pky-%key-key_field.
+DATA(m) = upd_tab[ 1 ]-%data-%key-key_field.
+DATA(o) = upd_tab[ 1 ]-%data-key_field.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Constants for BDEF Derived Type Components</h3>
+<p>Several BDEF derived types contain <code>%</code> components, which have a specific type and represent flags. The mentioned <code>%control</code> structure, whose components are of type <code>ABP_BEHV_FLAG</code>, is such a component. When assigning values to these components, ensure you use appropriate values. The <code>IF_ABAP_BEHV</code> interface provides a range of structured constants for this purpose. Although these constants are technically identical, it is recommended that you use them in the right context.</p>
+<table>
+<thead><tr>
+<th>Type</th>
+<th>Structured Constant</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>ABP_BEHV_FLAG</code></td>
+<td><code>IF_ABAP_BEHV=&gt;MK</code></td>
+<td>Marks and unmarks fields in ABAP EML modify and read operations, such as in <code>%control</code> and <code>%element</code>.</td>
+</tr>
+<tr>
+<td><code>ABP_BEHV_FIELD_PERM</code></td>
+<td><code>IF_ABAP_BEHV=&gt;PERM-F</code></td>
+<td>Used in the context of field permission results, such as a field marked as mandatory or read-only.</td>
+</tr>
+<tr>
+<td><code>ABP_BEHV_OP_PERM</code></td>
+<td><code>IF_ABAP_BEHV=&gt;PERM-O</code></td>
+<td>For operation permission results, such as a delete operation that is marked as enabled.</td>
+</tr>
+<tr>
+<td><code>ABP_BEHV_FIELD_CTRL</code></td>
+<td><code>IF_ABAP_BEHV=&gt;FC-F</code></td>
+<td>For field feature control results, such as a field marked with no restrictions.</td>
+</tr>
+<tr>
+<td><code>ABP_BEHV_OP_CTRL</code></td>
+<td><code>IF_ABAP_BEHV=&gt;FC-O</code></td>
+<td>For operation feature control results, such as a disabled update operation.</td>
+</tr>
+<tr>
+<td><code>ABP_BEHV_AUTH</code></td>
+<td><code>IF_ABAP_BEHV=&gt;AUTH</code></td>
+<td>For authorization results, such as an unauthorized operation.</td>
+</tr>
+<tr>
+<td><code>IF_ABAP_BEHV=&gt;T_CHAR01</code></td>
+<td><code>IF_ABAP_BEHV=&gt;OP</code></td>
+<td>For dynamic ABAP EML statements; e.g. <code>if_abap_behv=&gt;op-m-create</code> for create and <code>if_abap_behv=&gt;op-r-read</code> for read operations.</td>
+</tr>
+<tr>
+<td><code>IF_ABAP_BEHV=&gt;T_CHAR01</code></td>
+<td><code>IF_ABAP_BEHV=&gt;COP</code></td>
+<td>For accumulated change operation information such as in the context of draft additional save; e.g. <code>if_abap_behv=&gt;cop-update</code> for update operations.</td>
+</tr>
+</tbody>
+</table>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Secondary Table Keys of BDEF Derived Types</h3>
+<ul>
+<li>Internal tables typed with BDEF derived types (<code>TYPE TABLE FOR ...</code>) are standard tables with an empty <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenprimary_table_key_glosry.htm">primary table key</a> (<code>primary_key</code>).</li>
+<li>Predefined <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensecondary_table_key_glosry.htm">secondary table keys</a> are available for many types.</li>
+<li>These secondary table keys are always <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensorted_key_glosry.htm">sorted keys</a>.</li>
+<li>Currently available secondary table keys (as also visible in one of the images above when using the F2 help in ADT):</li>
+<li><code>entity</code>: Includes <code>%key</code></li>
+<li><code>cid</code>: Includes <code>%cid</code> or <code>%cid_ref</code>, and can - depending on the type - also include <code>%key</code> and <code>%pid</code></li>
+<li><code>draft</code>: Available in draft scenarios; includes <code>%is_draft</code>; can also include <code>%key</code> and <code>%pid</code></li>
+<li><code>pid</code>: Available in late numbering scenarios; includes <code>%pid</code>; can also include <code>%tmp</code> and <code>%key</code></li>
+<li>The <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenalias_glosry.htm">alias name</a> <code>id</code> is available for either <code>entity</code>, <code>draft</code>, or <code>pid</code> depending on the context. Check the F2 information in ADT for the respective types.</li>
+</ul>
+<pre><code>DATA itab_cr TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.
+
+itab_cr = VALUE #( %control-key_field = if_abap_behv=&gt;mk-on
+                   %control-field1 = if_abap_behv=&gt;mk-on
+                   %control-field2 = if_abap_behv=&gt;mk-on
+                   %control-field3 = if_abap_behv=&gt;mk-on
+                   %control-field4 = if_abap_behv=&gt;mk-on
+                   ( %cid           = `cid1`
+                     %key-key_field = 1
+                     field1         = &#x27;aaa&#x27;
+                     field2         = &#x27;bbb&#x27;
+                     field3         = 11
+                     field4         = 111 ) ).
+
+&quot;Secondary table keys available in the example table: cid, entity
+
+&quot;The statements demonstrate the secondary table keys using table expressions.
+&quot;The statements commented out raise a syntax warning. The secondary table key 
+&quot;should be specified explicitly.
+&quot;DATA(line_a) = itab_cr[ %cid = `cid1` ].
+&quot;DATA(line_b) = itab_cr[ %cid = `cid1` %key = VALUE #( key_field = 1 ) ].
+DATA(line_c) = itab_cr[ KEY cid COMPONENTS %cid = `cid1`
+                                           %key = VALUE #( key_field = 1 ) ].
+
+&quot;DATA(line_d) = itab_cr[ %key = VALUE #( key_field = 1 ) ].
+&quot;The COMPONENTS addition is optional.
+DATA(line_e) = itab_cr[ KEY entity %key = VALUE #( key_field = 1 ) ].</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Type Mapping for RAP</h3>
+<h4>RAP-Specific Additions to the CORRESPONDING Operator</h4>
+<p>The <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconstructor_expr_corresponding.htm"><code>CORRESPONDING</code></a> operator offers RAP-specific additions for handling type mappings related to BDEF derived types and other types. For more information, see the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapeml_type_mapping.htm">ABAP Keyword Documentation topic</a>.</p>
+<pre><code>... CORRESPONDING ...( ... MAPPING FROM ENTITY ) ...
+... CORRESPONDING ...( ... MAPPING TO ENTITY ) ...
+... CORRESPONDING ...( ... USING CONTROL ) ...
+... CORRESPONDING ...( ... MAPPING FROM ENTITY USING CONTROL ) ...
+... CORRESPONDING ...( ... CHANGING CONTROL ) ...</code></pre>
+<p>The following additions are available:</p>
+<p>For some additions, a mapping needs to be specified in the BDEF. For more information, see the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_type_mapping.htm">ABAP Keyword Documentation topic</a>.</p>
+<p>The following example uses a BDEF derived type from the ABAP cheat sheets. It shows additions that do not require a type mapping to be specified.</p>
+<pre><code>&quot;BDEF derived type 
+DATA derived_type TYPE STRUCTURE FOR UPDATE zdemo_abap_rap_ro_m.
+
+&quot;Other type
+&quot;For simplicity, the structure has the same component names
+&quot;and types to avoid further additions in the statement.
+DATA: BEGIN OF some_other_type,
+		key_field TYPE i,
+		field1    TYPE c LENGTH 10,
+		field2    TYPE c LENGTH 10,
+		field3    TYPE i,
+		field4    TYPE i,
+		END OF some_other_type.
+
+derived_type = VALUE #( key_field = 1
+                        field1 = &#x27;aaa&#x27;
+                        field2 = &#x27;bbb&#x27;
+                        field3 = 2
+                        field4 = 3
+                        %control = VALUE #( key_field = if_abap_behv=&gt;mk-on
+                                            field1    = if_abap_behv=&gt;mk-off
+                                            field2    = if_abap_behv=&gt;mk-on
+                                            field3    = if_abap_behv=&gt;mk-on
+                                            field4    = if_abap_behv=&gt;mk-off ) ).
+
+*&amp;---------------------------------------------------------------------*
+*&amp; USING CONTROL addition
+*&amp;---------------------------------------------------------------------*
+
+&quot;This addition respects the %control component of BDEF derived types, i.e.
+&quot;only those fields for which the %control field has been marked as enabled
+&quot;are respected by the mapping. A disabled %control field means that the
+&quot;mapping is not applied.
+
+&quot;In the example, components are marked as disabled in %control.
+&quot;Consequently, the field values are not assigned, and the type-specific
+&quot;initial values are used.
+some_other_type = CORRESPONDING #( derived_type USING CONTROL ).
+
+*KEY_FIELD    FIELD1     FIELD2    FIELD3    FIELD4
+*1                       bbb       2         0
+
+*&amp;---------------------------------------------------------------------*
+*&amp; CHANGING CONTROL addition
+*&amp;---------------------------------------------------------------------*
+
+&quot;This variant fills the %control structure of a BDEF-derived type based on
+&quot;a non-BDEF-derived type that does not include control information.
+&quot;In the example, two components are not assigned (i.e. they remain initial).
+&quot;Consequently, when using the CORRESPONDING operator with CHANGING CONTROL,
+&quot;the %control values are marked as disabled, the others as enabled.
+
+some_other_type = VALUE #( key_field = 4 field1 = &#x27;ccc&#x27; field4 = 5 ).
+
+derived_type = CORRESPONDING #( some_other_type CHANGING CONTROL ).
+
+*%CID_REF    KEY_FIELD    FIELD1    FIELD2     FIELD3    FIELD4    %CONTROL
+*            4            ccc                  0         5         KEY_FIELD    FIELD1    FIELD2    FIELD3    FIELD4
+*                                                                  01           01        00        00        01</code></pre>
+<h4>ABAP SQL Statements with BDEF Derived Types</h4>
+<p>The ABAP SQL statements <code>INSERT</code>, <code>UPDATE</code>, <code>MODIFY</code>, and <code>DELETE</code> offer the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmapping_from_entity.htm"><code>MAPPING FROM ENTITY</code></a> addition to handle BDEF derived types.</p>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; INSERT
+*&amp;---------------------------------------------------------------------*
+
+&quot;Populating a BDEF derived type
+DATA cr_der_type TYPE STRUCTURE FOR CREATE zdemo_abap_rap_ro_m.
+&quot;%control is not relevant in this example
+cr_der_type = VALUE #( key_field = 1
+                       field1 = &#x27;aaa&#x27;
+                       field2 = &#x27;bbb&#x27;
+                       field3 = 2
+                       field4 = 3 ).
+
+INSERT zdemo_abap_rapt1 FROM @cr_der_type MAPPING FROM ENTITY.
+
+*KEY_FIELD    FIELD1    FIELD2    FIELD3    FIELD4
+*1            aaa       bbb       2         3
+
+*&amp;---------------------------------------------------------------------*
+*&amp; MODIFY
+*&amp;---------------------------------------------------------------------*
+
+cr_der_type = VALUE #( BASE cr_der_type
+                       field1 = &#x27;YYY&#x27;
+                       field2 = &#x27;ZZZ&#x27; ).
+
+MODIFY zdemo_abap_rapt1 FROM @cr_der_type MAPPING FROM ENTITY.
+
+*KEY_FIELD    FIELD1    FIELD2    FIELD3    FIELD4
+*1            YYY       ZZZ       2         3
+
+*&amp;---------------------------------------------------------------------*
+*&amp; UPDATE with the INDICATORS SET STRUCTURE %control addition
+*&amp;---------------------------------------------------------------------*
+
+&quot;Populating a BDEF derived type
+&quot;%control is relevant in this example. Some %control values are enabled,
+&quot;some are not.
+cr_der_type = VALUE #( key_field = 1
+                       field1 = &#x27;###&#x27;
+                       field2 = &#x27;...&#x27;
+                       field3 = 100
+                       field4 = 200
+                       %control = VALUE #( key_field = if_abap_behv=&gt;mk-on
+                                           field1    = if_abap_behv=&gt;mk-on
+                                           field2    = if_abap_behv=&gt;mk-off
+                                           field3    = if_abap_behv=&gt;mk-off
+                                           field4    = if_abap_behv=&gt;mk-on ) ).
+
+UPDATE zdemo_abap_rapt1 FROM @cr_der_type
+	INDICATORS SET STRUCTURE %control MAPPING FROM ENTITY.
+
+*KEY_FIELD    FIELD1    FIELD2    FIELD3    FIELD4
+*1            ###       ZZZ       2         200
+
+*&amp;---------------------------------------------------------------------*
+*&amp; DELETE
+*&amp;---------------------------------------------------------------------*
+
+DELETE zdemo_abap_rapt1 FROM @cr_der_type MAPPING FROM ENTITY.</code></pre>
+<div class="note">[!NOTE] More information and ABAP statements: [Type Mapping for RAP](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapeml_type_mapping.htm)</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>ABAP EML Syntax</h2>
+<p>The focus is here on selected EML statements. These statements can be fairly long and various additions are possible. Find more information on the EML statements <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abeneml.htm">here</a>.</p>
+<h3>ABAP EML Syntax for Modifying Operations</h3>
+<p>The modifying operations covered include the standard operations (using the additions <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>CREATE</code></a>, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>CREATE BY</code></a>, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>UPDATE</code></a>, and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>DELETE</code></a>) and non-standard operations (actions) using the addition <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>EXECUTE</code></a>. All EML statements for the mentioned operations begin with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities.htm"><code>MODIFY</code></a>. The following commented code snippets demonstrate the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_short.htm">short</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entities_long.htm">long form</a> of EML <code>MODIFY</code> statements.</p>
+<div class="note">[!NOTE] Unlike reading operations, modifying operations are not enabled by default. You must make the respective notations in the BDEF: ``` ... create; update; delete; action some_act; ... ```</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Create Operation Using the Short Form of ABAP EML MODIFY Statements</h4>
+<ul>
+<li>The following code snippet demonstrates the creation of new instances of a RAP BO entity.</li>
+<li>The <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABAPMODIFY_ENTITY_SHORT.html">short form</a> of the <code>MODIFY</code> statement is used.</li>
+<li>Note that the statement has multiple (optional) additions.</li>
+<li>The statement uses the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_fields.htm"><code>FIELDS ( ... ) WITH</code></a> addition. See more details in the documentation and below.</li>
+<li>The statements, as is also valid for the following sections, can also use data objects declared and created inline.</li>
+</ul>
+<pre><code>&quot;Declaration of data objects using BDEF derived types
+
+DATA: cr_tab        TYPE TABLE FOR CREATE root_ent,    &quot;input derived type
+      mapped_resp   TYPE RESPONSE FOR MAPPED root_ent, &quot;response parameters
+      failed_resp   TYPE RESPONSE FOR FAILED root_ent,
+      reported_resp TYPE RESPONSE FOR REPORTED root_ent.
+
+&quot;Input derived type for the EML statement is filled using the VALUE operator
+&quot;Assumption: key_field is the key field having type i,
+&quot;field1 and field2 are data fields with character-like data type.
+&quot;Specify %cid even if not used or of interest; it must be unique within a request
+
+cr_tab = VALUE #(
+        ( %cid   = &#x27;cid1&#x27; key_field = 1
+          field1 = &#x27;A&#x27;    field2    = &#x27;B&#x27; )
+        ( %cid = &#x27;cid2&#x27;
+          &quot;Just to demo %data/%key. You can specify fields with or without
+          &quot;the derived type components
+          %data = VALUE #( %key-key_field = 2
+                          field1         = &#x27;C&#x27;
+                          field2         = &#x27;D&#x27; ) ) ).
+
+&quot;EML statement, short form
+&quot;root_ent must be the full name of the root entity, it is basically the name of the BDEF
+
+MODIFY ENTITY root_ent
+  CREATE &quot;determines the kind of operation
+  FIELDS ( key_field field1 field2 ) WITH cr_tab   &quot;Fields to be respected for the
+                                                   &quot;input derived type and the input
+                                                   &quot;derived type itself
+  MAPPED mapped_resp          &quot;mapping information
+  FAILED failed_resp          &quot;information on failures with instances
+  REPORTED reported_resp.     &quot;messages</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<div class="note">[!NOTE] -   Addition [`FIELDS ( ... ) WITH`](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_fields.htm):</div>
+<div class="note">-   Retrieving the responses and specifying the parameters is optional.</div>
+<div class="note">-  `%cid` should (or rather must) be provided even if you are not interested in its and subsequent operations do not require the reference. For an automatic provision of the `%cid` value, you can use the `AUTO FILL CID` addition in create operations.</div>
+<p>This field selection option specifies which fields are to be respected for the operation. The derived type, i. e. an internal table containing the concrete RAP BO instance values, follows <code>WITH</code>. If a field is specified in the field list within the pair of parentheses after <code>FIELDS</code>, the <code>%control</code> flag for this field is automatically set to <code>if_abap_behv=&gt;mk-on</code>. Likewise, if a field is not contained in the list, the flag in <code>%control</code> is set to <code>if_abap_behv=&gt;mk-off</code>. Assume <code>field2</code> is not specified in the list. The value for <code>field2</code> will not be respected (even if a value is specified in the internal table). The initial value will be used for the field. Assuming a data set with the value 2 for <code>key_field</code> already exists on the database for this BO, you should expect an entry for this particular instance in the <code>failed_resp</code> operand and potentially an error message in <code>reported_resp</code>, too. Nevertheless, especially in ABP implementations and depending on the context (in those methods you self-implement), you should implement and fill these parameters according to the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_contract_glosry.htm">RAP BO contract</a> to meet the variety of implementation rules.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Create Operation Using the Long Form of ABAP EML MODIFY Statements</h4>
+<ul>
+<li>The example demonstrates the long form of an ABAP EML <code>MODIFY</code> statement.</li>
+<li>The example statement uses the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_fields.htm"><code>FROM</code></a> addition instead of <code>FIELDS ( ... ) WITH</code>. See more details in the documentation and below.</li>
+</ul>
+<pre><code>MODIFY ENTITIES OF root_ent      &quot;full name of root entity
+  ENTITY root                    &quot;root or child entity (alias name if available)
+  CREATE FROM                    &quot;FROM as further field selection variant
+  VALUE #( ( %cid      = &#x27;cid&#x27;   &quot;Input derived type created inline
+             key_field = 3
+             field1    = &#x27;E&#x27;
+             field2    = &#x27;F&#x27;
+             %control = VALUE #(                &quot;Must be filled when using FROM
+               key_field = if_abap_behv=&gt;mk-on
+               field1    = if_abap_behv=&gt;mk-on
+               field2    = if_abap_behv=&gt;mk-on ) ) )
+  MAPPED DATA(m)       &quot;Target variables declared inline
+  FAILED DATA(f)
+  REPORTED DATA(r).
+
+&quot;Note: You can use the AUTO FILL CID addition to fill %cid automatically. It is 
+&quot;also possible in the short form. 
+MODIFY ENTITIES OF root_ent      
+  ENTITY root                    
+  CREATE AUTO FILL CID WITH 
+  VALUE #( ( key_field = 3
+             field1    = &#x27;E&#x27;
+             field2    = &#x27;F&#x27;
+             %control = VALUE #(                
+               key_field = if_abap_behv=&gt;mk-on
+               field1    = if_abap_behv=&gt;mk-on
+               field2    = if_abap_behv=&gt;mk-on ) ) )
+  MAPPED DATA(m2)       
+  FAILED DATA(f2)
+  REPORTED DATA(r2).</code></pre>
+<div class="note">[!NOTE] -   The entity specified after `ENTITY` can be either the root</div>
+<div class="note">-   The addition `FIELDS ( ... ) WITH` from the previous</div>
+<div class="note">-   The BDEF derived types can also be created</div>
+<div class="note">-   The long form allows you to bundle several operations in one</div>
+<div class="note">-  The [`SET FIELDS WITH`](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapmodify_entity_entities_fields.htm#!ABAP_VARIANT_4@4@) addition is available as another field specification option. However, it has limitations that you should be aware of. It can cause syntax warnings. Check the documentation. It is recommended that you use `FIELDS ... WITH` and `FROM`.</div>
+<p>entity itself or a child entity. If an alias is defined, the alias should be used. snippet is basically a shortcut for the addition <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_fields.htm"><code>FROM</code></a> that is used here. When using <code>FROM</code>, the values of the <code>%control</code> structure must be specified explicitly. <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendata_inline.htm">inline</a> as shown in the example using a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconstructor_expression_glosry.htm">constructor expression</a> for the input derived type and with <code>DATA</code> or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenfinal_inline.htm"><code>FINAL</code></a> for the responses. statement, either different operations on the same entity (for example, deleting some instances and updating some others) or operations on different entities of the same RAP BO (for example, creating a root entity instance and related instances of a child entity in one EML request). Long and short forms are also available for other EML statements.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Update Operations</h4>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; Short form of EML MODIFY statement
+*&amp;---------------------------------------------------------------------*
+
+&quot;The example code snippet uses data objects declared upfront instead of
+&quot;inline declarations.
+
+DATA: upd_tab       TYPE TABLE FOR UPDATE zdemo_abap_rap_ro_m,
+      failed_resp   TYPE RESPONSE FOR FAILED zdemo_abap_rap_ro_m,
+      reported_resp TYPE RESPONSE FOR REPORTED zdemo_abap_rap_ro_m.
+
+&quot;Note:
+&quot;The BDEF derived type does not have a %cid component but %cid_ref
+&quot;to refer to an existing instance (its %cid value) within the same
+&quot;EML request. The example includes the reference to an existing
+&quot;instance using %cid_ref for demonstration purposes, commented out.
+&quot;The example does not include an actually referable instance. When 
+&quot;there is no referable instance, a runtime error occurs.
+
+upd_tab = VALUE #(
+        ( key_field = 1 field1 = &#x27;A&#x27; field2 = &#x27;B&#x27; field3 = 1 field4 = 2 )
+        ( key_field = 2 field1 = &#x27;C&#x27; field2 = &#x27;D&#x27; field3 = 3 field4 = 4 )
+        &quot;( %cid_ref = `some_cid` field1 = &#x27;E&#x27; field2 = &#x27;F&#x27; field3 = 5 field4 = 6 )
+        ).
+
+&quot;Note:
+&quot;- The statement includes the field specification option FIELDS ( ... ) WITH.
+&quot;  The fields to be respected are included in the parentheses. For these,
+&quot;  %control is flagged as if_abap_behv=&gt;mk-on. The others, field3 and field4,
+&quot;  are not specified. Therefore, %control is flagged as if_abap_behv=&gt;mk-off
+&quot;  for these fields.
+&quot;- Typically, the key fields are not included since changing them is ruled
+&quot;  out in the example&#x27;s BDEF: field ( readonly:update ) key_field;
+&quot;- The EML statement does not have the mapped response parameter. No
+&quot;  new instance are created in update operations.
+
+MODIFY ENTITY zdemo_abap_rap_ro_m
+  UPDATE
+  FIELDS ( field1 field2 ) WITH upd_tab
+  FAILED failed_resp
+  REPORTED reported_resp.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Long form of EML MODIFY statement
+*&amp;---------------------------------------------------------------------*
+
+&quot;Note:
+&quot;- The statement&#x27;s operands are all declared inline.
+&quot;- The statement includes the field specification option FROM.
+&quot;- This specification option requires %control to be filled explicitly.
+&quot;  Unlike the previous example, the update operation also respects
+&quot;  field3 and field4, indicated by flagging all non-key components with
+&quot;  if_abap_behv=&gt;mk-on. As above, changing the key values is ruled out.
+&quot;  Flagging key_field with if_abap_behv=&gt;mk-on results in a runtime error.
+&quot;- See the excursion with specifying the %control component values.
+&quot;  Applying the coding technique mentioned there (providing the corresponding
+&quot;  values for all table lines outside of the inner parentheses), you can
+&quot;  save the specification of code lines.
+&quot;- As above, an example with %cid_ref is included but commented out since
+&quot;  the example does not inlcude a referable instance.
+
+MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+  ENTITY root
+  UPDATE
+  FROM VALUE #(
+    ( key_field = 4 field1 = &#x27;G&#x27; field2 = &#x27;H&#x27; field3 = 7 field4 = 8
+      %control = VALUE #( key_field = if_abap_behv=&gt;mk-off
+                          field1 = if_abap_behv=&gt;mk-off
+                          field2 = if_abap_behv=&gt;mk-on
+                          field3 = if_abap_behv=&gt;mk-on
+                          field4 = if_abap_behv=&gt;mk-on ) )
+    ( key_field = 5 field1 = &#x27;I&#x27; field2 = &#x27;J&#x27; field3 = 9 field4 = 10
+      %control = VALUE #( key_field = if_abap_behv=&gt;mk-off
+                          field1 = if_abap_behv=&gt;mk-on
+                          field2 = if_abap_behv=&gt;mk-on
+                          field3 = if_abap_behv=&gt;mk-on
+                          field4 = if_abap_behv=&gt;mk-on ) )
+*    ( %cid_ref = `another_cid` field1 = &#x27;K&#x27; field2 = &#x27;L&#x27; field3 = 11 field4 = 12
+*      %control = VALUE #( key_field = if_abap_behv=&gt;mk-off
+*                          field1 = if_abap_behv=&gt;mk-on
+*                          field2 = if_abap_behv=&gt;mk-on
+*                          field3 = if_abap_behv=&gt;mk-on
+*                          field4 = if_abap_behv=&gt;mk-on ) )
+     )
+  FAILED DATA(f_resp)
+  REPORTED DATA(r_resp).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Delete Operations</h4>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; Short form of EML MODIFY statement
+*&amp;---------------------------------------------------------------------*
+
+&quot;The example code snippet uses data objects declared upfront instead of
+&quot;inline declarations.
+
+DATA: del_tab           TYPE TABLE FOR DELETE zdemo_abap_rap_ro_m,
+      failed_response   TYPE RESPONSE FOR FAILED zdemo_abap_rap_ro_m,
+      reported_response TYPE RESPONSE FOR REPORTED zdemo_abap_rap_ro_m.
+
+&quot;Note:
+&quot;The BDEF derived type only includes components to identify instances.
+&quot;This can be either referring to an existing existing using %cid_ref
+&quot;- its %cid value - within the same EML request, or the key. The example
+&quot;includes the reference to an existing instance using %cid_ref for
+&quot;demonstration purposes, commented out. The example does not include an
+&quot;actually referable instance. When there is no referable instance, a
+&quot;runtime error occurs.
+
+del_tab = VALUE #(
+    ( key_field = 1 )
+    ( key_field = 2 )
+    &quot;( %cid_ref = `some_cid` )
+    ).
+
+&quot;Note:
+&quot;EML MODIFY staments for delete operations can only use the field
+&quot;specification option FROM.
+
+MODIFY ENTITY zdemo_abap_rap_ro_m
+  DELETE
+  FROM del_tab
+  FAILED failed_response
+  REPORTED reported_response.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Long form of EML MODIFY statement
+*&amp;---------------------------------------------------------------------*
+
+&quot;Note:
+&quot;The statement&#x27;s operands are all declared inline.
+
+MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+  ENTITY root
+  DELETE
+  FROM VALUE #(
+    ( key_field = 4 )
+    ( key_field = 5 )
+    &quot;( %cid_ref = `another_cid` )
+    )
+  FAILED DATA(f_del_resp)
+  REPORTED DATA(r_del_resp).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Dynamic Form of ABAP EML MODIFY Statements</h4>
+<ul>
+<li>The code snippet demonstrates the dynamic form <code>MODIFY ENTITIES OPERATIONS ...</code>.</li>
+<li>Using the statement, you can execute multiple modify operations for multiple RAP BOs in a single statement.</li>
+<li>Find more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABAPMODIFY_ENTITIES_OPERATIONS_DYN.html">here</a>.</li>
+</ul>
+<pre><code>DATA: op_tab           TYPE abp_behv_changes_tab,
+        create_root_tab  TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m,
+        update_root_tab  TYPE TABLE FOR UPDATE zdemo_abap_rap_ro_m,
+        delete_root_tab  TYPE TABLE FOR UPDATE zdemo_abap_rap_ro_m,
+        cba              TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m\_child,
+        update_child_tab TYPE TABLE FOR UPDATE zdemo_abap_rap_ch_m,
+        delete_child_tab TYPE TABLE FOR DELETE zdemo_abap_rap_ch_m.
+
+create_root_tab = VALUE #(
+            ( %cid = &#x27;cid1&#x27;
+                key_field = 5
+                %control-key_field = if_abap_behv=&gt;mk-on
+                field1 = &#x27;a&#x27;
+                %control-field1 = if_abap_behv=&gt;mk-on
+                field2 = &#x27;b&#x27;
+                %control-field2 = if_abap_behv=&gt;mk-on )
+            ( %cid = &#x27;cid2&#x27;
+                key_field = 6
+                %control-key_field = if_abap_behv=&gt;mk-on
+                field1 = &#x27;d&#x27;
+                %control-field1 = if_abap_behv=&gt;mk-on
+                field2 = &#x27;d&#x27;
+                %control-field2 = if_abap_behv=&gt;mk-on )
+            ( %cid = &#x27;cid3&#x27;
+                key_field = 7
+                %control-key_field = if_abap_behv=&gt;mk-on
+                field1 = &#x27;e&#x27;
+                %control-field1 = if_abap_behv=&gt;mk-on
+                field2 = &#x27;f&#x27;
+                %control-field2 = if_abap_behv=&gt;mk-on ) ).
+
+update_root_tab = VALUE #(
+            ( %cid_ref = &#x27;cid2&#x27;
+            field1 = &#x27;g&#x27;
+            %control-field1 = if_abap_behv=&gt;mk-on
+            field2 = &#x27;h&#x27;
+            %control-field2 = if_abap_behv=&gt;mk-on ) ).
+
+cba = VALUE #(
+            ( %cid_ref = &#x27;cid1&#x27;
+                %target = VALUE #( (
+                %cid = &#x27;cid_cba1&#x27;
+                key_ch = 10
+                %control-key_ch = if_abap_behv=&gt;mk-on
+                field_ch1 = &#x27;i&#x27;
+                %control-field_ch1 = if_abap_behv=&gt;mk-on
+                field_ch2 = 1
+                %control-field_ch2 = if_abap_behv=&gt;mk-on
+            ) ) )
+            ( %cid_ref = &#x27;cid2&#x27;
+                %target = VALUE #( (
+                %cid = &#x27;cid_cba2&#x27;
+                key_ch = 20
+                %control-key_ch = if_abap_behv=&gt;mk-on
+                field_ch1 = &#x27;j&#x27;
+                %control-field_ch1 = if_abap_behv=&gt;mk-on
+                field_ch2 = 2
+                %control-field_ch2 = if_abap_behv=&gt;mk-on
+            ) ) )
+            ( %cid_ref = &#x27;cid3&#x27;
+                %target = VALUE #( (
+                %cid = &#x27;cid_cba3&#x27;
+                key_ch = 30
+                %control-key_ch = if_abap_behv=&gt;mk-on
+                field_ch1 = &#x27;k&#x27;
+                %control-field_ch1 = if_abap_behv=&gt;mk-on
+                field_ch2 = 3
+                %control-field_ch2 = if_abap_behv=&gt;mk-on
+            ) ) ) ).
+
+update_child_tab = VALUE #(
+            ( key_field = 6
+                field_ch1 = &#x27;l&#x27;
+                %control-field_ch1 = if_abap_behv=&gt;mk-on
+                field_ch2 = 4
+                %control-field_ch2 = if_abap_behv=&gt;mk-on ) ).
+
+delete_root_tab = VALUE #( ( key_field = 7 ) ).
+
+delete_child_tab = VALUE #( ( key_field = 7 ) ).
+
+op_tab = VALUE #(
+        ( op = if_abap_behv=&gt;op-m-create
+            entity_name = &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;
+            instances   = REF #( create_root_tab ) )
+        ( op = if_abap_behv=&gt;op-m-update
+            entity_name = &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;
+            instances   = REF #( update_root_tab ) )
+        ( op = if_abap_behv=&gt;op-m-delete
+            entity_name = &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;
+            instances   = REF #( delete_root_tab ) )
+        ( op = if_abap_behv=&gt;op-m-create_ba
+            entity_name = &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;
+            sub_name    = &#x27;_CHILD&#x27;
+            instances   = REF #( cba ) )
+        ( op = if_abap_behv=&gt;op-m-update
+            entity_name = &#x27;ZDEMO_ABAP_RAP_CH_M&#x27;
+            instances   = REF #( update_child_tab ) )
+        ( op = if_abap_behv=&gt;op-m-delete
+            entity_name = &#x27;ZDEMO_ABAP_RAP_CH_M&#x27;
+            instances   = REF #( delete_child_tab ) )
+        ).
+
+MODIFY ENTITIES OPERATIONS op_tab
+    MAPPED   DATA(m)
+    FAILED   DATA(f)
+    REPORTED DATA(r).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Executing Actions</h4>
+<ul>
+<li>A RAP action is a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENRAP_NSTANDARD_OPERATION_GLOSRY.html">non-standard operation</a> that modifies the state of a RAP BO entity instance.</li>
+<li>Various flavors of actions are available. Find more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENBDL_ACTION.html">here</a>.</li>
+<li>To execute actions, use the syntax <code>MODIFY ... EXECUTE ...</code>.</li>
+</ul>
+<pre><code>&quot;Example snippet taken from the executable example
+&quot;The long form of the MODIFY statement is used. It includes
+&quot;a create operation and executes an action. 
+MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+    ENTITY root
+    CREATE FIELDS ( key_field field1 field2 field3 field4 )
+        WITH VALUE #(
+        ( %cid = &#x27;cid_x2&#x27;
+          key_field = 7
+          field1    = &#x27;ooo&#x27;
+          field2    = &#x27;ppp&#x27;
+          field3    = 70
+          field4    = 71 ) )
+    EXECUTE multiply_by_2 FROM VALUE #(
+        &quot;Executing action via %cid_ref
+        ( %cid_ref = &#x27;cid_x2&#x27; )
+        &quot;Executing action via key
+        ( key_field  =  1  )
+        ( key_field  =  2  ) ) 
+    MAPPED DATA(mapped)
+    FAILED DATA(failed)
+    REPORTED DATA(reported).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Excursions</h4>
+<h5>Specifying %control Component Values in the Short Form of VALUE Constructor Expressions</h5>
+<ul>
+<li>The following EML statement creates RAP BO instances. The BDEF derived type is created inline.</li>
+<li>With the <code>FROM</code> addition, the <code>%control</code> values must be specified explicitly.</li>
+<li>There is also a short form of <code>VALUE</code> constructor expressions. In this case, you can provide the corresponding values for all table lines  outside of the inner parentheses, instead of individually specifying the values for each instance within the parentheses.</li>
+<li>The corresponding <code>%control</code> component value is then assigned for all of the following table lines.</li>
+</ul>
+<pre><code>MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+    ENTITY root
+    CREATE FROM VALUE #(
+        %control-key_field = if_abap_behv=&gt;mk-on
+        %control-field1    = if_abap_behv=&gt;mk-on
+        %control-field2    = if_abap_behv=&gt;mk-on
+        %control-field3    = if_abap_behv=&gt;mk-on
+        %control-field4    = if_abap_behv=&gt;mk-off
+        ( %cid      = &#x27;cid1&#x27;
+          key_field = 1
+          field1    = &#x27;aaa&#x27;
+          field2    = &#x27;bbb&#x27;
+          field3    = 10
+          field4    = 100 )
+        ( %cid      = &#x27;cid2&#x27;
+          key_field = 2
+          field1    = &#x27;ccc&#x27;
+          field2    = &#x27;ddd&#x27;
+          field3    = 20
+          field4    = 200 ) )
+    MAPPED DATA(m)
+    FAILED DATA(f)
+    REPORTED DATA(r).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h5>Combining Multiple Operations in One ABAP EML Request</h5>
+<p>The following EML statement combines multiple operations in one EML request. It demonstrates the use of the BDEF derived type components <code>%cid</code> and <code>%cid_ref</code>.</p>
+<ul>
+<li>First, two instances are created by specifying <code>%cid</code>.</li>
+<li>An update operation in the same request only specifies a certain field within the parentheses of the <code>FIELDS ( ... ) WITH</code> addition which denotes that only this particular field should be updated.</li>
+<li>The other field values remain unchanged.</li>
+<li>The reference to the instance is made via <code>%cid_ref</code>.</li>
+<li>Consider an EML request in which no instance to refer to using <code>%cid_ref</code> exists, e. g. for an update operation. You can also make the reference using the unique key.</li>
+<li>A delete operation is available in the same request, too.</li>
+<li><code>DELETE</code> can only be followed by the addition <code>FROM</code>.</li>
+<li>In contrast to other derived types, the derived type that is expected here (<code>TYPE TABLE FOR DELETE</code>) only has <code>%cid_ref</code> and the key as components.</li>
+</ul>
+<pre><code>MODIFY ENTITIES OF root_ent
+  ENTITY root
+  CREATE FIELDS ( key_field field1 field2 ) WITH
+    VALUE #( ( %cid    = &#x27;cid4&#x27; key_field = 4
+                field1 = &#x27;G&#x27;    field2    = &#x27;H&#x27; )
+              ( %cid   = &#x27;cid5&#x27; key_field = 5
+                field1 = &#x27;I&#x27;    field2    = &#x27;J&#x27; ) )
+
+  UPDATE FIELDS ( field2 ) WITH
+    VALUE #( ( %cid_ref = &#x27;cid4&#x27; field2 = &#x27;Z&#x27; ) )
+
+  DELETE FROM
+    VALUE #( ( %cid_ref  = &#x27;cid5&#x27; ) &quot;Instance referenced via %cid_ref
+             ( key_field = 9 ) )    &quot;Instance referenced via the key
+...</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h5>Creating Instances for the Root and Child Entity (Deep Create)</h5>
+<p>The following code snippet shows a deep create.</p>
+<ul>
+<li>First, an instance is created for the root entity.</li>
+<li>Then, in the same request, instances are created for the child entity based on the root instance.</li>
+<li>In the example below, the assumption is that a composition is specified in the root view entity like <code>composition [1..*] of root_ent as _child</code> and <code>key_field</code> and <code>key_field_child</code> are the keys of the child view entity.</li>
+<li>The structured component <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_target.htm"><code>%target</code></a> enters the picture here which contains the target&#x27;s primary key and data fields.</li>
+</ul>
+<pre><code>MODIFY ENTITIES OF root_ent
+  ENTITY root_ent
+  CREATE FIELDS ( key_field field1 field2 ) WITH
+    VALUE #( ( %cid = &#x27;cid6&#x27; key_field = 6
+                field1 = &#x27;I&#x27; field2 = &#x27;J&#x27; ) )
+  CREATE BY \_child
+  FIELDS ( key_field_child field1_child field2_child  ) WITH
+    VALUE #( ( %cid_ref = &#x27;cid6&#x27;
+                %target = VALUE #( ( %cid            = &#x27;cid_child_1&#x27;
+                                     key_field_child = 1
+                                     field1_child    = &#x27;aa&#x27;
+                                     field2_child    = &#x27;bb&#x27; )
+                                   ( %cid            = &#x27;cid_child_2&#x27;
+                                     key_field_child = 2
+                                     field1_child    = &#x27;cc&#x27;
+                                     field2_child    = &#x27;dd&#x27; ) ) ) )
+...</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>ABAP EML Syntax for Reading Operations</h3>
+<ul>
+<li>Read-only operations always return a result, i.e. the syntax of the</li>
+</ul>
+<p>EML statement requires the addition <code>RESULT</code> and an operand.</p>
+<ul>
+<li>When RAP BO instances are read, the returned data include the</li>
+</ul>
+<p>current status of instances in the transactional buffer which includes unsaved modifications on instances. If an instance is not yet available in the transactional buffer, the currently persisted data set is (automatically - in case of a managed scenario) read into the transactional buffer.</p>
+<ul>
+<li>Note that read operations are always implicitly enabled for each</li>
+</ul>
+<p>entity listed in a BDEF, i. e. there is no extra definition in the BDEF in contrast to, for example, create or update.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Reading Operations</h4>
+<ul>
+<li>The following code snippet shows the long form of the EML</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapread_entity_entities_op.htm"><code>READ</code></a> statement for reading instances from the root entity.</p>
+<ul>
+<li>In <code>READ</code> statements, the additions <code>FIELDS ( ... ) WITH</code> and <code>FROM</code> can also be used to specify the fields that you intend to</li>
+</ul>
+<p>read. Here, the addition <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapread_entity_entities_fields.htm"><code>ALL FIELDS WITH</code></a> is available for reading all field values.</p>
+<ul>
+<li>There are also short and dynamic forms of the statement.</li>
+</ul>
+<pre><code>READ ENTITIES OF root_ent
+  ENTITY root_ent
+  ALL FIELDS WITH
+  VALUE #( ( key_field = 1 )   &quot;Derived type TYPE TABLE FOR READ IMPORT only includes the keys
+           ( key_field = 2 ) )
+  RESULT DATA(result)
+  FAILED DATA(f)
+  REPORTED DATA(r).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Read-by-Association Operations</h4>
+<ul>
+<li>Read-by-association operations include the optional addition</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapread_entity_entities_op&amp;sap-language=EN&amp;sap-client=000&amp;version=X&amp;anchor=!ABAP_ONE_ADD@1@&amp;tree=X"><code>LINK</code></a> with which you can retrieve the keys of the source and target (i. e. the associated entity).</p>
+<ul>
+<li>The by-association operations work reciprocally, i. e. you can, for example, read a child instance via the parent and a</li>
+</ul>
+<p>parent instance via the child, too.</p>
+<pre><code>&quot;Read-by association operation: parent to child
+READ ENTITIES OF root_ent
+  ENTITY root_ent
+  BY \_child
+  ALL FIELDS WITH VALUE #( ( key_field = 1 ) )
+  RESULT DATA(rba_res1)
+  LINK DATA(links1).
+  ...
+
+&quot;Read-by association operation: child to parent
+READ ENTITIES OF root_ent
+  ENTITY child_ent
+  BY \_parent
+  ALL FIELDS WITH VALUE #( ( key_field = 1 key_field_child = 1 ) )
+  RESULT DATA(rba_res2)
+  LINK DATA(links2).
+  ...</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Dynamic ABAP EML READ Statements</h4>
+<p>In addition to the short and long forms described above, various ABAP EML statements also have dynamic forms. Taking EML read operations as an example, the following code snippet shows a dynamic EML <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapread_entities_operations.htm"><code>READ ENTITIES</code></a> statement. The relevant syntax element is the <code>OPERATIONS</code> addition. The dynamic form allows the collection of read operations for multiple RAP BOs in one EML statement. For more information, see the ABAP keyword documentation and the comments in the snippet.</p>
+<pre><code>&quot;The statement is taken from the executable example. The example has a 
+&quot;root entity and a child entity. For both entities, RAP BO instances
+&quot;are to be read (read and read-by-association operation).
+
+DATA:
+    &quot;The following data object is the operand of the dynamic EML statement
+    &quot;It is an internal table and has a special, RAP-specific type.
+    op_tab          TYPE abp_behv_retrievals_tab,
+
+    &quot;More data object declarations (internal tables typed with BDEF
+    &quot;derived types) that are relevant for the EML statement.
+    &quot;For both entities (root and child), RAP BO instances are to be 
+    &quot;read. The internal tables are used for components of the internal
+    &quot;table op_tab further down.
+    read_dyn        TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ro_m,
+    read_dyn_result TYPE TABLE FOR READ RESULT zdemo_abap_rap_ro_m,
+    rba_dyn         TYPE TABLE FOR READ IMPORT zdemo_abap_rap_ro_m\_child,
+    rba_dyn_result  TYPE TABLE FOR READ RESULT zdemo_abap_rap_ro_m\_child,
+    rba_dyn_link    TYPE TABLE FOR READ LINK zdemo_abap_rap_ro_m\_child.
+
+&quot;Filling the internal tables, i.e. which instances are to be read
+&quot;Root entity
+&quot;Example:
+&quot;- The key is comprised of the field &#x27;key_field&#x27;. It is of type i.
+&quot;- The %control structure is filled, flagging those fields that
+&quot;  are to be read. Flagging the key field is not required.
+read_dyn = VALUE #(
+    ( %key-key_field = 1
+      %control = VALUE #(
+        field1 = if_abap_behv=&gt;mk-on
+        field2 = if_abap_behv=&gt;mk-on
+        field3 = if_abap_behv=&gt;mk-on
+        field4 = if_abap_behv=&gt;mk-on ) )
+    ( %key-key_field = 2
+      %control = VALUE #(
+        field1 = if_abap_behv=&gt;mk-on
+        field2 = if_abap_behv=&gt;mk-on
+        field3 = if_abap_behv=&gt;mk-on
+        field4 = if_abap_behv=&gt;mk-on ) ) ).
+
+&quot;Child entity
+&quot;Instances to be read for a read-by-association operation
+&quot;The shared key is &#x27;key_field&#x27;.
+rba_dyn = VALUE #(
+    ( %key-key_field = 1
+      %control = VALUE #(
+        key_ch    = if_abap_behv=&gt;mk-on        
+        field_ch1 = if_abap_behv=&gt;mk-on
+        field_ch2 = if_abap_behv=&gt;mk-on ) )
+    ( %key-key_field = 2
+      %control = VALUE #(
+        key_ch    = if_abap_behv=&gt;mk-on
+        field_ch1 = if_abap_behv=&gt;mk-on
+        field_ch2 = if_abap_behv=&gt;mk-on ) ) ).
+
+&quot;Filling the internal table that is the operand of the
+&quot;dynamic EML statement
+&quot;This table has optional and mandatory components.
+op_tab = VALUE #(
+    ( &quot;op: Specifies the operation to be executed; is mandatory;
+        &quot;    can be set with the predefined constants, e.g. OP-R-READ
+        &quot;    etc., of interface IF_ABAP_BEHV
+        op = if_abap_behv=&gt;op-r-read
+        &quot;entity_name: Specifies the name of the RAP BO entity for which
+        &quot;             the operation is executed; is mandatory
+        entity_name = &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;
+        &quot;instances: Specifies a reference to an internal table holding
+        &quot;           the input keys; must be appropriately typed; is mandatory
+        instances   = REF #( read_dyn )
+        &quot;results: Specifies a reference to an internal table with the required
+        &quot;         BDEF derived type for the read results; is mandatory
+        results     = REF #( read_dyn_result ) )
+    ( op = if_abap_behv=&gt;op-r-read_ba
+        entity_name = &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;
+        &quot;sub_name: Only relevant for specifying association names in
+        &quot;          read-by-association operations; in that context, it is mandatory
+        sub_name    = &#x27;_CHILD&#x27;
+        &quot;full: Optional flag; specifies if all target instances are to be retrieved
+        full        = abap_true
+        instances   = REF #( rba_dyn )
+        results     = REF #( rba_dyn_result )
+        &quot;links: Reference to internal table holding the key pairs of the source and
+        &quot;       target
+        links       = REF #( rba_dyn_link ) ) ).
+
+READ ENTITIES OPERATIONS op_tab.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Accessing Change Information</h4>
+<ul>
+<li>ABAP EML read operations using <code>WITH CHANGES</code> provide access to accumulated change information for RAP BO instances within a RAP transaction.</li>
+<li>Syntax:</li>
+<li>Short form: <code>READ ENTITY IN LOCAL MODE ... WITH CHANGES ...</code></li>
+<li>Long form: <code>READ ENTITIES OF ... IN LOCAL MODE ENTITY ... WITH CHANGES ...</code></li>
+<li>Regarding the dynamic form, see the notes further down.</li>
+<li>After <code>RESULT</code>, the BDEF derived type <code>TYPE TABLE FOR READ CHANGES</code> is expected.</li>
+<li>In addition to RAP BO instance data, the read result includes the component <code>%chg</code>, which indicates the accumulated operation.</li>
+<li>Restrictions:</li>
+<li>Available only with managed RAP BOs (not applicable to unmanaged RAP BOs)</li>
+<li>Usable only in implementation classes</li>
+<li>Must be used in conjunction with <code>IN LOCAL MODE</code></li>
+<li>Cannot be applied to read-by-association operations or when executing RAP functions.</li>
+<li>The addition helps determine whether a RAP BO instance is unchanged or has been created, updated, or deleted during the current RAP transaction. The <code>%control</code> structure components in the read result indicate which fields have changed, but only for those components where the <code>%chg</code> value is either <code>if_abap_behv=&gt;cop-create</code>, <code>if_abap_behv=&gt;cop-update</code>, or <code>if_abap_behv=&gt;cop-recreate</code>. In all other cases, the <code>%control</code> component value remains initial.</li>
+<li>With regard to the dynamic form, <code>WITH CHANGES</code> cannot be specified. The functionality of <code>WITH CHANGES</code> is implemented in dynamic ABAP EML <code>READ</code> statements by setting the <code>full</code> component of the statement&#x27;s operand to <code>if_abap_behv=&gt;typekind-result_chg</code>.</li>
+</ul>
+<p>Example statements</p>
+<pre><code>&quot;Short form
+DATA read_changes TYPE TABLE FOR READ CHANGES demo_rap_entity. 
+ 
+READ ENTITY IN LOCAL MODE demo_rap_entity 
+  WITH CHANGES 
+  ALL FIELDS WITH CORRESPONDING #( keys ) 
+  RESULT read_changes 
+  FAILED failed.
+
+&quot;Dynamic form
+DATA: op_tab          TYPE abp_behv_retrievals_tab, 
+      read_dyn        TYPE TABLE FOR READ IMPORT demo_rap_entity, 
+      read_dyn_result TYPE TABLE FOR READ CHANGES demo_rap_entity, 
+      entity          TYPE abp_entity_name VALUE &#x27;DEMO_RAP_ENTITY&#x27;. 
+ 
+read_dyn = VALUE #( FOR wa IN keys ( 
+  %key-key_field  = wa-key_field 
+  %control-field1 = if_abap_behv=&gt;mk-on 
+  %control-field2 = if_abap_behv=&gt;mk-on 
+  %control-field3 = if_abap_behv=&gt;mk-on 
+  %control-field4 = if_abap_behv=&gt;mk-on ) ). 
+ 
+op_tab = VALUE #( ( 
+  op          = if_abap_behv=&gt;op-r-read 
+  entity_name = entity 
+  full        = if_abap_behv=&gt;typekind-result_chg 
+  instances   = REF #( read_dyn ) 
+  results     = REF #( read_dyn_result ) ) ). 
+ 
+READ ENTITIES IN LOCAL MODE OPERATIONS op_tab FAILED DATA(f).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>COMMIT ENTITIES: Persisting to the Database</h3>
+<ul>
+<li>A [`COMMIT</li>
+</ul>
+<p>ENTITIES<code>](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcommit_entities.htm) statement triggers the RAP save sequence. Without such a statement, the modified RAP BO instances that are available in the transactional buffer are not persisted to the database. In case of a natively supported RAP scenario (for example, when using OData), the </code>COMMIT ENTITIES` request is executed automatically.</p>
+<ul>
+<li><code>COMMIT ENTITIES</code> implicitly includes [`COMMIT</li>
+</ul>
+<p>WORK`](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcommit.htm).</p>
+<ul>
+<li>Note: <code>COMMIT ENTITIES</code> statements cannot be used</li>
+</ul>
+<p>in behavior implementations.</p>
+<ul>
+<li>There are multiple variants available for the statement as described</li>
+</ul>
+<p>in the ABAP Keyword Documentation <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcommit_entities.htm">here</a>. They deal with different variants of how to handle RAP responses, among others.</p>
+<ul>
+<li><code>COMMIT ENTITIES</code> statements set the system field</li>
+</ul>
+<p><code>sy-subrc</code>. When using <code>COMMIT ENTITIES</code>, it is not guaranteed that <code>COMMIT WORK</code> is carried out successfully. Hence, you should include a check for <code>sy-subrc</code> after <code>COMMIT ENTITIES</code> so that you can react to failures accordingly.</p>
+<p>&lt;table&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; Variant/Addition &lt;/td&gt; &lt;td&gt; Notes &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Short form of <code>COMMIT ENTITIES</code></p>
+<p>&lt;/td&gt; &lt;td&gt;</p>
+<p>The following snippet shows a create operation. This operation has only an impact on the database with the <code>COMMIT ENTITIES</code> statement. Triggering the save sequence means that the execution of the statement triggers the calling of the saver methods available in the saver class of a behavior implementation. In managed scenarios (except for some special variants), the saving is done automatically without implementing a dedicated saver method. Optionally, you can specify the <code>RESPONSES</code> addition followed by a data object of type <code>ABP_BEHV_RESPONSE_TAB</code> to retrieve information returned by the response parameters of RAP saver methods.</p>
+<p>&lt;br&gt;</p>
+<pre><code>MODIFY ENTITIES OF root_ent
+  ENTITY root_ent
+  CREATE FIELDS ( key_field field1 field2 ) WITH
+  VALUE #( ( %cid = &#x27;cid&#x27; key_field = 7
+             field1 = &#x27;K&#x27; field2 = &#x27;L&#x27; ) )
+  MAPPED DATA(mapped)
+  FAILED DATA(failed)
+  REPORTED DATA(rep).
+
+COMMIT ENTITIES.
+
+IF sy-subrc &lt;&gt; 0.
+  ...
+ENDIF.
+
+... &quot;Some modifications
+
+DATA f_resp TYPE abp_behv_response_tab.
+DATA r_resp TYPE abp_behv_response_tab.
+&quot;Note: Inline declarations for the data objects are also possible.
+COMMIT ENTITIES RESPONSES FAILED f_resp REPORTED r_resp.
+
+IF sy-subrc &lt;&gt; 0.
+  ...
+ENDIF.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Long form of <code>COMMIT ENTITIES</code></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<p>The long syntax form includes the retrieval of information for one or more RAP BO entities. Root entities must be specified.</p>
+<p>&lt;br&gt;</p>
+<pre><code>COMMIT ENTITIES
+ RESPONSE OF zdemo_abap_rap_ro_m
+   FAILED   DATA(f1)
+   REPORTED DATA(r1)
+ RESPONSE OF zdemo_abap_rap_draft_m
+   FAILED   DATA(f2)
+   REPORTED DATA(r2).
+
+IF sy-subrc &lt;&gt; 0.
+    ...
+ENDIF.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Dynamic form of <code>COMMIT ENTITIES</code></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<p>The dynamic syntax form allows you to retrieve RAP responses from RAP saver methods by dynamically specifying one or more RAP BO root entities.</p>
+<p>&lt;br&gt;</p>
+<pre><code>DATA: root_name1  TYPE abp_root_entity_name VALUE &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;,
+      root_name2  TYPE abp_root_entity_name VALUE &#x27;ZDEMO_ABAP_RAP_DRAFT_M&#x27;,
+      failed_resp TYPE abp_behv_response_tab.
+
+DATA(dyn_tab) = VALUE abp_entity_name_tab( ( root_name1 )
+                                           ( root_name2 ) ).
+
+COMMIT ENTITIES  RESPONSES OF dyn_tab
+    FAILED   failed_resp
+    REPORTED DATA(reported_resp).
+
+IF sy-subrc &lt;&gt; 0.
+    ...
+ENDIF.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Specifying a commit scope</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>Especially used in late numbering scenarios to get the final keys from the preliminary keys (using the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapconvert_key.htm"><code>CONVERT KEY</code></a> addition)</li>
+<li>The commit scope is opened by <code>COMMIT ENTITIES BEGIN ...</code> (<code>...</code> stands for further syntax options such as the specification of <code>RESPONSES ...</code> or <code>RESPONSE OF ...</code> ), and closed by <code>COMMIT ENTITIES END.</code>.</li>
+</ul>
+<p>&lt;br&gt;</p>
+<pre><code>COMMIT ENTITIES BEGIN. 
+ 
+... 
+
+&quot;CONVERT KEY OF some_bo FROM ...-%pid TO DATA(some_key).
+
+&quot;For example, converting the preliminary keys (e.g. %pid components) 
+&quot;based on entries in the MAPPED table of a RAP BO entity. 
+&quot;Using a CONVERT KEY statement, you can retrieve the final keys of
+&quot;individual instances, and store them in a local variable. 
+ 
+COMMIT ENTITIES END.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Simulating a commit</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>The optional <code>IN SIMULATION MODE</code> addition can be specified with <code>COMMIT ENTITIES</code> statements allowing a RAP transaction to be checked.</li>
+<li>With this addition, only the RAP early save phase is processed without saving data, i.e. a final <code>COMMIT WORK</code> is not performed.</li>
+<li>The addition can be used to check the consistency of the transaction by evaluating, for example, the <code>sy-subrc</code> value as a result of executing the commit in simulation mode.</li>
+</ul>
+<p>&lt;br&gt;</p>
+<pre><code>DELETE FROM zdemo_abap_rapt1.
+
+DO 2 TIMES.
+ MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+  ENTITY root
+  CREATE FIELDS ( key_field )
+  AUTO FILL CID WITH VALUE #( ( key_field = 100 ) )
+  MAPPED DATA(m1)
+  FAILED DATA(f1)
+  REPORTED DATA(r1).
+
+ IF sy-index = 1.
+   COMMIT ENTITIES IN SIMULATION MODE.
+ ELSE.
+   COMMIT ENTITIES.
+ ENDIF.
+
+ IF sy-subrc &lt;&gt; 0.
+  ...
+ ENDIF.
+
+ SELECT FROM zdemo_abap_rapt1
+  FIELDS key_field
+  ORDER BY key_field
+  INTO TABLE @DATA(tab).
+
+ IF sy-index = 1.
+  ASSERT tab IS INITIAL.
+  &quot;Clearing the transactional buffer
+  ROLLBACK ENTITIES.
+ ELSE.
+  ASSERT lines( tab ) = 1.
+  ASSERT tab[ 1 ]-key_field = 100.
+ ENDIF.
+ENDDO.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>ROLLBACK ENTITIES</h3>
+<ul>
+<li>The <code>ROLLBACK ENTITIES</code> statement rolls back all changes of the current <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_luw_glosry.htm">RAP transaction</a>.</li>
+<li>This rollback includes the clearing of the transactional buffer (by calling the <code>cleanup</code> method) and locks.</li>
+<li>Note that in unmanaged scenarios, you must implement the behavior yourself. For example, the <code>cleanup</code> method must include an appropriate implementation to clear the transactional buffer.</li>
+<li>Same as for <code>COMMIT ENTITIES</code>, in natively supported RAP scenarios, such as an SAP Fiori application using OData, the <code>ROLLBACK ENTITIES</code> call is implicitly and automatically performed by the RAP runtime engine.</li>
+</ul>
+<p>The following example demonstrates the effect of <code>ROLLBACK ENTITIES</code>. In the second loop pass, <code>ROLLBACK ENTITIES</code> clears the transactional buffer, leaving nothing to commit. Therefore, the assertions are also true for the second loop.</p>
+<pre><code>DELETE FROM zdemo_abap_rapt1.
+
+DO 2 TIMES.
+ MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+  ENTITY root
+  CREATE FIELDS ( key_field )
+  AUTO FILL CID WITH VALUE #( ( key_field = sy-index ) )
+  MAPPED DATA(m1)
+  FAILED DATA(f1)
+  REPORTED DATA(r1).
+
+ IF sy-index = 2.
+   ROLLBACK ENTITIES.
+ ENDIF.
+
+COMMIT ENTITIES.
+
+ IF sy-subrc &lt;&gt; 0.
+  ...
+ ENDIF.
+
+ SELECT FROM zdemo_abap_rapt1
+  FIELDS key_field
+  ORDER BY key_field
+  INTO TABLE @DATA(tab).
+
+  ASSERT lines( tab ) = 1.
+  ASSERT tab[ 1 ]-key_field = 1.
+ENDDO.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>GET PERMISSIONS: Retrieving Information about RAP BO Permissions</h3>
+<ul>
+<li>RAP BO permissions cover aspects such as global and instance authorization, or global, instance, and static feature control.</li>
+<li>Using ABAP EML <code>GET PERMISSIONS</code> statements, you can retrieve information about these permissions.</li>
+<li>Like other ABAP EML statements, <code>GET PERMISSIONS</code> offers multiple (optional) additions and syntax variants.</li>
+<li>Find more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABAPGET_PERMISSIONS.html">here</a> and in the subtopics.</li>
+<li>The example code snippet uses the short form of <code>GET PERMISSIONS</code>, specifying an <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABAPGET_PERMISSIONS_ONLY_CLAUSE.html">only clause</a>. The <code>ONLY GLOBAL</code> addition ensures the result includes only global authorization, global and static feature control.</li>
+<li>Unlike many other ABAP EML statements, the <code>GET PERMISSIONS</code> example statement works with a data object having a structured BDEF derived type (after <code>REQUEST</code>), not a tabular BDEF derived type.</li>
+</ul>
+<pre><code>DATA request TYPE STRUCTURE FOR PERMISSIONS REQUEST zdemo_abap_rap_ro_m.
+
+request = VALUE #(
+    %create          = if_abap_behv=&gt;mk-on
+    %update          = if_abap_behv=&gt;mk-on
+    %delete          = if_abap_behv=&gt;mk-on
+    %field-key_field = if_abap_behv=&gt;mk-on
+    %field-field1    = if_abap_behv=&gt;mk-on
+    %field-field2    = if_abap_behv=&gt;mk-on
+    %field-field3    = if_abap_behv=&gt;mk-on
+    %field-field4    = if_abap_behv=&gt;mk-on ).
+
+GET PERMISSIONS ONLY GLOBAL ENTITY zdemo_abap_rap_ro_m
+    REQUEST request
+    RESULT DATA(result)
+    FAILED DATA(failed)
+    REPORTED DATA(reported).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Raising RAP Business Events</h3>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_entity_event_glosry.htm">RAP business events</a> can be raised in ABAP behavior pools with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapraise_entity_event.htm"><code>RAISE ENTITY EVENT</code></a> statements.</li>
+<li>The focus of the snippets is on the local consumption of RAP business events. Prerequisites:</li>
+<li><code>event</code> specifications are available in the BDEF (e.g. <code>... event some_evt; ...</code>). For more details, refer to the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_event.htm">BDL documentation</a>.</li>
+<li>A <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_event_handler_class_glosry.htm">RAP event handler class</a> is available that is used to implement <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_event_handler_meth_glosry.htm">RAP event handler methods</a>.</li>
+<li>Note that these methods are called asynchronously.</li>
+<li>Similar to RAP handler and saver methods, RAP event handler methods are implemented in the CCIMP include (<em>Local Types</em> tab in ADT) of the RAP event handler class.</li>
+<li>To locally consume RAP business events, a local class that inherits from <code>CL_ABAP_BEHAVIOR_EVENT_HANDLER</code> can be implemented in the CCIMP include of a RAP event handler class.</li>
+<li>More information:</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_events.htm">ABAP for RAP Business Events</a> in the ABAP Keyword Documentation</li>
+<li><a href="https://help.sap.com/docs/abap-cloud/abap-rap/business-events">Business Events</a> in the SAP Help Portal</li>
+</ul>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; Syntax for the declaration part of a global RAP event handler class
+*&amp;---------------------------------------------------------------------*
+
+CLASS cl_event_handler DEFINITION PUBLIC FOR EVENTS OF some_bdef.
+  ...
+ENDCLASS.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Syntax for the declaration part of a local event handler class
+*&amp; in the CCIMP include of a RAP event handler class 
+*&amp;---------------------------------------------------------------------*
+
+CLASS lhe_event DEFINITION INHERITING FROM cl_abap_behavior_event_handler.
+  ...
+ENDCLASS.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; RAP event handler method definition
+*&amp;---------------------------------------------------------------------*
+
+&quot;Notes: 
+&quot;- Must be defined as instance methods in the private visibility section. 
+&quot;- The input parameter par is an internal table of type TYPE TABLE FOR EVENT.
+&quot;- This type includes the keys of RAP BO instances (and %param, if the event
+&quot;  is specified with a parameter in the BDEF)
+&quot;- The methods do not contain RAP response parameters.
+METHODS meth FOR ENTITY EVENT par FOR some_bdef~some_evt.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; RAISE ENTITY EVENT statement in an ABP, e.g. the save_modified method
+*&amp; in managed scenarios with additional save
+*&amp;---------------------------------------------------------------------*
+
+...
+CLASS lsc IMPLEMENTATION.
+  METHOD save_modified.
+   &quot;Assumption: An event is specified for create operations in the BDEF as follows
+   &quot;event created;
+   IF create-some_bdef IS NOT INITIAL.    
+     RAISE ENTITY EVENT some_bdef~created 
+        FROM VALUE #( FOR &lt;cr&gt; IN create-root ( %key = VALUE #( some_key = &lt;cr&gt;-some_key ) ) ).
+   ENDIF.
+
+   &quot;Assumption: An event is specified for delete operations in the BDEF as follows
+   &quot;event deleted parameter some_abstract_entity;
+   &quot;The abstract entity has two parameters, for example, with which additional
+   &quot;information can be passed.
+   IF delete-some_bdef IS NOT INITIAL.
+     RAISE ENTITY EVENT some_bdef~deleted
+       FROM VALUE #( FOR &lt;del&gt; IN delete-some_bdef (
+         %key   = VALUE #( some_key = &lt;del&gt;-some_key )
+         %param = VALUE #( par_a = &#x27;01&#x27;
+                           par_b = &#x27;Item deleted&#x27; ) ) ).
+   ENDIF.
+  ENDMETHOD.
+ENDCLASS.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Additions to ABAP EML Statements in ABAP Behavior Pools</h3>
+<p>There are a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abeneml_in_abp.htm">special additions when using EML in behavior pools</a>.</p>
+<h4>IN LOCAL MODE Addition</h4>
+<ul>
+<li>Using the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapin_local_mode.htm"><code>IN LOCAL MODE</code></a> addition to ABAP EML <code>READ</code> and <code>MODIFY</code> statements can be used to suppress feature controls, authorization checks, and prechecks.</li>
+<li>Consider the following use case: There is a field to display the</li>
+</ul>
+<p>booking status of a trip on a UI. In the BDEF, this field is specified as read-only. Hence, it cannot be modified by a user on the UI. However, there is a button on the UI to book the trip. This button might trigger an action to book the trip so that the value of the field changes from open to booked. To enable this, the underlying handler method for the modify operation with the action to be executed has the addition <code>IN LOCAL MODE</code> that ignores the feature control.</p>
+<p>Syntax:</p>
+<pre><code>MODIFY ENTITIES OF root_ent IN LOCAL MODE
+  ENTITY root
+  EXECUTE book
+  FROM action_tab
+  ...</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>AUGMENTING Addition to ABAP EML MODIFY Statements</h4>
+<ul>
+<li>ABAP EML <code>MODIFY</code> statements include a special syntax variant used only in the context of projections: <code>MODIFY AUGMENTING ENTITY|ENTITIES</code>.</li>
+<li>RAP projection business objects prepare a business object for specific services, allowing flexible service consumption and role-based service design. Find more details in the <a href="https://help.sap.com/docs/abap-cloud/abap-rap/business-object-projection">Development guide for the ABAP RESTful Application Programming Model</a>.</li>
+<li>Purpose: Modify and enrich requests from the base BO at the projection layer before storing the data in the transactional buffer. All standard operations and actions are supported.</li>
+<li>You can use the statement with the <code>AUGMENTING</code> addition only in RAP BO providers.</li>
+<li>Response parameters are not supported with these statements.</li>
+<li>Note the <code>RELATING</code> addition in this context. This is relevant if the augmented request contains instances not in the original request. It establishes a relationship between the new instances and the original ones in a relationship table to associate potential responses.</li>
+</ul>
+<pre><code>MODIFY AUGMENTING ENTITY some_bdef
+    UPDATE FROM ...
+
+&quot;relates_tab is of type abp_behv_relating_tab
+MODIFY AUGMENTING ENTITY some_bdef
+    UPDATE FROM ... RELATING TO some_instances BY relates_tab.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>RAP Excursions</h2>
+<h3>Using Keys and Identifying RAP BO Instances in a Nutshell</h3>
+<p>The following bullet points outline important aspects regarding keys and identifying <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_instance_glosry.htm">RAP BO instances</a> in ABAP EML statements.</p>
+<p><strong>Why is it important?</strong></p>
+<ul>
+<li>The [primary</li>
+</ul>
+<p>key](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenprimary_key_glosry.htm &quot;Glossary Entry&quot;) of a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_entity_inst_glosry.htm">RAP BO entity instance</a> is composed of one or more <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenkey_field_glosry.htm">key fields</a>.</p>
+<ul>
+<li>These key fields stand for the fields that are specified with</li>
+</ul>
+<p><code>key</code> in the underlying <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_v2_view_glosry.htm">CDS view entity</a> of the RAP BO.</p>
+<ul>
+<li>The primary key uniquely identifies each RAP BO entity instance.</li>
+<li>As a general rule, after the creation of an instance including the primary key during a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_create_operation_glosry.htm">RAP create operation</a>, the primary key can no longer be changed.</li>
+<li>Note that there are different numbering concepts, such as <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_early_numbering_glosry.htm">early</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlate_numbering_glosry.htm">late numbering</a>. In the latter concept, newly created entity instances are given their final key only shortly before saving in the database. Until then, the business logic uses a temporary key that has to be replaced.</li>
+<li>If a data set with a particular primary key already exists in the</li>
+</ul>
+<p>persistent database table, the saving of a RAP BO instance is rejected because of a duplicate primary key.</p>
+<p><strong>How can a RAP BO instance be uniquely identified?</strong></p>
+<ul>
+<li>It can be done by using a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_inst_identifier_glosry.htm">RAP instance identifier</a></li>
+</ul>
+<p>or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_cont_identifier_glosry.htm">RAP content identifier</a> or both of them.</p>
+<ul>
+<li>RAP instance identifier:</li>
+<li>It consists of the primary key fields and all relevant <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_derived_type_glosry.htm">BDEF derived type</a></li>
+</ul>
+<p>components.</p>
+<ul>
+<li>To ease the reference to all of these components, special</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencomponent_group_glosry.htm">component groups</a> are available to summarize the components and make them addressable via one single name.</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_key.htm"><code>%key</code></a>:</li>
+</ul>
+<p>Contains the primary key fields of a RAP BO instance</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_tky.htm"><code>%tky</code></a>:</li>
+</ul>
+<p>Specifies the transactional key. Comprises <code>%key</code> (and, thus, the primary key fields of a RAP BO instance) and more components that are relevant to uniquely identify a RAP BO instance. Among them, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_pid.htm"><code>%pid</code></a> (relevant for late numbering scenarios) and the draft indicator <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_is_draft.htm"><code>%is_draft</code></a> (relevant for <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_with_draft.htm">draft</a> scenarios). In non-late numbering or non-draft scenarios, these extra components are just blank. However, it is recommended that you use <code>%tky</code> in all scenarios since it simplifies a possible later switch, for example, to a draft scenario. In doing so, lots of adaptations to the code regarding the keys and the inclusion of <code>%is_draft</code> can be avoided.</p>
+<ul>
+<li>RAP content identifier:</li>
+<li>Reflected in the component</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_cid.htm"><code>%cid</code></a> which is a string of type <code>ABP_BEHV_CID</code> to define a content ID.</p>
+<ul>
+<li>Used as a unique and preliminary identifier for RAP BO instances</li>
+</ul>
+<p>in RAP create operations, especially where no primary key exists for the particular instance.</p>
+<ul>
+<li>For newly created instances, the ID can then be used for performing further modifications, referencing to those instances using <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_cid_ref.htm"><code>%cid_ref</code></a> (which has the same value as %cid), for example, in RAP operations using <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>CREATE BY</code></a>, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>UPDATE</code></a></li>
+</ul>
+<p>and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>DELETE</code></a>, as well as <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_action.htm">actions</a> with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_op.htm"><code>EXECUTE</code></a>).</p>
+<ul>
+<li>In contrast to the primary key and the preliminary ID</li>
+</ul>
+<p><code>%pid</code> for late numbering scenarios, <code>%cid</code> (and <code>%cid_ref</code>) are only available on a short-term basis for the current ABAP EML request within the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_int_phase_glosry.htm">RAP interaction phase</a> in one RAP transaction.</p>
+<ul>
+<li><strong>Note:</strong>  Specify <code>%cid</code> even if there are no further operations referring to it.</li>
+<li>Special case: Late numbering</li>
+<li>In late numbering scenarios newly created</li>
+</ul>
+<p>entity instances are given their final key only shortly before saving in the database, i. e. you deal with preliminary keys in the RAP interaction phase and the early phase of the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_save_seq_glosry.htm">RAP save sequence</a>.</p>
+<ul>
+<li>In this case, you can use <code>%key</code> to hold the preliminary</li>
+</ul>
+<p>keys or use a preliminary ID in the dedicated component <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_pid.htm"><code>%pid</code></a> which is of type <code>ABP_BEHV_PID</code> and only available in late numbering scenarios.</p>
+<ul>
+<li>Similar to above, to uniquely identify RAP BO instances in late</li>
+</ul>
+<p>numbering scenarios, you can use either <code>%key</code> or <code>%pid</code> or both of them. In any case, the use of <code>%tky</code> is handy because it includes both components. You must ensure that <code>%tky</code> in total uniquely identifies the instances.</p>
+<ul>
+<li><strong>Note:</strong> A further component group to refer to the keys is available: <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_pky.htm"><code>%pky</code></a>. <code>%pky</code> contains <code>%pid</code> and <code>%key</code> in late numbering scenarios. In non-late numbering scenarios, it just contains <code>%key</code>. <code>%pky</code> itself is contained in <code>%tky</code>. There are contexts, for example, particular actions, where <code>%tky</code> is not available but <code>%pky</code> is. This way, there is still the option to summarize <code>%pid</code> and <code>%key</code> in one component group in the absence of <code>%tky</code>.</li>
+</ul>
+<p><strong>General rule</strong>: A RAP BO instance must - where available - always be uniquely identifiable by its transactional key (<code>%tky</code>) for internal processing during the RAP interaction phase. <code>%tky</code> always contains all relevant components for the chosen scenario.</p>
+<h4>Assignment of Key Component Groups</h4>
+<pre><code>    ... %tky = CORRESPONDING #( wa-%tky ) ...
+    ... %key = CORRESPONDING #( wa-%key ) ...
+    ... %pky = CORRESPONDING #( wa-%pky ) ...</code></pre>
+<ul>
+<li>As a general best practice, you should use a RAP BO instance key component group when referring to the entire key, rather than listing the individual key fields. It is recommended that you use <code>%tky</code> whenever possible.</li>
+<li>Avoid specifying multiple keys. For example, check the F2 information to understand what is included in the component groups to avoid redundancy. You should avoid specifying a component group and a key separately if the group already includes that key.</li>
+<li>In the following cases, type compatibility cannot be guaranteed in component group assignments:</li>
+<li>Mixing key component groups when they refer to the same RAP BO entity, e.g. <code>wa-%tky = wa-%key</code>. Such an assignment should also be avoided when both component groups have an identical scope in terms of components (e.g. <code>%tky</code> and <code>%key</code> in non-late-numbering and non-draft scenarios).</li>
+<li>Mixing the same key component groups when referring to two different RAP BO entities, for example, <code>wa_root-%tky = wa_child-%tky</code>. In this case, adding more components later may cause syntax errors for an assignment that worked previously.</li>
+<li>Defining structured types that have the same components as key component groups, and then assigning data objects of that type to those of the respective, original key component group.</li>
+<li>In the above cases, the <code>CORRESPONDING</code> operator can be used to ensure type compatibility in assignments to key component groups:</li>
+<li>In cases where different data objects of key component groups of a BDEF derived type are to be assigned to the same key component group of the same entity, a direct assignment works without a syntax warning because the content is identical. A direct assignment is recommended (<code>...wa1_root-%tky = wa2_root-%tky ...</code>). The use of the <code>CORRESPONDING</code> operator is unnecessary and less performant. This is true, for example, for key component group assignments in the context of RAP response parameters failed and reported.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>RAP Concepts</h3>
+<p><strong>RAP numbering</strong></p>
+<ul>
+<li>A concept that deals with setting values for primary key fields.</li>
+<li>There are multiple options to handle the numbering for primary key</li>
+</ul>
+<p>fields depending on when (early in the RAP interaction phase or late in the RAP save sequence) and by whom (RAP BO consumer, behavior pool, or framework) the primary key values are set.</p>
+<ul>
+<li>When:</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_early_numbering_glosry.htm">Early numbering</a>:</li>
+</ul>
+<p>The final key values are assigned during a RAP create operation in the interaction phase.</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_late_numbering_glosry.htm">Late numbering</a>:</li>
+</ul>
+<p>The final key values are assigned during the RAP save sequence (and here only in the RAP saver method <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_adjust_numbers.htm"><code>adjust_numbers</code></a>).</p>
+<ul>
+<li>By whom</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_ext_numbering_glosry.htm">External numbering</a>:</li>
+</ul>
+<p>Key values are provided by the RAP BO consumer. For example, in a create operation, the key values are specified by the RAP BO consumer like other non-key field values. Basically, this is the concept with which the snippets above are tailored.</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_int_numbering_glosry.htm">Internal numbering</a>:</li>
+</ul>
+<p>Key values are provided by the RAP BO provider. For example, in a create operation, the key values are not specified in an EML create request by the RAP BO consumer but rather by the RAP BO provider. In case of a managed RAP BO, the key is automatically created by the framework which only works if the key is of a certain type (16-character byte-like <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenuuid_glosry.htm">UUID</a>). In case of an unmanaged RAP BO, the key values are provided in a dedicated handler method which must be self-implemented. Note that late numbering is internal by default since no further RAP BO consumer interaction is possible in the late phase of the RAP save sequence.</p>
+<p><strong>Draft</strong></p>
+<ul>
+<li>The draft concept in RAP allows the content of the transactional</li>
+</ul>
+<p>buffer to be stored in intermediate storages (<a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendraft_table_glosry.htm">draft tables</a>) in order to allow transactions to expand over different ABAP sessions.</p>
+<ul>
+<li>Like the concepts mentioned above, a RAP BO can be draft-enabled in</li>
+</ul>
+<p>the BDEF. If enabled, the application allows data modifications and the temporary storage of modifications but does not yet persist them to the database. The users of the application can continue modifying this data later and they might even use a different device from the one where they modified the data previously.</p>
+<ul>
+<li>The draft indicator <code>%is_draft</code> is available for RAP BO instance identification. It is used to indicate if a RAP BO</li>
+</ul>
+<p>instance is a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_draft_instance_glosry.htm">draft instance</a> or an <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_active_instance_glosry.htm">active instance</a>. Conveniently, the component group <code>%tky</code> contains <code>%is_draft</code>. <code>%is_draft</code> can then be addressed via <code>%tky</code>.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Late Numbering and Key Identification in the Late Phase of the RAP Save Sequence</h4>
+<ul>
+<li>Context: RAP saver method <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_adjust_numbers.htm"><code>adjust_numbers</code></a> in which the final key values are assigned; the preliminary keys can</li>
+</ul>
+<p>be included in <code>%key</code> or <code>%pid</code> or both of them.</p>
+<ul>
+<li><code>%pid</code> and the preliminary key values in <code>%key</code> are automatically assigned to the following components when</li>
+</ul>
+<p>reaching the <code>adjust_numbers</code> method:</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_tmp.htm"><code>%tmp</code></a>: A component that is assigned the preliminary key values</li>
+</ul>
+<p>contained in <code>%key</code>. In doing so, <code>%tmp</code> takes over the role that <code>%key</code> has had in the RAP interaction phase to hold the preliminary key values.</p>
+<ul>
+<li><code>%pid</code> remains as is. The component group</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapderived_types_pre.htm"><code>%pre</code></a> contains <code>%pid</code> and <code>%tmp</code> and, thus, all preliminary identifiers.</p>
+<ul>
+<li>In the <code>adjust_numbers</code> method, the preliminary keys are</li>
+</ul>
+<p>transformed into the final keys, i. e. the preliminary keys are mapped to <code>%key</code> (which holds the final keys in this context) in the <code>mapped</code> <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_response_param_glosry.htm">response parameter</a>.</p>
+<ul>
+<li>Depending on your use case to use either <code>%pid</code> or (the</li>
+</ul>
+<p>preliminary key values in) <code>%key</code> (which is <code>%tmp</code> here in this method) during the interaction phase or both of them, you must ensure that <code>%pre</code> in total (since it contains both <code>%pid</code> and <code>%tmp</code>) is unique and mapped to the final keys that are to be contained in <code>%key</code>.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Ensuring Data Consistency in a RAP Transaction</h3>
+<p>The <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenluw_glosry.htm">LUW</a> concept, which deals with the transfer of data from one consistent state to another, applies to applications using RAP. RAP transactions are integrated with the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensap_luw_glosry.htm">SAP LUW</a>, which is a prerequisite for transactional consistency. RAP provides a standardized approach and rules (<a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_contract_glosry.htm">RAP BO contract</a>) for the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_glosry.htm">RAP business object (BO)</a> runtime to ensure that the RAP transaction is correctly implemented, data inconsistencies are avoided, and the SAP LUW is successfully completed.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Phases of a RAP Transaction</h4>
+<p>A RAP transaction is divided into two phases during the runtime of a RAP BO, while the second phase can be divided into two subphases that serve different purposes.</p>
+<p>!<a href="files/phases_of_rap_luw.png">Phases of a RAP Transaction</a></p>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_int_phase_glosry.htm">RAP interaction phase</a>:</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_handler_method_glosry.htm">RAP handler methods</a> are called in a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabp_handler_class_glosry.htm">RAP handler class</a> that inherits from <code>CL_ABAP_BEHAVIOR_HANDLER</code>.</li>
+<li>New data, i.e. RAP BO instances, are created in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abentransactional_buffer_glosry.htm">RAP transactional buffer</a>, or persisted data is retrieved and inserted into the transactional buffer for further processing.</li>
+<li>The state of the data may become inconsistent in the transactional buffer during this phase. However, the data remains consistent in the database because changes are made only in the transactional buffer.</li>
+</ul>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_save_seq_glosry.htm">RAP save sequence</a>:</p>
+<ul>
+<li>The RAP save sequence is triggered by a <code>COMMIT ENTITIES</code> statement. In natively supported RAP scenarios, such as an SAP Fiori application using OData, the <code>COMMIT ENTITIES</code> call is implicitly and automatically performed by the RAP runtime engine.</li>
+<li>RAP saver methods are called in the RAP saver class, which inherits from the base class <code>CL_ABAP_BEHAVIOR_SAVER</code>, in a specific order.</li>
+<li>Is divided into the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenearly_rap_save_phase_glosry.htm">RAP early save phase</a> (ensures that the RAP BO instances in the transactional buffer - all RAP BOs in the current RAP transaction are involved - are in a consistent state so that they can be saved to the database) and the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlate_rap_save_phase_glosry.htm">RAP late save phase</a> (to finally save data from the transactional buffer to the database).</li>
+</ul>
+<p>(Optional:) Saver methods called in the RAP early save phase:</p>
+<ol>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_finalize.htm"><code>finalize</code></a>: For final calculations and data changes before saving. In managed scenarios, determinations specified with <code>ON SAVE</code> are called when reaching this method.</li>
+</ol>
+<ol>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_check_before_save.htm"><code>check_before_save</code></a>: For data consistency checks in the transactional buffer. In managed scenarios, validations specified with <code>ON SAVE</code> are called when this method is reached.</li>
+</ol>
+<ol>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapsaver_class_cleanup_finalize.htm"><code>cleanup_finalize</code></a>: If there are failures in at least one of the previous saver methods, further processing with the RAP late save phase is rejected and the transaction returns to the interaction phase. Before that, this saver method is called, allowing changes made in the finalize method to be rolled back.</li>
+</ol>
+<p>If there are errors in the early save phase, <code>sy-subrc</code> returns the value 4 after <code>COMMIT ENTITIES</code> statements. If the data in the transactional buffer is consistent after the early save phase, the late save phase is processed, which also means that a point of no return has been reached. Unlike the early save phase, you cannot return to the interaction phase when you reach the late save phase. Either the RAP transaction ends with a successful commit, or the changes are rolled back and a runtime error occurs.</p>
+<p>Saver methods called in the RAP late save phase:</p>
+<ol>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_adjust_numbers.htm"><code>adjust_numbers</code></a>: Provides RAP BO instances with their final numbers. This method is available only in late numbering scenarios.</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_method_save.htm"><code>save</code></a> (or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaprap_saver_meth_save_modified.htm"><code>save_modified</code></a> in managed scenarios with an unmanaged or additional save): Used to save data from the transactional buffer to the database. If there are no issues, the final database commit is triggered and an implicit <code>COMMIT WORK</code> is executed.</li>
+</ol>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_method_cleanup.htm"><code>cleanup</code></a> method: After a successful save, the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensaver_method_cleanup.htm"><code>cleanup</code></a> method clears the transactional buffer. It completes the save sequence.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Commit and Rollback in a RAP Transaction</h4>
+<p>The default ABAP statements for RAP are <code>COMMIT ENTITIES</code> (triggers the RAP save sequence and the final database commit; in natively supported RAP scenarios, the commit is performed implicitly and automatically by the RAP runtime engine) and <code>ROLLBACK ENTITIES</code> (rolls back all changes of the current RAP transaction, i.e. the transactional buffer is cleared by calling the <code>cleanup</code> method). Both are RAP-specific and end the RAP transaction.</p>
+<p><em>Notes on <code>COMMIT ...</code> and <code>ROLLBACK ...</code> statements due to the integration of RAP transactions into the SAP LUW:</em></p>
+<ul>
+<li><code>COMMIT ENTITIES</code> implicitly triggers <code>COMMIT WORK</code>.</li>
+<li>Using <code>COMMIT WORK</code> in RAP (instead of <code>COMMIT ENTITIES</code>) also triggers the RAP save sequence. If there are no errors in the RAP save sequence, the final database commit is successful. Only in this best-case scenario does <code>COMMIT WORK</code> have the same effect as <code>COMMIT ENTITIES</code>. However, if there are errors in the save sequence, a runtime error occurs in any case, while a return to the interaction phase is still possible when using <code>COMMIT ENTITIES</code>.</li>
+<li><code>COMMIT ENTITIES</code> provides RAP-specific functionality with various additions that are not possible with <code>COMMIT WORK</code>, such as RAP responses can be retrieved, key conversion in late numbering scenarios, checking a RAP transaction in a simulation mode.</li>
+<li>There are short, long, and dynamic forms of <code>COMMIT ENTITIES</code> statements.</li>
+<li><code>COMMIT ENTITIES</code> statements implicitly enforce local updates with <code>COMMIT WORK</code>, or <code>COMMIT WORK AND WAIT</code> if the local update fails. Therefore, the update is either a local update or a synchronous update, but never an asynchronous update. When <code>COMMIT WORK</code> is used, the RAP BO consumer can choose between synchronous and asynchronous update for RAP BO entities.</li>
+<li><code>ROLLBACK ENTITIES</code> implicitly triggers <code>ROLLBACK WORK</code>. Both have the same effect when used in RAP. Therefore, they are interchangeable.</li>
+</ul>
+<div class="note">[!NOTE] Special Case: Failures in the Late Save Phase - In exceptional cases, for example, when [BAPIs](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenbapi_glosry.htm) are called to save RAP BO instances in the late save phase, it may happen that the basic rule that failures must not occur in the RAP late save phase and be detected in the RAP early save phase is violated. - In such cases, the base class `CL_ABAP_BEHAVIOR_SAVER_FAILED` can be used for the RAP saver class. - RAP BO consumers can be informed by filling the RAP response parameters (some of which are not available when using `CL_ABAP_BEHAVIOR_SAVER` as the base class) in the saver method implementation so that they can react accordingly. - After a `COMMIT ENTITIES` statement and a failure in the late save phase, `sy-subrc` is set to 8. - A subsequent RAP operation may result in a runtime error. If the RAP BO consumer is to continue after an error in the late phase of the RAP save sequence, an explicit `ROLLBACK ENTITIES` is required.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Allowed/Forbidden Operations in a Behavior Implementation in a RAP Transaction</h4>
+<p>The following restrictions apply to operations and/or statements in the individual phases of a RAP transaction in ABAP behavior implementations. Note that, depending on setting the strict mode in the BDEF, runtime errors may occur due to the use of forbidden statements, or static code checks may be applied. Note that most operations/statements refer to the use in the unrestricted ABAP language scope.</p>
+<table>
+<thead><tr>
+<th>Operations/Statements</th>
+<th>Interaction phase</th>
+<th>Early save phase</th>
+<th>Late save phase</th>
+<th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendatabase_commit_glosry.htm">Database commits</a> using <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensecondary_db_connection_glosry.htm">secondary connections</a> &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>Secondary connections are allowed for infrastructure purposes, for example. They can be used to store data that is not part of the main transaction, such as application logs, traces, or number ranges.</td>
+</tr>
+<tr>
+<td>Database commits using the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenstandard_db_connection_glosry.htm">standard connection</a> &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>X</td>
+<td>X</td>
+<td>-</td>
+<td>Database commits can be made in phases other than the late phase, for example, by calling external services or using a <code>WAIT</code> statement.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abensrfc_glosry.htm">sRFC</a> (<code>CALL FUNCTION ... DESTINATION</code>), <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenarfc_glosry.htm">aRFC</a> (<code>CALL FUNCTION ... STARTING NEW TASK</code>) &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>X</td>
+<td>X</td>
+<td>-</td>
+<td>Allowed in phases other than the late save phase, e.g. for the purpose of parallelization within the application. It is up to the application to ensure consistency, e.g. to ensure read-only access, to handle a potential two-phase commit, or to provide a proper error handling.</td>
+</tr>
+<tr>
+<td>Database modifications</td>
+<td>-</td>
+<td>-</td>
+<td>X</td>
+<td>Only allowed in the late save phase because the data being processed is always potentially inconsistent. Database changes in other phases would result in multiple database transactions instead of one transaction, which would disrupt the SAP LUW.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenupdate_function_module_glosry.htm">Update function module</a> (<code>CALL FUNCTION ... IN UPDATE TASK</code>) &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>-</td>
+<td>-</td>
+<td>X</td>
+<td>Can be used to ensure that there is only one database transaction. In addition, registering function modules for update tasks at stages other than the late save phase would interfere with RAP draft scenarios, for example, where data is stored in draft tables. There is no way to unregister function modules once they have been registered.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenbgrfc_glosry.htm">bgRFC</a> (<code>CALL FUNCTION ... IN BACKGROUND UNIT</code>) &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>-</td>
+<td>-</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abentrfc_2_glosry.htm">tRFC</a>, <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenqrfc_glosry.htm">qRFC</a> (<code>CALL FUNCTION ... IN BACKGROUND TASK</code>) &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Obsolete technologies.</td>
+</tr>
+<tr>
+<td><code>PERFORM ON COMMIT</code>, <code>PERFORM ON ROLLBACK</code> &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>(X)</td>
+<td>(X)</td>
+<td>X</td>
+<td>Basically possible in all phases, but should be reserved for the late save. Note: The use of these statements indicates improper integration with RAP. It is especially important to check draft scenarios when calling legacy code and using these statements. Instead, ABAP EML or procedure calls that do not include a <code>COMMIT WORK</code> should be used.</td>
+</tr>
+<tr>
+<td>Transaction control <code>COMMIT WORK</code>, <code>ROLLBACK WORK</code></td>
+<td>X/-</td>
+<td>X/-</td>
+<td>X/-</td>
+<td>When a transactional phase has been explicitly set by methods of the <code>CL_ABAP_TX</code> class (find more information <a href="https://help.sap.com/docs/abap-cloud/abap-concepts/controlled-sap-luw">here</a>), the transaction owner is allowed to execute a commit or rollback statement. In the contexts of RAP (that is, where RAP is the transaction owner, for example, in handler and saver methods), local consumption of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_entity_event_glosry.htm">RAP business events</a>, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbgpf_glosry.htm">bgPF</a>, and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclassified_api_glosry.htm">classified APIs</a>, commit or rollback statements are not allowed.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_glosry.htm">Dynpro</a> processing (e.g.  <code>SET SCREEN</code>, <code>CALL SCREEN</code>, <code>LEAVE SCREEN</code>, <code>CALL DIALOG</code>, <code>SUPPRESS DIALOG</code>, <code>MESSAGE</code> without <code>INTO</code>, <code>WRITE</code>, <code>STOP</code>) &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Not allowed in ABAP behavior implementations. Results in a runtime error.</td>
+</tr>
+<tr>
+<td>Transaction processing (<code>CALL TRANSACTION</code>, <code>LEAVE TRANSACTION</code>) &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Not allowed to prevent (unwanted) integration of other LUWs.</td>
+</tr>
+<tr>
+<td>Raising an exception (<code>RAISE EXCEPTION</code>)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>It is not allowed to leave a RAP transaction this way.</td>
+</tr>
+<tr>
+<td>Raising a RAP business event using <code>RAISE ENTITY EVENT</code></td>
+<td>-</td>
+<td>-</td>
+<td>X</td>
+<td>The statements are recommended in the <code>save</code> and <code>save_modified</code> RAP saver methods.</td>
+</tr>
+<tr>
+<td>Report processing (<code>SUBMIT ...</code>) &lt;br&gt;&lt;br&gt;(unrestricted ABAP language scope)</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Not allowed in transactional contexts. Results in a syntax or runtime error. &lt;br&gt;<code>SUBMIT ... AND RETURN</code> does not currently return an error, but it leads to potentially unwanted screen processing, and because of the missing return channel, there is no proper error handling.</td>
+</tr>
+</tbody>
+</table>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>RAP Additional and Unmanaged Save</h3>
+<pre><code>      managed with additional save implementation in class bp_some_abp unique;
+      strict(2);
+      ...</code></pre>
+<ul>
+<li>As covered in the RAP terms section, <em>managed</em> is an implementation type that is specified in the BDEF, and which determines the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_provider_glosry.htm">RAP BO provider</a>, and thus,  how the transactional buffer is provided and how the behavior of a RAP BO is implemented.</li>
+<li>In a managed RAP BO, the RAP framework automatically executes the save, eliminating the need for any additional logic. However, you can modify this behavior by adding or replacing the default save logic. This is not applicable to unmanaged BOs, where the save is user-defined.</li>
+<li>RAP additional save</li>
+<li>This feature enhances the default save sequence by incorporating additional save logic.</li>
+<li>You can apply this additional save logic to the entire BO or a specific entity.</li>
+<li>For example, you can add functionality to be executed during the save, such as change documents or writing to an application log.</li>
+<li>The relevant BDEF syntax is <code>with additional save</code></li>
+<li>The additional save logic is implemented in the <code>save_modified</code> RAP saver method.</li>
+<li><code>save_modified</code> has three importing parameters with specific BDEF derived types:</li>
+<li><code>create</code> of type <code>REQUEST FOR CHANGE ...</code></li>
+<li><code>update</code> of type <code>REQUEST FOR CHANGE ...</code></li>
+<li><code>delete</code> of type <code>REQUEST FOR DELETE ...</code></li>
+<li>These BDEF derived types are deep structures containing internal tables with RAP BO instance keys and/or data, i.e. they contain those instances that are to be created, updated or deleted.</li>
+<li>Optional additions are available in the BDEF. With the specification in the code snippet above, by default, only the values of the key fields and changed fields are passed to the <code>save_modified</code> method. Using the addition <code>with full data</code>, you can, as the name implies, pass all instance data: <code>managed with additional save with full data implementation in class ...</code>.</li>
+</ul>
+<pre><code>    managed with unmanaged save implementation in class bp_some_abp unique;
+    strict(2);
+    ...</code></pre>
+<ul>
+<li>RAP unmanaged save</li>
+<li>This feature replaces the default managed save logic with a custom save logic.</li>
+<li>BDEF syntax:</li>
+<li>Also in this case, ...</li>
+<li>you can apply the save logic to the entire BO or an individual entity.</li>
+<li>the implementation is done in the <code>save_modified</code> RAP saver method.</li>
+</ul>
+<ul>
+<li>More information:</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbdl_saving.htm">ABAP Keyword Documentation</a></li>
+<li>Development guide for the ABAP RESTful Application Programming Model:</li>
+<li><a href="https://help.sap.com/docs/abap-cloud/abap-rap/additional-save">Additional Save</a></li>
+<li><a href="https://help.sap.com/docs/abap-cloud/abap-rap/unmanaged-save">Unmanaged Save</a></li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Handling Dependencies on RAP Business Objects in ABAP Unit</h3>
+<p>The <a href="14_ABAP_Unit_Tests.md">ABAP Unit Tests</a> cheat sheet includes an example demonstrating the handling of dependencies on RAP business objects:</p>
+<ul>
+<li>Creating transactional buffer test doubles using the <code>CL_BOTD_TXBUFDBL_BO_TEST_ENV</code> class</li>
+<li>Mocking ABAP EML APIs using the <code>CL_BOTD_MOCKEMLAPI_BO_TEST_ENV</code> class</li>
+</ul>
+<p>Note that there is a RAP-specific variant of the <code>CREATE OBJECT</code> statement available. <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcreate_object_for_testing.htm"><code>CREATE OBJECT ... FOR TESTING.</code></a> enables the instantiation of RAP handler classes. Find more information in the <a href="https://help.sap.com/docs/abap-cloud/abap-rap/test">Development guide for the ABAP RESTful Application Programming Model</a>.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>RAP-Related System Classes and Functionality</h3>
+<p>Several RAP-related system classes and functionality are available, including (some of them are mentioned in the cheat sheet):</p>
+<ul>
+<li>Classes related to implementations of the saver class:</li>
+<li><code>CL_ABAP_BEHAVIOR_SAVER</code>: Saver classes inherit from that class</li>
+<li><code>CL_ABAP_BEHAVIOR_HANDLER</code>: Saver classes can inherit from that class in special cases, e.g. when failures in the late save phase cannot be ruled out</li>
+<li>Class related to RAP business events</li>
+<li><code>CL_ABAP_BEHAVIOR_EVENT_HANDLER</code>: An event handler class inherits from that class</li>
+<li>Classes related to ABAP Unit</li>
+<li><code>CL_BOTD_TXBUFDBL_BO_TEST_ENV</code>: For creating transactional buffer test doubles</li>
+<li><code>CL_BOTD_MOCKEMLAPI_BO_TEST_ENV</code>: For mocking ABAP EML APIs</li>
+<li><code>CL_ABAP_TX</code> class providing methods for setting transactional phases</li>
+<li>This class is not exclusively related to RAP since the setting of transactional phases is implicitly done in RAP. However, it is, for example, relevant in the context of the local consumption of RAP business events when, for example, database modifications are performed in the event handler implementations.</li>
+<li>Find more information <a href="https://help.sap.com/docs/abap-cloud/abap-concepts/controlled-sap-luw">here</a>.</li>
+<li><code>CL_ABAP_BEHV_AUX</code> class providing methods for retrieving various types of information, including:</li>
+<li>Details about the current RAP transactional phase, such as the RAP early save phase, RAP late save phase, or RAP interaction phase (using the <code>GET_CURRENT_PHASE</code> method)</li>
+<li>Context information for the current RAP handler and saver method (accessed through the <code>GET_CURRENT_CONTEXT</code> method)</li>
+<li>The method kind (obtained via the <code>GET_CURRENT_HANDLER_KIND</code> method)</li>
+</ul>
+<pre><code>    &quot;Context information for the current handler
+    cl_abap_behv_aux=&gt;get_current_context( IMPORTING
+          in_local_mode   = FINAL(loc_mode)
+          call_kind       = FINAL(call)
+          draft_activate  = FINAL(dr_act)
+          draft_user      = FINAL(dr_user)
+          for_permissions = FINAL(for_perm)
+          from_behavior   = FINAL(fr_behv)
+          from_interface  = FINAL(fr_int)
+          from_projection = FINAL(fr_proj)
+          privileged      = FINAL(priv) ).</code></pre>
+<ul>
+<li><code>get_bdef_derived_type</code> method in the context of RTTI for creating BDEF derived types dynamically, and the <code>get_base_type</code> method for retrieving the BDEF derived type (or dictionary type)</li>
+</ul>
+<pre><code>    &quot;TYPE TABLE FOR
+    DATA dref_itab TYPE REF TO data.
+
+    &quot;Getting a type description object for a BDEF derived type
+    DATA tab_der_type_create TYPE TABLE FOR CREATE zdemo_abap_rap_ro_m.
+    DATA(tdo_tab_bdef_derived_type) = cl_abap_tabledescr=&gt;get_bdef_derived_type(
+                                            p_entity   = &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;
+                                            p_kind     = abp_bdef_derived_type-create ).
+
+    CREATE DATA dref_itab TYPE HANDLE tdo_tab_bdef_derived_type.
+
+    &quot;Getting type information and checking type compatibility
+    DATA(tdo_for_dref_tab_der_type) = CAST cl_abap_tabledescr( cl_abap_typedescr=&gt;describe_by_data( dref_itab-&gt;* ) ).
+    DATA(applies_to_tab_der_type) = tdo_for_dref_tab_der_type-&gt;applies_to_data( tab_der_type_create ).
+    ASSERT applies_to_tab_der_type = abap_true.
+
+    &quot;TYPE STRUCTURE FOR
+    DATA dref_struc TYPE REF TO data.
+
+    &quot;Getting a type description object for a BDEF derived type
+    DATA struc_der_type_create TYPE STRUCTURE FOR CREATE zdemo_abap_rap_ro_m.
+    DATA(tdo_struc_bdef_derived_type) = cl_abap_structdescr=&gt;get_bdef_derived_type(
+                                            p_entity   = &#x27;ZDEMO_ABAP_RAP_RO_M&#x27;
+                                            p_kind     = abp_bdef_derived_type-create ).
+
+    CREATE DATA dref_struc TYPE HANDLE tdo_struc_bdef_derived_type.
+
+    &quot;Getting type information and checking type compatibility
+    DATA(tdo_for_dref_struc_der_type) = CAST cl_abap_structdescr( cl_abap_typedescr=&gt;describe_by_data( dref_struc-&gt;* ) ).
+    DATA(applies_to_struc_der_type) = tdo_for_dref_struc_der_type-&gt;applies_to_data( struc_der_type_create ).
+    ASSERT applies_to_struc_der_type = abap_true.
+
+    &quot;Retrieving the BDEF derived type or dictionary type using the get_base_type method
+    TYPES der_type1 TYPE STRUCTURE FOR READ RESULT zdemo_abap_rap_ro_m.
+    TYPES der_type2 TYPE der_type1.
+
+    FINAL(tdo1) = CAST cl_abap_datadescr( cl_abap_typedescr=&gt;describe_by_name( &#x27;DER_TYPE1&#x27; ) ).
+    FINAL(tdo2) = CAST cl_abap_datadescr( cl_abap_typedescr=&gt;describe_by_name( &#x27;DER_TYPE2&#x27; ) ).
+
+    FINAL(abs_name1) = tdo1-&gt;absolute_name.
+    FINAL(abs_name2) = tdo2-&gt;absolute_name.
+
+    FINAL(base_type1) = tdo1-&gt;get_base_type( ).
+    FINAL(base_type2) = tdo2-&gt;get_base_type( ).
+
+    FINAL(abs_name_base1) = base_type1-&gt;absolute_name.
+    FINAL(abs_name_base2) = base_type2-&gt;absolute_name.
+
+    TYPES carr_tab_type TYPE zdemo_abap_carr.
+    FINAL(tdo3) = CAST cl_abap_datadescr( cl_abap_typedescr=&gt;describe_by_name( &#x27;CARR_TAB_TYPE&#x27; ) ).
+    FINAL(abs_name3) = tdo3-&gt;absolute_name.
+    FINAL(base_type3) = tdo3-&gt;get_base_type( ).
+    FINAL(abs_name_base3) = base_type3-&gt;absolute_name.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>More Information</h2>
+<ul>
+<li>Section [ABAP for RAP Business</li>
+</ul>
+<p>Objects](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_for_rap_bos.htm) in the ABAP Keyword Documentation including EML</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_glossary.htm">RAP Glossary</a></li>
+<li>[Development guide for the ABAP RESTful Application Programming</li>
+</ul>
+<p>Model](https://help.sap.com/docs/ABAP_PLATFORM_NEW/fc4c71aa50014fd1b43721701471913d/289477a81eec4d4e84c0302fb6835035.html)</p>
+<ul>
+<li>[RAP</li>
+</ul>
+<p>Contract](https://help.sap.com/docs/ABAP_PLATFORM_NEW/fc4c71aa50014fd1b43721701471913d/3a402c5cf6a74bc1a1de080b2a7c6978.html): Rules for the RAP BO provider and consumer implementation to ensure consistency and reliability</p>
+<ul>
+<li>The <a href="25_Authorization_Checks.md">Authorization Checks</a> cheat sheet includes high-level information and provides links on authorization control in RAP.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Executable Examples</h2>
+<p>This cheat sheet is supported by different executable examples demonstrating various scenarios:</p>
+<ul>
+<li>Demo RAP scenario with a managed RAP BO, external numbering: <a href="./src/zcl_demo_abap_rap_ext_num_m.clas.abap">zcl_demo_abap_rap_ext_num_m</a></li>
+<li>Demo RAP scenario with an unmanaged RAP BO, external numbering: <a href="./src/zcl_demo_abap_rap_ext_num_u.clas.abap">zcl_demo_abap_rap_ext_num_u</a></li>
+<li>Demo RAP scenario (&quot;RAP calculator&quot;) with a managed, draft-enabled RAP BO, late numbering <a href="./src/zcl_demo_abap_rap_draft_ln_m.clas.abap">zcl_demo_abap_rap_draft_ln_m</a></li>
+<li>Demonstrating the local consumption of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_entity_event_glosry.htm">RAP business events</a> in the context of a RAP demo scenario (managed RAP BO with managed <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_int_numbering_glosry.htm">internal numbering</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_add_save_glosry.htm">additional save</a>): <a href="./src/zcl_demo_abap_rap_m_as.clas.abap">zcl_demo_abap_rap_m_as</a></li>
+</ul>
+<div class="note">[!NOTE] - To reduce the complexity, the executable examples only focus on the technical side. ABAP classes play the role of a RAP BO consumer here. - The examples do not represent real life scenarios and are not suitable as role models for proper RAP scenarios. They rather focus on the technical side by giving an idea how the communication and data exchange between a RAP BO consumer and RAP BO provider can work. Additionally, the examples show how the methods for non-standard RAP BO operations might be self-implemented in an ABAP behavior pool. - Due to the simplification, the examples do not entirely meet all requirements of the [RAP BO contract](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenrap_bo_contract_glosry.htm) and do not represent semantic or best practice examples. - You can check out the "RAP calculator" example using the preview version of an SAP Fiori Elements UI. See the comments in the class for more information. - The steps to import and run the code are outlined [here](README.md#-getting-started-with-the-examples). - [Disclaimer](./README.md#%EF%B8%8F-disclaimer)</div>
+</body>
+</html>

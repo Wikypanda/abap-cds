@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02 Structures - ABAP Cheat Sheet</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #95a5a6;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4, h5, h6 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+<p>&lt;a name=&quot;top&quot;&gt;&lt;/a&gt;</p>
+<h1>Structures</h1>
+<ul>
+<li><a href="#structures">Structures</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#globally-available-structures-and-structured-types">Globally Available Structures and Structured Types</a></li>
+<li><a href="#creating-structures-and-structured-types-locally">Creating Structures and Structured Types Locally</a></li>
+<li><a href="#creating-structured-types">Creating Structured Types</a></li>
+<li><a href="#creating-structures">Creating Structures</a></li>
+<li><a href="#creating-structures-using-existing-structured-types">Creating Structures Using Existing Structured Types</a></li>
+<li><a href="#creating-structures-by-inline-declaration">Creating Structures by Inline Declaration</a></li>
+<li><a href="#creating-constant-and-immutable-structures">Creating Constant and Immutable Structures</a></li>
+<li><a href="#creating-enumerated-structures">Creating Enumerated Structures</a></li>
+<li><a href="#creating-anonymous-structures">Creating Anonymous Structures</a></li>
+<li><a href="#variants-of-structures">Variants of Structures</a></li>
+<li><a href="#accessing-components-of-structures">Accessing (Components of) Structures</a></li>
+<li><a href="#assign-statements">ASSIGN Statements</a></li>
+<li><a href="#populating-structures">Populating Structures</a></li>
+<li><a href="#using-the-value-operator">Using the VALUE Operator</a></li>
+<li><a href="#using-the-new-operator">Using the NEW Operator</a></li>
+<li><a href="#using-the-corresponding-operator-and-move-corresponding-statements">Using the CORRESPONDING Operator and MOVE-CORRESPONDING Statements</a></li>
+<li><a href="#clearing-structures">Clearing Structures</a></li>
+<li><a href="#processing-structures">Processing Structures</a></li>
+<li><a href="#structures-in-abap-sql-statements">Structures in ABAP SQL Statements</a></li>
+<li><a href="#structures-in-statements-for-processing-internal-tables">Structures in Statements for Processing Internal Tables</a></li>
+<li><a href="#including-structures">Including Structures</a></li>
+<li><a href="#excursions">Excursions</a></li>
+<li><a href="#sy-structure">sy Structure</a></li>
+<li><a href="#getting-structured-type-information-and-creating-structures-at-runtime">Getting Structured Type Information and Creating Structures at Runtime</a></li>
+<li><a href="#boxed-components">Boxed Components</a></li>
+<li><a href="#executable-example">Executable Example</a></li>
+</ul>
+<h2>Introduction</h2>
+<p>Structures ...</p>
+<ul>
+<li>are <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendata_object_glosry.htm">data objects</a></li>
+</ul>
+<p>with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenstructured_type_glosry.htm">structured data types</a> (which is a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencomplex_data_type_glosry.htm">complex data type</a> because it is composed of other data types).</p>
+<ul>
+<li>consist of a sequence of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencomponent_glosry.htm">components</a> of any data type, that is, the components of a structure can be, for example, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenelementary_data_object_glosry.htm">elementary data objects</a>, structures themselves, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abeninternal_table_glosry.htm">internal tables</a> or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenreference_glosry.htm">references</a>.</li>
+<li>are used to combine different data objects that belong together. A typical example is an address. It has several components, such as name, street, city, and so on, that belong together.</li>
+<li>play an important role in the context of internal tables and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendatabase_table_glosry.htm">database tables</a>. Structured types serve as <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrow_type_glosry.htm">line types</a> for these tables. Most internal tables across <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_program_glosry.htm">ABAP programs</a> may have structured line types. For database tables, there is no alternative to structured line types.</li>
+<li>can be created locally in an ABAP program and globally. This cheat sheet focuses on locally defined structures and structured types.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Globally Available Structures and Structured Types</h2>
+<ul>
+<li>Apart from the local declaration of a structured type, you can create such a type, for example, as global <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_structure_glosry.htm">DDIC structure</a> in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_dictionary_glosry.htm">ABAP Dictionary</a>. Such a DDIC structure defines a globally available structured type (<a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_type_glosry.htm">DDIC type</a>).</li>
+<li>There are other structured types available globally, which may be the structured types most commonly used in ABAP programs:</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_db_table_glosry.htm">Database tables</a> defined in the ABAP Dictionary can be used as data types just like DDIC structures in an ABAP program. This means that when you create a structure in your ABAP program, for example, you can simply use the name of a database table to address the line type of the table. The structure you created will then have the same structured type as the database table. Typically, you use the database tables to create structures of such a type, or internal tables of such a structured line type, to process data read from the database table in structures or internal tables.</li>
+<li>Various <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_entity_glosry.htm">CDS entities</a> are globally available structured types. For example, a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_v2_view_glosry.htm">CDS view entity</a> represents a structured data type and can be used as such in ABAP programs (but not in the ABAP Dictionary).</li>
+<li>Structures and structured data types can be defined in the public <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenvisibility_section_glosry.htm">visibility section</a> of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenglobal_class_glosry.htm">global classes</a> or in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenglobal_interface_glosry.htm">global interfaces</a> and then used globally.</li>
+</ul>
+<pre><code>&quot;Creating structures based on globally available structured types
+&quot;Database table
+DATA struc_from_dbtab TYPE zdemo_abap_fli.
+&quot;CDS view entity
+DATA struc_from_cds_ve TYPE zdemo_abap_fli_ve.
+&quot;CDS abstract entity
+DATA struc_from_cds_abs TYPE zdemo_abap_abstract_ent.
+&quot;CDS table function
+DATA struc_from_cds_tab_func TYPE zdemo_abap_table_function.
+
+&quot;Globally available structured type in the public visibility section of
+&quot;classes/interfaces
+DATA struc_from_struc_type_in_cl TYPE zcl_demo_abap_amdp=&gt;fli_struc.
+
+&quot;Creating structured types based on globally available structured types
+TYPES ty_struc_from_dbtab TYPE zdemo_abap_fli.
+TYPES ty_struc_from_cds_ve TYPE zdemo_abap_fli.</code></pre>
+<div class="note">[!NOTE] - This cheat sheet focuses on locally defined structures and structured types. - Classic [DDIC views](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_view_glosry.htm) are not available in [ABAP Cloud](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_cloud_glosry.htm). They can only be used as structured types in [classic ABAP](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclassic_abap_glosry.htm).</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Creating Structures and Structured Types Locally</h2>
+<p>The typical language elements for creating structures and structured types locally in an ABAP program are <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaptypes_struc.htm"><code>BEGIN OF ... END OF ...</code></a>. They are used in combination with the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaptypes.htm"><code>TYPES</code></a> keyword to create a structured type and the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapdata.htm"><code>DATA</code></a> keyword to create a structure.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Creating Structured Types</h3>
+<ul>
+<li>The following statement defines a structured type introduced by <code>TYPES</code>. The type name is preceded by <code>BEGIN OF</code> (which marks the beginning of the structured type definition) and <code>END OF</code> (the end of the definition).</li>
+<li>The components - at least one must be defined - are listed in between.</li>
+<li>Such structured type definitions are usually grouped together in a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenchained_statement_glosry.htm">chained statement</a>, i.e. <code>TYPES</code> is followed by a colon, and the components are separated by commas.</li>
+</ul>
+<pre><code>TYPES: BEGIN OF struc_type,
+         comp1 TYPE ...,
+         comp2 TYPE ...,
+         comp3 TYPE ...,
+         ...,
+       END OF struc_type.</code></pre>
+<pre><code>TYPES BEGIN OF struc_type.
+  TYPES comp1 TYPE ... .
+  TYPES comp2 TYPE ... .
+  TYPES comp3 TYPE ... .
+  ... .
+TYPES END OF struc_type.</code></pre>
+<p>Alternatively, you can also use the following syntax. However, a chained statement may provide better readability.</p>
+<ul>
+<li>The simplest structures and structured types have <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenelementary_data_type_glosry.htm">elementary</a></li>
+</ul>
+<p>components.</p>
+<ul>
+<li>As mentioned above, the components can be of any type, i.e. they can be of structured types themselves, internal table types, or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenreference_type_glosry.htm">reference types</a>.</li>
+<li>You can use the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapdata_simple.htm"><code>TYPE</code></a></li>
+</ul>
+<p>and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapdata_referring.htm"><code>LIKE</code></a> additions for the types of the components. You can use the <code>LINE OF</code> addition to refer to a table type or an internal table.</p>
+<pre><code>TYPES: BEGIN OF struc_type,
+         comp1 TYPE i,                 &quot;elementary type           
+         comp2 TYPE c LENGTH 5,        &quot;elementary type
+         comp3 TYPE structured_type,   &quot;structured type
+         comp4 TYPE itab_type,         &quot;internal table type
+         comp5 TYPE ddic_type,         &quot;DDIC type
+         comp6 TYPE REF TO i,          &quot;data reference
+         comp7 LIKE data_object,       &quot;deriving type from a data object                  
+         comp8 TYPE LINE OF itab_type, &quot;component has structured type, type derived from internal table type 
+         comp9 LIKE LINE OF itab,      &quot;component has structured type, type derived from internal table        
+         ...,
+       END OF struc_type.</code></pre>
+<div class="note">[!NOTE] Outside of classes, you can also refer to DDIC types using `LIKE` (`... comp11 LIKE ddic_type, ...`). If you actually want to refer to an existing data object, but due to typing errors you inadvertently specify a name that exists as DDIC type, errors may be unavoidable.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Creating Structures</h3>
+<ul>
+<li>To create a structure (i.e. a structured data object) in an ABAP program, you can use the <code>DATA</code> keyword.</li>
+<li>It works in the same way as the <code>TYPES</code> statement above.</li>
+<li>Unlike the <code>TYPES</code> statement, you can use the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapdata_options.htm"><code>VALUE</code></a> addition to set default values.</li>
+</ul>
+<pre><code>DATA: BEGIN OF struc,
+        comp1 TYPE ...,
+        comp2 TYPE ... VALUE ...,
+        comp3 TYPE i VALUE 99,
+        comp4 TYPE i VALUE IS INITIAL,  &quot;Without the addition VALUE, or if IS INITIAL is specified, 
+                                        &quot;the content is initial.
+        comp5 TYPE local_structured_type,
+        ...,
+      END OF struc.</code></pre>
+<p>Alternatively, you can use the following syntax. Similar to above, a chained statement may provide better readability.</p>
+<pre><code>DATA BEGIN OF struc.
+  DATA comp1 TYPE ... .
+  DATA comp2 TYPE ... VALUE ... .
+... .
+DATA END OF struc.</code></pre>
+<div class="note">[!NOTE] -  The keywords [`CLASS-DATA`](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapclass-data.htm) and [`CONSTANTS`](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapconstants.htm) can also be used to create structures. In principle, they represent special cases of the general statement shown above. See the ABAP Keyword Documentation for more information. - Structures can also be created [inline](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abeninline_declaration_glosry.htm) using [`DATA(...)`](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendata_inline.htm) or [`FINAL(...)`](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenfinal_inline.htm), as shown below.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Creating Structures Using Existing Structured Types</h3>
+<pre><code>&quot;Local structured type 
+TYPES: BEGIN OF struc_type,
+         comp1 TYPE i,                            
+         comp2 TYPE c LENGTH 5,   
+       END OF struc_type.
+
+&quot;Creating a structure using a local structured type
+DATA struc_1 TYPE struc_type.
+
+&quot;Creating structures based on globally available types from the DDIC
+&quot;Note: When referring to such types, you cannot provide start values for the individual components. 
+DATA: struc_2 TYPE some_ddic_structure,
+      struc_3 TYPE some_ddic_table,
+      struc_4 TYPE some_cds_view.
+
+&quot;Structure based on a structured type that is available in the public
+&quot;visibility section of a global class
+DATA struc_5 TYPE cl_some_class=&gt;struc_type.
+
+&quot;Creating structures by referring to local data objects and internal table types
+DATA: struc_6 LIKE struc_1,
+      struc_7 LIKE LINE OF some_itab,
+      struc_8 TYPE LINE OF some_itab_type.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Creating Structures by Inline Declaration</h3>
+<ul>
+<li>This is particularly useful for declaring data objects at the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenoperand_position_glosry.htm">operand positions</a> where you actually need them.</li>
+<li>In this way, you can avoid an extra declaration of the structure in different contexts.</li>
+<li>You can use the declaration operator using <code>DATA(...)</code>. The <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenfinal_inline.htm"><code>FINAL</code></a> declaration operator is used to create <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenimmutable_variable_glosry.htm">immutable variables</a>.</li>
+<li>You can also create structures using the <code>VALUE</code> operator (and also fill them as shown below). Without specifying component values in the parentheses, you create an initial structure.</li>
+</ul>
+<pre><code>&quot;Structures created inline instead of an extra declared variable
+DATA struc_9 LIKE struc_1.
+struc_9 = struc_1
+
+&quot;Type is derived from the right-hand structure; the content of struc is assigned, too.
+DATA(struc_10) = struc_1.
+FINAL(struc_11) = struc_9.
+
+&quot;Using the VALUE operator
+&quot;A structure declaration as follows (without providing component 
+&quot;value assignments) ...
+DATA(struc_a) = VALUE struc_type( ).
+
+&quot;... is similar to the following declaration.
+DATA struc_b TYPE struc_type.
+
+&quot;Structures declared inline instead of an extra declared variable
+
+&quot;Example: SELECT statement
+&quot;Extra declaration
+DATA struc_12 TYPE zdemo_abap_fli.
+
+SELECT SINGLE *
+  FROM zdemo_abap_fli
+  WHERE carrid = &#x27;LH&#x27;
+  INTO @struc_12.
+
+&quot;Inline declaration
+SELECT SINGLE *
+  FROM zdemo_abap_fli
+  WHERE carrid = &#x27;LH&#x27;
+  INTO @DATA(struc_13).
+
+&quot;Example: Loop over an internal table
+DATA itab TYPE TABLE OF zdemo_abap_fli WITH EMPTY KEY.
+... &quot;itab is filled
+
+&quot;Extra declaration
+DATA wa_1 LIKE LINE OF itab.
+
+LOOP AT itab INTO wa_1.
+  ...
+ENDLOOP.
+
+&quot;Inline declaration
+LOOP AT itab INTO DATA(wa_2).
+  ...
+ENDLOOP.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Creating Constant and Immutable Structures</h3>
+<ul>
+<li>Constant structures can be created with the <code>... BEGIN OF ... END OF ...</code> additions. Their values cannot be changed.</li>
+<li>As shown above, the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenfinal_inline.htm"><code>FINAL</code></a> declaration operator is used to create <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenimmutable_variable_glosry.htm">immutable variables</a>.</li>
+</ul>
+<pre><code>CONSTANTS: BEGIN OF const_struct,
+             num TYPE i VALUE 123,
+             str TYPE string VALUE `ABAP`,
+             n3  TYPE n LENGTH 3 VALUE &#x27;000&#x27;,
+             c5  TYPE c LENGTH 5 VALUE &#x27;abcde&#x27;,
+           END OF const_struct.
+
+DATA(num) = const_struct-num.
+&quot;const_struct-num = 456.
+
+TYPES struct_type LIKE const_struct.
+FINAL(final_struct) = VALUE struct_type( num = 987 str = `hello` n3 = &#x27;123&#x27; c5 = &#x27;xyz&#x27; ).
+
+DATA(num_from_final) = final_struct-num.
+&quot;final_struct-num = 1.
+
+SELECT * FROM zdemo_abap_carr INTO TABLE @DATA(itab).
+
+&quot;The work area is specified as immutable variable. The variable&#x27;s content cannot be changed
+&quot;in the loop, however, the variable is exchanged with the next loop pass.
+LOOP AT itab INTO FINAL(wa).
+  DATA(carrid) = wa-carrid.
+  &quot;wa-carrid = &#x27;XY&#x27;.
+ENDLOOP.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Creating Enumerated Structures</h3>
+<p>Find more information on <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenenum_type_glosry.htm">enumerated types</a> in the <a href="16_Data_Types_and_Objects.md#abap-enumerated-types-and-objects">Data Types and Data Objects</a> cheat sheet.</p>
+<pre><code>&quot;When creating enumerated types, an enumerated structure can optionally be declared in 
+&quot;the context of the type declaration.
+&quot;A component of an enumerated structure: An enumerated constant that exists as a component
+&quot;of a constant structure, not as a single data object.
+TYPES basetype TYPE i.
+TYPES: BEGIN OF ENUM t_enum_struc STRUCTURE en_struc BASE TYPE basetype,
+         a VALUE IS INITIAL,
+         b VALUE 1,
+         c VALUE 2,
+         d VALUE 3,
+       END OF ENUM t_enum_struc STRUCTURE en_struc.
+
+DATA(enum_comp) = en_struc-b.
+
+DATA(conv_enum_comp) = CONV basetype( en_struc-b ).
+ASSERT conv_enum_comp = 1.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Creating Anonymous Structures</h3>
+<p>Using the instance operator <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconstructor_expression_new.htm"><code>NEW</code></a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcreate_data.htm"><code>CREATE DATA</code></a> statements, you can create <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenanonymous_data_object_glosry.htm">anonymous data objects</a>, such as anonymous structures. The <code>NEW</code> addition of the <code>INTO</code> clause of an ABAP SQL <code>SELECT</code> statement also creates an anonymous data object. As outlined below, you can access the components or the entire data objects by <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendereferencing_operat_glosry.htm">dereferencing</a>. For more information, refer to the <a href="06_Dynamic_Programming.md">Dynamic Programming</a> and <a href="05_Constructor_Expressions.md">Constructor Expressions</a> cheat sheets.</p>
+<pre><code>&quot;Without assigning component values in the parentheses, the anonymous
+&quot;structure is initial.
+DATA(struc_ref_a) = NEW struc_type( ).
+
+DATA struc_ref_b TYPE REF TO DATA.
+struc_ref_b = NEW struc_type( ).
+
+&quot;Multiple syntax options are available for CREATE DATA
+&quot;statements. See the cheat sheets mentioned.
+CREATE DATA struc_ref_b TYPE struc_type.
+
+DATA struc_ref_c TYPE REF TO struc_type.
+&quot;Implicit data type definition
+CREATE DATA struc_ref_c.
+
+&quot;NEW addition of the INTO clause of an ABAP SQL SELECT statement
+SELECT SINGLE carrid, carrname
+ FROM zdemo_abap_carr
+ WHERE carrid = char`LH`
+ INTO NEW @DATA(struc_ref_d).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Variants of Structures</h2>
+<p>Depending on the component type, the structure can be a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenflat_structure_glosry.htm">flat structure</a>, a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abennested_structure_glosry.htm">nested structure</a>, or a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendeep_structure_glosry.htm">deep structure</a>.</p>
+<pre><code>    DATA: BEGIN OF struc,
+            comp1 TYPE i,
+            comp2 TYPE c LENGTH 15,
+            comp3 TYPE p LENGTH 8 DECIMALS 2,
+            ...,
+          END OF struc.</code></pre>
+<ul>
+<li><strong>Flat structures</strong> contain only elementary types that have a fixed length, that is, there are no internal tables, reference types or strings as components. Nesting does not matter in this context. Even a nested structure is considered flat unless a substructure contains a deep component.</li>
+</ul>
+<ul>
+<li><strong>Nested structures</strong>: At least one component of a structure is a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensubstructure_glosry.htm">substructure</a>,</li>
+</ul>
+<pre><code>    DATA: BEGIN OF address_n,
+            BEGIN OF name,
+              title   TYPE string VALUE `Mr.`,
+              prename TYPE string VALUE `Duncan`,
+              surname TYPE string VALUE `Pea`,
+            END OF name,
+            BEGIN OF street,
+              name TYPE string VALUE `Vegetable Lane`,
+              num  TYPE string VALUE `11`,
+            END OF street,
+            BEGIN OF city,
+              zipcode TYPE string VALUE `349875`,
+              name    TYPE string VALUE `Botanica`,
+            END OF city,
+        END OF address_n.</code></pre>
+<p>that is, it refers to another structure. The following example has multiple substructures.</p>
+<pre><code>    DATA: BEGIN OF address_d,
+            name    TYPE string VALUE `Mr. Duncan Pea`, 
+            street  TYPE string VALUE `Vegetable Lane 11`, 
+            city    TYPE string VALUE `349875 Botanica`, 
+            details TYPE TABLE OF some_table WITH EMPTY KEY, 
+          END OF address_d.</code></pre>
+<ul>
+<li><strong>Deep structures</strong>: Contain at least one internal table, reference type, or string as a component.</li>
+</ul>
+<pre><code>    DATA: BEGIN OF address,
+            name   TYPE string VALUE `Mr. Duncan Pea`,
+            street TYPE string VALUE `Vegetable Lane 11`,
+            city   TYPE string VALUE `349875 Botanica`,
+          END OF address.</code></pre>
+<p>Although the following structure looks quite simple, it is not a flat structure, but a deep structure, because it contains strings.</p>
+<div class="note">[!NOTE] - The data types of DDIC types are all flat (not nested) structures. Exception: Components of type `string` can be contained. - [Work areas](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenwork_area_glosry.htm) of ABAP SQL statements cannot contain any deep components other than strings among others. - Especially for assignments and comparisons of deep structures, the compatibility of the source and target structure must be taken into account.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Accessing (Components of) Structures</h2>
+<ul>
+<li>Structures can be accessed as a whole. You can also address the individual components of structures at the appropriate operand positions.</li>
+<li>To address the components, use the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenstructure_component_sel_glosry.htm">structure component selector</a></li>
+</ul>
+<p><code>-</code>.</p>
+<pre><code>&quot;Addressing components via the structure component selector
+... struc-comp1 ...
+... struc-comp2 ...
+... struc-comp3 ...
+
+&quot;Examples for addressing the whole structure and individual components
+IF struc IS INITIAL. 
+  ...
+ENDIF.
+
+IF struc-comp1 = 1. 
+  ...
+ENDIF.
+
+DATA(complete_struc) = struc.
+DATA(comp_value) = struc-comp2.
+
+&quot;Type and data declarations
+TYPES: type_1 TYPE structured_type-comp1,
+       type_2 LIKE struc-comp1.
+
+DATA: var_1 TYPE structured_type-comp1,
+      var_2 LIKE struc-comp1.
+
+&quot;Variables with reference to a structured data object
+DATA ref_struc_1 TYPE REF TO structured_type.
+ref_struc_1 = NEW #( ).
+&quot;Excursion: Creating a reference variable using inline declaration
+DATA(ref_struc_2) = NEW structured_type( ).
+
+... ref_struc_1-&gt;comp1 ...
+... ref_struc_1-&gt;*-comp1 ...  &quot;Using the dereferencing operator
+... ref_struc_2-&gt;comp2 ... 
+... ref_struc_2-&gt;*-comp2 ...  &quot;Using the dereferencing operator</code></pre>
+<ul>
+<li>For variables with reference to a structured data object, the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenobject_component_select_glosry.htm">object component selector</a> <code>-&gt;</code> can be used: <code>...dref-&gt;comp ...</code>. The following syntax also works, but is less <em>convenient</em>: <code>... dref-&gt;*-comp ...</code>.</li>
+<li>ADT and the ABAP Editor provide code completion for structure components after the component selectors.</li>
+</ul>
+<pre><code>... struc-substructure-comp1 ...
+... address_n-name-title ...</code></pre>
+<p>Nested components can be addressed using chaining:</p>
+<div class="note">[!NOTE] There are syntax options for dynamically accessing structure components. See the [Dynamic Porgramming](06_Dynamic_Programming.md) cheat sheet.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>ASSIGN Statements</h3>
+<pre><code>&quot;A field symbol is set using an assignment of a memory area to the 
+&quot;field symbol by ASSIGN statements.
+&quot;Particularly, field symbols and ASSIGN statements are supporting elements for 
+&quot;dynamic programming. ASSIGN statements have multiple additions. Find more information 
+&quot;and examples in the Dynamic Programming cheat sheet.
+
+TYPES: BEGIN OF s,
+         comp1 TYPE i,
+         comp2 TYPE c LENGTH 3,
+         comp3 TYPE n LENGTH 5,
+         comp4 TYPE string,
+       END OF s.
+
+DATA(demo_struc) = VALUE s( comp1 = 1 comp2 = &#x27;abc&#x27; comp3 = &#x27;12345&#x27; comp4 = `ABAP` ).
+
+&quot;Defining a field symbol
+FIELD-SYMBOLS &lt;a&gt; TYPE s.
+
+&quot;Assigning the entire structure to a field symbole
+ASSIGN demo_struc TO &lt;a&gt;.
+
+&quot;Accessing a structure component via the field symbol
+DATA(comp1) = &lt;a&gt;-comp1.
+
+&quot;Field symbol declared inline
+&quot;Note: The typing depends on the memory area specified. In this case,
+&quot;the field symbol &lt;fd&gt; has the structured type s. This is valid for static
+&quot;assignments. In case of dynamic assignments, the type is the generic type
+&quot;data.
+ASSIGN demo_struc TO FIELD-SYMBOL(&lt;b&gt;).
+comp1 = &lt;b&gt;-comp1.
+
+&quot;Accessing components of structures by assigning components to field symbols
+&quot;The field symbols is typed with the generic type data so that all components,
+&quot;which have random types, can be assigned.
+FIELD-SYMBOLS &lt;d&gt; TYPE data.
+ASSIGN demo_struc-comp1 TO &lt;d&gt;.
+ASSIGN demo_struc-comp2 TO &lt;d&gt;.
+ASSIGN demo_struc-comp3 TO &lt;d&gt;.
+ASSIGN demo_struc-comp4 TO &lt;d&gt;.
+
+&quot;Accessing structures and components dynamically
+&quot;Note: In case of dynamic assignments, ...
+&quot;- sy-subrc is set.
+&quot;- the type of field symbols declared inline is the generic type data.
+ASSIGN (&#x27;DEMO_STRUC&#x27;) TO FIELD-SYMBOL(&lt;c&gt;).
+ASSERT sy-subrc = 0.
+
+&quot;Using ASSIGN COMPONENT statements
+&quot;It is recommended to use the newer syntax, which specifies the component 
+&quot;selector followed by a data object in a pair of parentheses.
+&quot;After COMPONENT (and in the parentheses in the newer syntax), a character-like 
+&quot;or numeric data object is expected.
+DATA(some_comp) = `COMP2`.
+ASSIGN COMPONENT some_comp OF STRUCTURE demo_struc TO &lt;d&gt;.
+ASSERT sy-subrc = 0.
+
+some_comp = `COMP5`.
+ASSIGN COMPONENT some_comp OF STRUCTURE demo_struc TO &lt;d&gt;.
+ASSERT sy-subrc = 4.
+
+&quot;Numeric data objects
+&quot;The data object is implicitly converted to type i (if required) and
+&quot;interpreted as the position of the component in the structure.
+ASSIGN COMPONENT 1 OF STRUCTURE demo_struc TO &lt;d&gt;.
+ASSERT sy-subrc = 0.
+
+ASSIGN COMPONENT 5 OF STRUCTURE demo_struc TO &lt;d&gt;.
+ASSERT sy-subrc = 4.
+
+&quot;0 means that the entire structure is assigned
+ASSIGN COMPONENT 0 OF STRUCTURE demo_struc TO &lt;d&gt;.
+ASSERT sy-subrc = 0.
+ASSERT &lt;d&gt; = demo_struc.
+
+&quot;Newer syntax using the component selector followed by content in
+&quot;a pair of parentheses.
+ASSIGN demo_struc-(&#x27;COMP4&#x27;) TO &lt;d&gt;.
+ASSIGN demo_struc-(some_comp) TO &lt;d&gt;.
+ASSIGN demo_struc-(3) TO &lt;d&gt;.
+ASSIGN demo_struc-(0) TO &lt;d&gt;.
+
+&quot;Iterating across all structure components
+DO.
+  ASSIGN demo_struc-(sy-index) TO &lt;d&gt;.
+  IF sy-subrc &lt;&gt; 0.
+    EXIT.
+  ENDIF.
+ENDDO.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Populating Structures</h2>
+<pre><code>some_struc = another_struc.
+
+&quot;When creating a new structure by inline declaration, the type of
+&quot;the right-hand structure is derived and the content is assigned.
+
+DATA(struc_inl) = some_struc.</code></pre>
+<p>You can copy the content of a structure to another using the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenassignment_operator_glosry.htm">assignment operator</a> <code>=</code>. In the following example, it is assumed that the target and source structures are of compatible types. In general, note that special <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconversion_struc.htm">conversion</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlogexp_rules_operands_struc.htm">comparison rules</a> apply to value assignments involving structures.</p>
+<pre><code>TYPES: BEGIN OF addr_struc,
+        name   TYPE string,
+        street TYPE string,
+        city   TYPE string,
+       END OF addr_struc.
+
+DATA address TYPE addr_struc.
+
+address-name   = `Mr. Duncan Pea`.
+address-street = `Vegetable Lane 11`.
+address-city   = `349875 Botanica`.</code></pre>
+<p>To assign values to individual structure components, use the component selector.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Using the VALUE Operator</h3>
+<ul>
+<li>The <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconstructor_expression_value.htm"><code>VALUE</code></a> operator can be used to construct the content of complex data objects such as structures or internal tables.</li>
+<li>It is particularly useful because assigning values by addressing the structure components individually can be very cumbersome, especially when assigning values to structure components at the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenoperand_position_glosry.htm">operand position</a>.</li>
+<li>If the type of the operand can be inferred implicitly, the <code>#</code> character can be used used before the parentheses. Otherwise, the type must be  specified explicitly.</li>
+<li>The <code>VALUE</code> operator and inline declarations can be used to create and populate structures in one go.</li>
+<li>Note that there are special <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconversion_struc.htm">conversion</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlogexp_rules_operands_struc.htm">comparison</a> rules for structures. See the ABAP Keyword Documentation for more details.</li>
+</ul>
+<pre><code>&quot;# used: type of the operand can be implicitly derived
+address = VALUE #( name   = `Mr. Duncan Pea`
+                   street = `Vegetable Lane 11`
+                   city   = `349875 Botanica` ).
+
+&quot;Declaring a structure inline
+&quot;Type used explicitly: type of the operand cannot be implicitly derived
+DATA(addr) = VALUE addr_struc( name   = `Mr. Duncan Pea`
+                               street = `Vegetable Lane 11`
+                               city   = `349875 Botanica` ).
+
+
+&quot;Using the BASE addition to retain existing component values
+addr = VALUE #( BASE addr street = `Some Street 1` ).
+*NAME              STREET           CITY           
+*Mr. Duncan Pea    Some Street 1    349875 Botanica
+
+&quot;Without the BASE addition, the components are initialized
+addr = VALUE #( street = `Another Street 2` ).
+*NAME       STREET              CITY   
+*           Another Street 2           
+
+&quot;Nesting value operators
+TYPES: BEGIN OF struc_nested,
+        a TYPE i,
+        BEGIN OF nested_1,
+          b TYPE i,
+          c TYPE i,
+        END OF nested_1,
+        BEGIN OF nested_2,
+          d TYPE i,
+          e TYPE i,
+        END OF nested_2,
+      END OF struc_nested.
+
+DATA str_1 TYPE struc_nested.
+
+str_1 = VALUE #( a        = 1 
+                 nested_1 = VALUE #( b = 2 c = 3 ) 
+                 nested_2 = VALUE #( d = 4 e = 5 ) ).
+
+&quot;Inline declaration
+&quot;Component a is not specified here, i.e. its value remains initial.
+DATA(str_2) = VALUE struc_nested( nested_1 = VALUE #( b = 2 c = 3 ) 
+                                  nested_2 = VALUE #( d = 4 e = 5 ) ).
+
+&quot;Apart from the VALUE operator, the NEW operator can be used to create
+&quot;a data reference variable (and populate the structure)
+DATA(str_ref) = NEW struc_nested( a        = 1 
+                                  nested_1 = VALUE #( b = 2 c = 3 ) 
+                                  nested_2 = VALUE #( d = 4 e = 5 ) ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Using the NEW Operator</h3>
+<p>Using the instance operator <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconstructor_expression_new.htm"><code>NEW</code></a>, you can create <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenanonymous_data_object_glosry.htm">anonymous data objects</a>, such as anonymous structures. You can access the components or the entire data objects by <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendereferencing_operat_glosry.htm">dereferencing</a>. For more information, refer to the  <a href="06_Dynamic_Programming.md">Dynamic Programming</a> and <a href="05_Constructor_Expressions.md">Constructor Expressions</a> cheat sheets.</p>
+<pre><code>&quot;Creating a data reference variable 
+DATA addr_ref1 TYPE REF TO addr_struc.
+
+&quot;Populating the anonymous structure
+addr_ref1 = NEW #( name   = `Mr. Duncan Pea`
+                   street = `Vegetable Lane 11`
+                   city   = `349875 Botanica` ).
+
+addr_ref1-&gt;name = `Mrs. Jane Doe`.     
+
+&quot;Declaring an anonymous structure/a data reference variable inline    
+DATA(addr_ref2) = NEW addr_struc( name   = `Mr. Duncan Pea`
+                                  street = `Vegetable Lane 11`
+                                  city   = `349875 Botanica` ).
+
+addr_ref2-&gt;* = VALUE #( BASE addr_ref2-&gt;* name = `Mr. John Doe` ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Using the CORRESPONDING Operator and MOVE-CORRESPONDING Statements</h3>
+<ul>
+<li>You can use statements with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmove-corresponding.htm"><code>MOVE-CORRESPONDING</code></a></li>
+</ul>
+<p>and the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconstructor_expr_corresponding.htm"><code>CORRESPONDING</code></a> operator to assign values to structure components, especially when assigning values from a source structure to a target structure which have incompatible types and/or differently named components.</p>
+<ul>
+<li>Both are used to assign identically named components of structures to each other.</li>
+<li>The syntax also works for structures of the same type.</li>
+<li>Also note the special <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconversion_struc.htm">conversion</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlogexp_rules_operands_struc.htm">comparison</a> rules for structures in this context.</li>
+</ul>
+<div class="note">[!NOTE] - The [`CL_ABAP_CORRESPONDING`](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencl_abap_corresponding.htm) system class is available for making assignments. See the ABAP Keyword Documentation for the details. - The `INTO` clause of ABAP SQL statements has the `CORRESPONDING` addition. There, the following basic rule applies, which affects the value assignment: Without the `CORRESPONDING ...` addition, column names do not matter, only the position. With the `CORRESPONDING ...` addition, the position of the columns does not matter, only the name. See examples in the ABAP SQL cheat sheet.</div>
+<p>The following examples demonstrate the value assignment using <code>MOVE-CORRESPONDING</code> statements and the <code>CORRESPONDING</code> operator with various additions. The focus is on flat structures only.</p>
+<pre><code>&quot;Moves identically named components; content in other components
+&quot;of the targets structure are kept.
+MOVE-CORRESPONDING struc TO diff_struc.
+
+&quot;Initializes target structure; moves identically named components
+diff_struc = CORRESPONDING #( struc ).
+
+&quot;Same effect as the first MOVE-CORRESPONDING statement;
+&quot;addition BASE keeps existing content
+diff_struc = CORRESPONDING #( BASE ( diff_struc ) struc ).
+
+&quot;MAPPING addition: Specifying components of a source structure that are
+&quot;assigned to the components of a target structure in mapping
+&quot;relationships.
+diff_struc = CORRESPONDING #( BASE ( diff_struc ) struc MAPPING comp1 = compa ).
+
+&quot;EXCEPT addition: Excluding components from the assignment.
+diff_struc = CORRESPONDING #( BASE ( diff_struc ) struc EXCEPT comp1 ).</code></pre>
+<p>Value assignments in deep structures</p>
+<ul>
+<li>In the context of deep structures, there are additional syntax variants available for <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmove-corresponding.htm"><code>MOVE-CORRESPONDING</code></a> statements and the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconstructor_expr_corresponding.htm"><code>CORRESPONDING</code></a> operator.</li>
+<li>The following examples focus on internal tables as structure components. Check out the syntax in action in the executable example.</li>
+</ul>
+<pre><code>&quot;Nonidentical elementary component types are kept in target
+&quot;structure which is true for the below MOVE-CORRESPONDING statements;
+&quot;existing internal table content is replaced by content of
+&quot;the source table irrespective of identically named components
+MOVE-CORRESPONDING deep_struc TO diff_deep_struc.
+
+&quot;Existing internal table content is replaced but the value
+&quot;assignment happens for identically named components only.
+MOVE-CORRESPONDING deep_struc TO diff_deep_struc EXPANDING NESTED TABLES.
+
+&quot;Existing internal table content is kept; table content of the source
+&quot;structure are added but the value assignment happens like the first
+&quot;MOVE-CORRESPONDING statement without further syntax additions.
+MOVE-CORRESPONDING deep_struc TO diff_deep_struc KEEPING TARGET LINES.
+
+&quot;Existing internal table content is kept; table content of the source
+&quot;structure are added; the value assignment happens like the statement
+&quot;MOVE-CORRESPONDING ... EXPANDING NESTED TABLES.
+MOVE-CORRESPONDING deep_struc TO diff_deep_struc EXPANDING NESTED TABLES KEEPING TARGET LINES.
+
+&quot;Target structure is initialized; the value assignment for an internal
+&quot;table happens irrespective of identically named components.
+diff_deep_struc = CORRESPONDING #( deep_struc ).
+
+&quot;Target structure is initialized; the value assignment for an internal
+&quot;table happens for identically named components only.
+diff_deep_struc = CORRESPONDING #( DEEP deep_struc ).
+
+&quot;Nonidentical elementary component types are kept in target structure;
+&quot;internal table content is replaced; there, the value assignment
+&quot;happens like using the CORRESPONDING operator without addition.
+diff_deep_struc = CORRESPONDING #( BASE ( diff_struc ) deep_struc ).
+
+&quot;Nonidentical elementary component types are kept in target structure;
+&quot;internal table content is replaced; there, the value assignment
+&quot;happens like using the CORRESPONDING operator with the addition DEEP.
+diff_deep_struc = CORRESPONDING #( DEEP BASE ( diff_struc ) deep_struc ).
+
+&quot;Nonidentical elementary component types are kept in target structure;
+&quot;internal table content is kept, too, and table content of the
+&quot;source structure are added; there, the value assignment
+&quot;happens like using the CORRESPONDING operator without addition.
+diff_deep_struc = CORRESPONDING #( APPENDING BASE ( diff_struc ) deep_struc ).
+
+&quot;Nonidentical elementary component types are kept in target structure;
+&quot;internal table content is kept, too, and table content of the
+&quot;source structure are added; there, the value assignment
+&quot;happens like using the CORRESPONDING operator with the addition DEEP.
+diff_deep_struc = CORRESPONDING #( DEEP APPENDING BASE ( diff_struc ) deep_struc ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Clearing Structures</h2>
+<p>You can reset individual components to their initial values and clear the entire structure using the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapclear.htm"><code>CLEAR</code></a> keyword. Note that <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapfree_dataobject.htm"><code>FREE</code></a> statements also deletes the content, but they also release the initially allocated memory. space.</p>
+<pre><code>CLEAR struc-component.
+
+CLEAR struc.
+
+&quot;This statement additionally releases memory space.
+FREE struc.
+
+&quot;Note: An assignment using the VALUE operator without entries in the parentheses clears the structure. 
+struc = VALUE #( ). 
+
+&quot;The same applies to data reference variables pointing to structures.
+struc_ref = NEW #( ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Processing Structures</h2>
+<p>Structures are primarily used to process data from tables. In this context, structures often take on the role of a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenwork_area_glosry.htm">work area</a>. The following code snippets cover only a selection. For more examples, see the cheat sheets about internal tables and ABAP SQL.</p>
+<h3>Structures in ABAP SQL Statements</h3>
+<p>The following code snippets cover a selection. Find more information and code snippets in the <a href="03_ABAP_SQL.md">ABAP SQL</a> cheat sheet.</p>
+<p>&lt;table&gt; &lt;tr&gt; &lt;td&gt; Subject &lt;/td&gt; &lt;td&gt; Notes &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; Reading a row from a database table into a structure that has a compatible type &lt;/td&gt; &lt;td&gt;</p>
+<p>Note that, since database tables are flat, the target structure must also be flat. In the example below, the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapselect_single.htm"><code>SINGLE</code></a> addition reads only a single row into the structure. It returns the first entry that matches the <code>WHERE</code> condition.</p>
+<pre><code>&quot;Creating a structure with a compatible type
+DATA ls_fli1 TYPE zdemo_abap_fli.
+
+SELECT SINGLE FROM zdemo_abap_fli
+  FIELDS *
+  WHERE carrid = &#x27;LH&#x27;
+  INTO @ls_fli1.
+
+&quot;Target structure declared inline
+SELECT SINGLE FROM zdemo_abap_fli
+  FIELDS *
+  WHERE carrid = &#x27;LH&#x27;
+  INTO @DATA(ls_fli2).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; Reading a row from a database table into a structure that has an incompatible type &lt;/td&gt; &lt;td&gt;</p>
+<p>Components in the structure with identical names are filled.</p>
+<pre><code>SELECT SINGLE FROM zdemo_abap_fli
+  FIELDS *
+  WHERE carrid = &#x27;AA&#x27;
+  INTO CORRESPONDING FIELDS OF @ls_fli_diff.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Reading a line from an internal table into a structure using an ABAP SQL <code>SELECT</code> statement &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>SELECT SINGLE FROM @itab AS itab_alias
+  FIELDS *
+  WHERE ...
+  INTO @DATA(ls_struc).
+  &quot;INTO CORRESPONDING FIELDS OF @some_existing_struc.</code></pre>
+<p>Note the specified alias name and that ABAP variables like internal tables must be escaped with <code>@</code>. The addition <code>INTO CORRESPONDING FIELDS OF</code> also applies here. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; Sequentially reading a row from a database table into a structure &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>SELECT FROM zdemo_abap_fli
+  FIELDS *
+  WHERE carrid = &#x27;AZ&#x27;
+  INTO @DATA(ls_sel_loop).
+      
+  IF sy-subrc = 0.
+    ...
+  ENDIF.
+ENDSELECT.</code></pre>
+<p>A <code>SELECT</code> loop can be specified with the syntax <code>SELECT ... ENDSELECT.</code>. In the following example, the row found and returned in a structure declared inline can be processed further. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Inserting a single row into a database table from a structure using  ABAP SQL statements with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapinsert_dbtab.htm"><code>INSERT</code></a> &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>INSERT INTO dbtab VALUES @struc.
+
+INSERT dbtab FROM @struc.
+
+INSERT dbtab FROM @( VALUE #( comp1 = ... comp2 = ... ) ).</code></pre>
+<p>The following statements can be considered as alternatives. The third statement shows that instead of inserting a row from an existing structure, you can create and fill a structure directly. Note that you should avoid inserting a row with a particular key into the database table if a row with the same key already exists. Note that with this and the followig syntax, various options/expressions are possible. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Updating a single row in a database table from a structure using ABAP SQL statements with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapupdate.htm"><code>UPDATE</code></a> &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>UPDATE dbtab FROM @struc.
+
+UPDATE dbtab FROM @( VALUE #( comp1 = ... comp2 = ... ) ).</code></pre>
+<pre><code>SELECT SINGLE *
+  FROM dbtab
+  WHERE ...
+  INTO @DATA(wa).
+
+UPDATE dbtab FROM @( VALUE #( BASE wa comp2 = ... comp4 = ... ) ).</code></pre>
+<p>Note that this syntax changes the entire row and all of its components. If you want to update a database table row from a structure by specifying components to be changed without overwriting other components, you can use the following method. First, read the desired row from the database table into a structure. Then, use the <code>VALUE</code> operator with the <code>BASE</code> addition and specify the components to be changed. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Updating or creating a single row in a database table from a structure using ABAP SQL statements with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_dbtab.htm"><code>MODIFY</code></a> &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>MODIFY dbtab FROM @struc.
+
+MODIFY dbtab FROM @( VALUE #( comp1 = ... comp2 = ... ) ).</code></pre>
+<p>If a row with the same key as specified in the structure already exists in the database table, the row is updated. If no row with the keys specified in the structure exists, a new row is created in the database table. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Deleting a single row in a database table from a structure using ABAP SQL statements with <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapdelete_dbtab.htm"><code>DELETE</code></a> &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>DELETE dbtab FROM @struc.
+
+DELETE dbtab FROM @( VALUE #( comp1 = ... ) ).</code></pre>
+<p>If a row with the same key as specified in the structure already exists in the database table, the row is updated. If no row with the keys specified in the structure exists, a new row is created in the database table. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<h3>Structures in Statements for Processing Internal Tables</h3>
+<p>The following code snippets cover a selection. Find more information and code snippets in the <a href="01_Internal_Tables.md">Internal Tables</a> cheat sheet.</p>
+<p>&lt;table&gt; &lt;tr&gt; &lt;td&gt; Subject &lt;/td&gt; &lt;td&gt; Notes &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Reading a line from an internal table into a structure using a <code>READ TABLE</code> statement &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>READ TABLE itab INTO DATA(wa) INDEX 1.
+
+READ TABLE itab ASSIGNING FIELD-SYMBOL(&lt;fs&gt;) INDEX 2.
+
+READ TABLE itab REFERENCE INTO DATA(dref) INDEX 3.</code></pre>
+<p>The code snippet below shows the reading of a line into a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenwork_area_glosry.htm">work area</a>, a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenfield_symbol_glosry.htm">field symbol</a>, and a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendata_reference_variable_glosry.htm">data reference variable</a>, all of which represent structured data objects that are declared inline. In the following example, a line is read based on the line number by specifying <code>INDEX</code>. For more details, see the section <em>Determining the target area</em> in the cheat sheet <a href="01_Internal_Tables.md#">Internal Tables</a>. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Reading a line from an internal table into a structure using a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abentable_expression_glosry.htm">table expression</a> &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>DATA(ls_table_exp) = itab[ 3 ].</code></pre>
+<p>The code snippet shows how to read a line into a structure declared inline. The index is given in square brackets. You can also specify table keys and free keys. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Sequentially reading a line from an internal table into a structure using a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaploop_at_itab_variants.htm"><code>LOOP AT</code></a> statement &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>LOOP AT itab ASSIGNING FIELD-SYMBOL(&lt;fs&gt;).
+  &lt;fs&gt;-comp1 = ...
+  ...
+ENDLOOP.</code></pre>
+<p>There are many ways to specify the condition on which the loop is based. The following example covers the option of reading all lines sequentially into a field symbol  declared inline. When using a field symbol, you can, for example, directly modify components. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Adding lines to and updating single lines in an internal table from a structure using <code>INSERT</code>, <code>APPEND</code>, and <code>MODIFY</code> statements &lt;/td&gt; &lt;td&gt;</p>
+<ul>
+<li>Note that all statements, including <code>INSERT</code> and <code>MODIFY</code>, are ABAP statements in this context, not ABAP SQL statements.</li>
+<li>Both <code>INSERT</code> and <code>APPEND</code> add one or more lines to an internal table. While <code>APPEND</code> adds at the bottom of the</li>
+</ul>
+<p>internal table, <code>INSERT</code> can be used to add lines at a specific position in the table. If you do not specify the position, the lines are also added at the bottom of the table. However, unlike <code>APPEND</code>, <code>INSERT</code> does not set <code>sy-tabix</code>.</p>
+<ul>
+<li><code>MODIFY</code> changes the content of an internal table entry.</li>
+<li>Statements using the <code>VALUE</code> operator to directly create and populate the structures are also possible. For more information and code</li>
+</ul>
+<pre><code>INSERT struc INTO TABLE itab.
+
+APPEND struc TO itab.
+
+MODIFY TABLE itab FROM struc.</code></pre>
+<p>snippets, see the <a href="01_Internal_Tables.md#">Internal Tables</a> cheat sheet. &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Including Structures</h2>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapinclude_type.htm"><code>INCLUDE TYPE</code></a></li>
+</ul>
+<p>and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapinclude_type.htm"><code>INCLUDE STRUCTURE</code></a> statements are used in the context of local structures.</p>
+<ul>
+<li>Structured data objects and types created with <code>... BEGIN OF... END OF ...</code> can use this syntax to include components of another structure, whether it is a locally defined or global structure, without creating  substructures.</li>
+<li><code>INCLUDE TYPE</code> can be used to include a structured type.</li>
+<li>You can use <code>INCLUDE STRUCTURE</code> to include a structure.</li>
+</ul>
+<div class="note">[!NOTE] - They are not additions of `... BEGIN OF ... END OF ...` but individual ABAP statements. - If you use a chained statement with a colon to declare the structure, the inclusion of other structures with these statements interrupts the chained statement, that is, the components of the included structures are included as direct components of the [superstructure](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensuperstructure_glosry.htm "Glossary Entry"). - By using the optional `AS` addition and specifying a name, the included components can be addressed by this common name as if they were actually components of a substructure. - The optional `RENAMING WITH SUFFIX` addition, followed by a name, gives the included components a suffix name to avoid naming conflicts with other components.</div>
+<pre><code>TYPES: BEGIN OF name_type,
+        title   TYPE string,
+        prename TYPE string,
+        surname TYPE string,
+      END OF name_type,
+      BEGIN OF street_type,
+        name TYPE string,
+        num  TYPE string,
+      END OF street_type,
+      BEGIN OF city_type,
+        zipcode TYPE string,
+        name    TYPE string,
+      END OF city_type.
+
+DATA city_struc TYPE city_type.
+
+TYPES BEGIN OF address_type.
+      INCLUDE TYPE name_type AS name.
+      INCLUDE TYPE street_type AS street RENAMING WITH SUFFIX _street.
+      INCLUDE STRUCTURE city_struc AS city RENAMING WITH SUFFIX _city.
+TYPES END OF address_type.
+
+DATA(component_names) = VALUE string_table( FOR wa IN CAST cl_abap_structdescr(
+   cl_abap_typedescr=&gt;describe_by_name( &#x27;ADDRESS_TYPE&#x27; ) )-&gt;components ( CONV #( wa-name ) ) ).
+
+*Content of COMPONENT_NAMES:
+*TITLE         
+*PRENAME       
+*SURNAME       
+*NAME_STREET   
+*NUM_STREET    
+*ZIPCODE_CITY  
+*NAME_CITY     </code></pre>
+<p>The following example shows how structured types and data objects are included in another structure. First, three structured types and a structured data object based on one of these types are created. Then, the types and the structure are included in the structured type <code>address_type</code>. As an excursion, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrun_time_type_identific_glosry.htm">Runtime Type Identification</a> is used to retrieve the component names of created structured type <code>address_type</code>. Refer to the <a href="#getting-structured-type-information-and-creating-structures-at-runtime">Getting Structured Type Information and Creating Structures at Runtime</a> section. The executable example demonstrates a structure that includes other structures in this way.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Excursions</h2>
+<h3>sy Structure</h3>
+<ul>
+<li>The <code>sy</code> (or <code>syst</code>) structure is a built-in data object.</li>
+<li>The components of the structure represent ABAP system fields.</li>
+<li>These fields, filled by the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_runtime_frmwk_glosry.htm">ABAP runtime framework</a>, can be used to query system information and more.</li>
+<li>Typically, they should only be read, and not overwritten.</li>
+<li>Prominent system fields are the following</li>
+<li><code>sy-subrc</code>: Return code of many ABAP statements; typically, the value 0 indicates success</li>
+<li><code>sy-tabix</code>: Row index of internal tables</li>
+<li><code>sy-index</code>: Loop pass index</li>
+<li>These ones and others can be used in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_for_cloud_dev_glosry.htm">ABAP for Cloud Development</a>. However, most of the fields should not be used in ABAP for Cloud Development (indicated by a syntax warning) because they refer to <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenstandard_abap_glosry.htm">Standard ABAP</a> contexts (e.g. classic dynpros and lists), or their values are not relevant in a cloud context.</li>
+<li>More information about the purpose of the individual components is available at <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abensystem_fields.htm">ABAP System Fields (F1 documentation for Standard ABAP)</a>.</li>
+</ul>
+<p>The following example demonstrates a selection of ABAP system fields. It uses artifacts from the ABAP cheat sheet repository. Note the comments in the code because a syntax warning will be displayed when inserting the code in a demo class that uses ABAP for Cloud Development. It is meant to emphasize that multiple system fields should not be used in ABAP for Cloud Development. To try the example out, create a demo class named <code>zcl_demo_abap</code> and paste the code into it. After activation, choose <em>F9</em> in ADT to execute the class. The example is set up to display output in the console.</p>
+<pre><code>CLASS zcl_demo_abap DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+CLASS zcl_demo_abap IMPLEMENTATION.
+  METHOD if_oo_adt_classrun~main.
+
+    &quot;In ABAP for Cloud Development, the following statement will show a syntax warning saying that
+    &quot;sy should not be used. Here, it is used for demonstration purposes.
+    &quot;In the example, RTTI is used to get all component names of the built-in data object sy. In the loop,
+    &quot;ABAP statements are created (they represent simple assignments using the various sy components) and
+    &quot;output to the console. You can copy all the output DATA(...) = ... statements from the console and 
+    &quot;paste them in the demo class&#x27;s main method implementation. The purpose is to demonstrate that most of 
+    &quot;the sy components should not be used in ABAP for Cloud Development. Most of the statements will show 
+    &quot;a syntax warning in ABAP for Cloud Development. Check the ABAP Keyword Documentation (for Standard ABAP) 
+    &quot;and the F2 information for the purpose of the individual sy components.
+    LOOP AT CAST cl_abap_structdescr( cl_abap_typedescr=&gt;describe_by_data( sy ) )-&gt;components INTO DATA(co).
+      DATA(sycomp) = to_lower( co-name ).
+      DATA(code) = |DATA(sy{ sycomp }) = sy-{ sycomp }.|.
+      out-&gt;write( code ).
+    ENDLOOP.
+    out-&gt;write( |\n| ).
+    out-&gt;write( |\n| ).
+
+    &quot;Demonstrating prominent sy components that can be used in ABAP for Cloud Development
+
+*&amp;---------------------------------------------------------------------*
+*&amp; sy-subrc: Return code of ABAP statements
+*&amp;---------------------------------------------------------------------*
+
+    &quot;Many ABAP statements set a sy-subrc value. Check the ABAP Keyword Documentation
+    &quot;for individual statements. Usually, the value 0 indicates a successful execution.
+
+    DATA(some_string) = `ABAP`.
+
+    &quot;FIND statements
+    &quot;Found
+    FIND `P` IN some_string.
+    ASSERT sy-subrc = 0.
+
+    &quot;Not found
+    FIND `p` IN some_string RESPECTING CASE.
+    ASSERT sy-subrc = 4.
+
+    DATA(some_itab) = VALUE string_table( ( `a` ) ( `b` ) ( `c` ) ( `d` ) ).
+
+    &quot;READ TABLE statements
+    &quot;Entry available
+    READ TABLE some_itab INTO DATA(wa1) INDEX 3.
+    ASSERT sy-subrc = 0.
+
+    &quot;Entry not available
+    READ TABLE some_itab INTO DATA(wa2) INDEX 7.
+    ASSERT sy-subrc = 4.
+
+    &quot;ABAP SQL statements
+    DELETE FROM zdemo_abap_tab1.
+    IF sy-subrc = 0.
+      out-&gt;write( `DELETE: All rows were deleted.` ).
+    ELSE.
+      out-&gt;write( `DELETE: No row was deleted because it was already empty.` ).
+    ENDIF.
+
+    INSERT zdemo_abap_tab1 FROM TABLE @( VALUE #( ( key_field = 1 ) ( key_field = 2 ) ) ).
+    IF sy-subrc = 0.
+      out-&gt;write( `INSERT: All rows of the internal table were inserted.` ).
+    ENDIF.
+
+    INSERT zdemo_abap_tab1 FROM TABLE @( VALUE #( ( key_field = 3 ) ( key_field = 3 ) ) ) ACCEPTING DUPLICATE KEYS.
+    IF sy-subrc = 4.
+      out-&gt;write( `INSERT ... ACCEPTING DUPLICATE KEYS: sy-subrc has the value 4 in this case. Not all rows of the ` &amp;&amp;
+                  `internal table were inserted because a row with the key already exists.` ).
+    ENDIF.
+
+    DELETE FROM zdemo_abap_tab1 WHERE key_field = 3.
+    IF sy-subrc = 0.
+      out-&gt;write( `DELETE: The row matching the WHERE condition was deleted.` ).
+    ELSE.
+      out-&gt;write( `DELETE: No match according to the WHERE condition.` ).
+    ENDIF.
+
+    DELETE FROM zdemo_abap_tab1 WHERE key_field = 3.
+    IF sy-subrc = 0.
+      out-&gt;write( `DELETE: The row matching the WHERE condition was deleted.` ).
+    ELSE.
+      out-&gt;write( `DELETE: No match according to the WHERE condition.` ).
+    ENDIF.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; sy-index: Loop indexes
+*&amp;---------------------------------------------------------------------*
+
+    CLEAR some_string.
+
+    &quot;DO loops
+    DO 5 TIMES.
+      some_string = some_string &amp;&amp; sy-index.
+    ENDDO.
+
+    ASSERT some_string = `12345`.
+
+    CLEAR some_string.
+
+    DO 10 TIMES.
+      some_string = some_string &amp;&amp; sy-index.
+      IF sy-index = 7.
+        EXIT.
+      ENDIF.
+    ENDDO.
+
+    ASSERT some_string = `1234567`.
+
+    CLEAR some_string.
+
+    DATA number TYPE i.
+
+    &quot;WHILE loop
+    WHILE number &lt; 9.
+      number = sy-index.
+      some_string = some_string &amp;&amp; number.
+    ENDWHILE.
+
+    ASSERT some_string = `123456789`.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; sy-tabix: Row index of internal tables
+*&amp;---------------------------------------------------------------------*
+   
+    &quot;Demo standard internal table with 5 entries
+    DATA(std_itab) = VALUE string_table( ( `a` ) ( `b` ) ( `c` ) ( `d` ) ( `e` ) ).
+
+    &quot;READ TABLE statement using a free key
+    READ TABLE std_itab INTO DATA(wa3) WITH KEY table_line = `b`.
+    ASSERT sy-tabix = 2.
+
+    &quot;Demo hashed internal table with 5 entries
+    DATA(hashed_itab) = VALUE string_hashed_table( ( `a` ) ( `b` ) ( `c` ) ( `d` ) ( `e` ) ).
+
+    &quot;READ TABLE statement using a free key
+    READ TABLE hashed_itab INTO DATA(wa4) WITH KEY table_line = `b`.
+    &quot;Hashed tables do not have a primary table index.
+    ASSERT sy-tabix = 0.
+
+    CLEAR some_string.
+
+    &quot;LOOP statements
+    LOOP AT std_itab INTO DATA(wa5).
+      some_string = some_string &amp;&amp; sy-tabix.
+    ENDLOOP.
+    ASSERT some_string = `12345`.
+
+    CLEAR some_string.
+    &quot;Step addition
+    &quot;In the example, the table is looped across backwards
+    &quot;indicated by the negative value. The step size 1 indicates
+    &quot;that each line is respected.
+    LOOP AT std_itab INTO DATA(wa6) STEP -1.
+      some_string = some_string &amp;&amp; sy-tabix.
+    ENDLOOP.
+    ASSERT some_string = `54321`.
+
+    CLEAR some_string.
+    &quot;Forward loop, step size = 2
+    LOOP AT std_itab INTO DATA(wa7) STEP 2.
+      some_string = some_string &amp;&amp; sy-tabix.
+    ENDLOOP.
+    ASSERT some_string = `135`.
+
+    CLEAR some_string.
+    &quot;FROM/TO additions
+    LOOP AT std_itab INTO DATA(wa8) FROM 2 TO 4.
+      some_string = some_string &amp;&amp; sy-tabix.
+    ENDLOOP.
+    ASSERT some_string = `234`.
+
+    CLEAR some_string.
+    &quot;STEP/FROM additions
+    LOOP AT std_itab INTO DATA(wa9) STEP 2 FROM 2.
+      some_string = some_string &amp;&amp; sy-tabix.
+    ENDLOOP.
+    ASSERT some_string = `24`.
+
+    CLEAR some_string.
+    &quot;Hashed table
+    LOOP AT hashed_itab INTO DATA(wa10).
+      some_string = some_string &amp;&amp; sy-tabix.
+    ENDLOOP.
+    ASSERT some_string = `00000`.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; sy-dbcnt: Edited table rows
+*&amp;---------------------------------------------------------------------*
+
+    DELETE FROM zdemo_abap_tab1.
+    DATA(dbcnt) = sy-dbcnt.
+
+    out-&gt;write( |Dbtab rows deleted: { dbcnt }| ).
+
+    INSERT zdemo_abap_tab1 FROM TABLE @( VALUE #( ( key_field = 1 ) ( key_field = 2 ) ) ).
+    ASSERT sy-dbcnt = 2.
+
+    INSERT zdemo_abap_tab1 FROM TABLE @( VALUE #( ( key_field = 3 ) ( key_field = 3 ) ) ) ACCEPTING DUPLICATE KEYS.
+    ASSERT sy-dbcnt = 1.
+
+    MODIFY zdemo_abap_tab1 FROM @( VALUE #( key_field = 1 char1 = &#x27;aaa&#x27; ) ).
+    ASSERT sy-dbcnt = 1.
+
+    UPDATE zdemo_abap_tab1 SET char2 = &#x27;bbb&#x27;.
+    ASSERT sy-dbcnt = 3.
+
+    DELETE FROM zdemo_abap_tab1 WHERE num1 IS INITIAL.
+    ASSERT sy-dbcnt = 3.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; sy-fdpos: Occurrence in byte or character strings
+*&amp;---------------------------------------------------------------------*
+
+    &quot;For example, relevant in comparison expressions such as CS (constains string).
+    &quot;If the comparison is true, sy-fdpos contains the offset of the found value. If it
+    &quot;is false, sy-fdpos contains the length of the searched string.
+
+    some_string = `###abap###`.
+
+    IF some_string CS `p`.
+      out-&gt;write( |The substring is found. Offset of first finding: { sy-fdpos }| ).
+    ELSE.
+      out-&gt;write( |The substring is not found. Length of searched string: { sy-fdpos }| ).
+      ASSERT sy-fdpos = strlen( some_string ).
+    ENDIF.
+
+    IF some_string CS `#`.
+      out-&gt;write( |The substring is found. Offset of first finding: { sy-fdpos }| ).
+    ELSE.
+      out-&gt;write( |The substring is not found. Length of searched string: { sy-fdpos }| ).
+      ASSERT sy-fdpos = strlen( some_string ).
+    ENDIF.
+
+    IF some_string CS `Y`.
+      out-&gt;write( |The substring is found. Offset of first finding: { sy-fdpos }| ).
+    ELSE.
+      out-&gt;write( |The substring is not found. Length of searched string: { sy-fdpos }| ).
+      ASSERT sy-fdpos = strlen( some_string ).
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Getting Structured Type Information and Creating Structures at Runtime</h3>
+<p>Using <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrun_time_type_services_glosry.htm">Runtime Type Services (RTTS)</a> you can ...</p>
+<ul>
+<li>get type information on data objects, data types or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abeninstance_glosry.htm">instances</a> at runtime (<a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrun_time_type_identific_glosry.htm">Runtime Type Identification (RTTI)</a>).</li>
+<li>define and create new data types as <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abentype_object_glosry.htm">type description objects</a> at runtime (<a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrun_time_type_creation_glosry.htm">Runtime Type Creation (RTTC)</a>).</li>
+</ul>
+<p>For more information, see the <a href="06_Dynamic_Programming.md">Dynamic Programming</a> cheat sheet.</p>
+<pre><code>TYPES: BEGIN OF demo_struc_type,
+             comp1 TYPE c LENGTH 3,
+             comp2 TYPE i,
+             comp3 TYPE string,
+       END OF demo_struc_type.
+DATA demo_struc TYPE demo_struc_type.
+
+DATA(tdo_c) = cl_abap_typedescr=&gt;describe_by_data( demo_struc ).
+&quot;DATA(tdo_c) = cl_abap_typedescr=&gt;describe_by_name( &#x27;DEMO_STRUC_TYPE&#x27; ).
+
+&quot;Cast to get more specific information
+DATA(tdo_struc) = CAST cl_abap_structdescr( cl_abap_typedescr=&gt;describe_by_data( demo_struc ) ).
+&quot;DATA(tdo_struc) = CAST cl_abap_structdescr( tdo_c ).
+
+DATA(type_category_struc) = tdo_struc-&gt;kind.
+DATA(relative_name_struc) = tdo_struc-&gt;get_relative_name( ).
+... &quot;Explore more options by positioning the cursor behind -&gt; and choosing CTRL + Space
+DATA(type_of_struc) = tdo_struc-&gt;struct_kind.
+DATA(struc_comps) = tdo_struc-&gt;components.
+DATA(struc_comps_more_details) = tdo_struc-&gt;get_components( ).
+DATA(struc_has_include) = tdo_struc-&gt;has_include.
+DATA(struc_incl_view) = tdo_struc-&gt;get_included_view( ).
+DATA(applies_to_data_struc) = tdo_struc-&gt;applies_to_data( `some string` ).
+
+&quot;Example: &quot;Looping&quot; across a structure
+&quot;For example, this may also be done using a DO loop and dynamic assignments.
+&quot;Demo structure, all components are convertible to type string
+TYPES: BEGIN OF ty_struc,
+         comp1 TYPE c LENGTH 3,
+         comp2 TYPE string,
+         comp3 TYPE i,
+         comp4 TYPE n LENGTH 4,
+       END OF ty_struc.
+DATA(struct) = VALUE ty_struc( comp1 = &#x27;abc&#x27; comp2 = `ABAP` comp3 = 123 comp4 = &#x27;9876&#x27; ).
+DATA looped_struc TYPE string.
+
+&quot;In the loop, a string is populated, component by component.
+LOOP AT CAST cl_abap_structdescr( cl_abap_typedescr=&gt;describe_by_data( struct ) )-&gt;components INTO DATA(comp).
+  looped_struc = |{ looped_struc }{ COND #( WHEN sy-tabix &lt;&gt; 1 THEN ` / ` ) }Name: &quot;{ CONV string( comp-name ) }&quot;, Value: &quot;{ struct-(comp-name) }&quot;|.
+ENDLOOP.
+
+&quot;Result:
+&quot;Name: &quot;COMP1&quot;, Value: &quot;abc&quot; / Name: &quot;COMP2&quot;, Value: &quot;ABAP&quot; / Name: &quot;COMP3&quot;, Value: &quot;123&quot; / Name: &quot;COMP4&quot;, Value: &quot;9876&quot;</code></pre>
+<p>RTTI example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Boxed Components</h3>
+<pre><code>  TYPES: BEGIN OF struct, 
+          text          TYPE c LENGTH 20, 
+          nested_struct TYPE zdemo_abap_carr BOXED, 
+         END OF struct.</code></pre>
+<ul>
+<li>In structures, boxed components represent nested structures managed by an internal reference.</li>
+<li>Currently, static boxes are supported as boxed components, enabling <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENINITIAL_VALUE_SHARING_GLOSRY.html">initial value sharing</a>. Find more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENSTATIC_BOXES.html">here</a>.</li>
+<li>The relevant addition in a structured type declaration is <code>BOXED</code>. Syntax example:</li>
+<li>When used:</li>
+<li>Optimize memory consumption for structures used repeatedly, such as in internal tables with nested structures. Without boxed components, memory increases line by line, even if the nested structure is initial. With boxed components, memory does not increase when nested structures are initial, and only reads are performed.</li>
+<li>Enhance runtime performance since assignments for components with active initial value sharing require only the internal reference, not additional data to be copied.</li>
+<li>Boxed components allocate memory when there is write access to at least one component or when a field symbol is assigned or data reference points to at least one component.</li>
+</ul>
+<p>Expand the following collapsible section for more information and example code.</p>
+<p>&lt;details&gt; &lt;summary&gt;🟢 Click to expand for more information and example code&lt;/summary&gt; &lt;!-- --&gt;</p>
+<p>The following example illustrates boxed components:</p>
+<ul>
+<li>Two internal tables are created. One includes a nested structure as a boxed component, and the other includes a nested structure that is not a boxed component.</li>
+<li>The tables are populated in a loop under various conditions.</li>
+<li>The example demonstrates the impact of boxed components on memory usage.</li>
+<li>To try it out, proceed as follows:</li>
+<li>Create a demo class named <code>zcl_demo_abap</code>, paste the code into it, and activate it.</li>
+<li>The example does not display output in the console.</li>
+<li>It includes sections you can comment in and out. See notes in the examples.</li>
+<li>The code sections compare the memory usage of boxed and non-boxed components:</li>
+<li><em>Comparison 1</em>: Empty nested boxed vs. empty nested non-boxed components</li>
+<li><em>Comparison 2</em>: All nested boxed vs. all nested non-boxed components populated</li>
+<li><em>Comparison 3</em>: Few nested boxed vs. few nested non-boxed components populated</li>
+<li>For the comparison:</li>
+<li>In ADT, add the <em>ABAP Memory (Debugger)</em> view. If not yet available, choose <em>Window</em> from the menu -&gt; <em>Show View</em> -&gt; <em>Other ...</em> -&gt; filter for &quot;memory&quot; and add <em>ABAP Memory (Debugger)</em>.</li>
+<li>Set a break-point at the <code>ASSERT</code> statement.</li>
+<li>For <em>Comparison 1</em>, the first section is commented in. Run the class with <em>F9</em> in ADT. The first section deals with an internal table containing boxed components, where all are empty.</li>
+<li>The debugger stops at the break-point. Open the <em>ABAP Memory (Debugger)</em> view.</li>
+<li>Press <em>Refresh</em> in the view&#x27;s top right corner. Check the <em>ABAP Application</em> values for used and allocated memory.</li>
+<li>You may want to take a screenshot for comparison.</li>
+<li>Stop debugging.</li>
+<li>Comment out the first section and comment in the next one. Ensure no other sections within the loop are commented in. This section handles an internal table with nested, non-boxed components.</li>
+<li>Repeat the process by setting the break-point and refreshing the view to compare memory values in the <em>ABAP Memory (Debugger)</em> view.</li>
+<li>Compare the resulting values of the memory consumption.</li>
+<li>Repeat the steps for <em>Comparison 2</em> and <em>Comparison 3</em>.</li>
+<li>The following observations should be made regarding the memory consumption values, reflecting the impact of boxed components:</li>
+<li><em>Comparison 1</em>: Empty nested boxed vs. empty nested non-boxed components</li>
+<li>The table with boxed components allocates significantly less memory than the one without. Non-boxed components have full memory allocation despite having no entries.</li>
+<li><em>Comparison 2</em>: All nested boxed vs. all nested non-boxed components populated</li>
+<li>Memory for the table with boxed components is slightly higher due to extra administrative costs.</li>
+<li><em>Comparison 3</em>: Few nested boxed vs. few nested non-boxed components populated</li>
+<li>Large tables with boxed components show considerably less memory usage when only a few components are populated compared to tables without boxed components.</li>
+</ul>
+<p>&lt;br&gt;</p>
+<pre><code>CLASS zcl_demo_abap DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zcl_demo_abap IMPLEMENTATION.
+
+  METHOD if_oo_adt_classrun~main.
+
+    &quot;Creating two demo internal tables
+    &quot;One with boxed components, the other with a nested, non-boxed components
+    TYPES:
+      BEGIN OF struc,
+        comp1 TYPE c LENGTH 1024,
+        comp2 TYPE c LENGTH 1024,
+      END OF struc,
+
+      BEGIN OF struc_w_boxed,
+        id         TYPE i,
+        boxed_comp TYPE struc BOXED,
+      END OF struc_w_boxed,
+
+      BEGIN OF struc_no_boxed,
+        id    TYPE i,
+        struc TYPE struc,
+      END OF struc_no_boxed,
+
+      tab_w_boxed  TYPE TABLE OF struc_w_boxed WITH EMPTY KEY,
+      tab_no_boxed TYPE TABLE OF struc_no_boxed WITH EMPTY KEY.
+
+    DATA: itab_w_boxed  TYPE tab_w_boxed,
+          itab_no_boxed TYPE tab_no_boxed.
+
+    &quot;Populating internal tables
+    &quot;When running the example, only have one code snippet commented in, i.e.
+    &quot;the snippets between the sections
+    &quot;---- Comment in/out START ----
+    &quot;...
+    &quot;---- Comment in/out END ----
+    DO 100000 TIMES.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Comparison 1
+*&amp;---------------------------------------------------------------------*
+ 
+      &quot;1) Internal table with boxed components: All boxed components empty
+
+      &quot;---- Comment in/out START ----
+      INSERT INITIAL LINE INTO TABLE itab_w_boxed REFERENCE INTO DATA(wa1).
+      wa1-&gt;id = sy-index.
+      &quot;---- Comment in/out END ----
+
+**************************************************************************************************
+
+      &quot;2) Internal table with non-boxed components: All nested, non-boxed components empty
+
+      &quot;---- Comment in/out START ----
+*      INSERT INITIAL LINE INTO TABLE itab_no_boxed REFERENCE INTO DATA(wa2).
+*      wa2-&gt;id = sy-index.
+      &quot;---- Comment in/out END ----
+
+**************************************************************************************************
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Comparison 2
+*&amp;---------------------------------------------------------------------*
+
+      &quot;3) Internal table with boxed components: All boxed components filled
+
+      &quot;---- Comment in/out START ----
+*      INSERT INITIAL LINE INTO TABLE itab_w_boxed REFERENCE INTO DATA(wa3).
+*      wa3-&gt;id = sy-index.
+*      wa3-&gt;boxed_comp-comp1 = sy-index.
+*      wa3-&gt;boxed_comp-comp2 = sy-index.
+      &quot;---- Comment in/out END ----
+
+**************************************************************************************************
+
+      &quot;4) Internal table with non-boxed components: All nested, non-boxed components filled
+
+      &quot;---- Comment in/out START ----
+*      INSERT INITIAL LINE INTO TABLE itab_no_boxed REFERENCE INTO DATA(wa4).
+*      wa4-&gt;id = sy-index.
+*      wa4-&gt;struc-comp1 = sy-index.
+*      wa4-&gt;struc-comp2 = sy-index.
+      &quot;---- Comment in/out END ----
+
+**************************************************************************************************
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Comparison 3
+*&amp;---------------------------------------------------------------------*
+
+      &quot;5) Internal table with boxed components: Only few boxed components filled
+
+      &quot;---- Comment in/out START ----
+*      INSERT INITIAL LINE INTO TABLE itab_w_boxed REFERENCE INTO DATA(wa5).
+*      wa5-&gt;id = sy-index.
+*      IF sy-index &lt;= 50.
+*        wa5-&gt;boxed_comp-comp1 = sy-index.
+*        wa5-&gt;boxed_comp-comp2 = sy-index.
+*      ENDIF.
+      &quot;---- Comment in/out END ----
+
+**************************************************************************************************
+
+      &quot;6) Internal table with non-boxed components: Only few nested, non-boxed components filled
+
+      &quot;---- Comment in/out START ----
+*      INSERT INITIAL LINE INTO TABLE itab_no_boxed REFERENCE INTO DATA(wa6).
+*      wa6-&gt;id = sy-index.
+*      IF sy-index &lt;= 50.
+*        wa6-&gt;struc-comp1 = sy-index.
+*        wa6-&gt;struc-comp2 = sy-index.
+*      ENDIF.
+      &quot;---- Comment in/out END ----
+    ENDDO.
+
+    ASSERT 1 = 1.
+
+  ENDMETHOD.
+
+ENDCLASS.</code></pre>
+<p>&lt;/details&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Executable Example</h2>
+<p><a href="./src/zcl_demo_abap_structures.clas.abap">zcl_demo_abap_structures</a></p>
+<div class="note">[!NOTE] - The executable example covers the following topics, among others: - Creating structures and structured types - Variants of structures - Accessing, populating, and clearing structures - Structures in the context of tables - Including structures - The steps to import and run the code are outlined [here](README.md#-getting-started-with-the-examples). - [Disclaimer](README.md#%EF%B8%8F-disclaimer)</div>
+</body>
+</html>

@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24 Builtin Functions - ABAP Cheat Sheet</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #95a5a6;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4, h5, h6 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+<p>&lt;a name=&quot;top&quot;&gt;&lt;/a&gt;</p>
+<h1>Built-In Functions</h1>
+<ul>
+<li><a href="#built-in-functions">Built-In Functions</a></li>
+<li><a href="#about-built-in-functions">About Built-In Functions</a></li>
+<li><a href="#logical-functions">Logical Functions</a></li>
+<li><a href="#numeric-functions">Numeric Functions</a></li>
+<li><a href="#string-functions">String Functions</a></li>
+<li><a href="#time-stamp-functions">Time Stamp Functions</a></li>
+<li><a href="#table-functions">Table Functions</a></li>
+<li><a href="#built-in-functions-for-abap-cds-and-abap-sql">Built-In Functions for ABAP CDS and ABAP SQL</a></li>
+<li><a href="#functions-for-numeric-values">Functions for Numeric Values</a></li>
+<li><a href="#functions-for-strings">Functions for Strings</a></li>
+<li><a href="#functions-for-date-time-and-time-stamps">Functions for Date, Time, and Time Stamps</a></li>
+<li><a href="#more-special-functions">More (Special) Functions</a></li>
+<li><a href="#coalesce-function">coalesce Function</a></li>
+<li><a href="#more-information">More Information</a></li>
+<li><a href="#executable-example">Executable Example</a></li>
+</ul>
+<p>This ABAP cheat sheet includes a variety of built-in functions in ABAP, along with code snippets to demonstrate their functionality. Many of the functions covered here are also included in other ABAP cheat sheets that focus on specific topics.</p>
+<h2>About Built-In Functions</h2>
+<p>ABAP offers a range of predefined built-in functions for different purposes. These include numeric functions for calculating numeric values, string functions for processing strings, table functions for working with internal tables, and more.</p>
+<p>The functions can have one argument, which is a data object or an expression whose content is passed, or they can have multiple arguments, some of which may be optional in certain cases. Each function has a specific return value and can be specified in different positions.</p>
+<p>Built-in functions are also available in ABAP SQL and ABAP CDS.</p>
+<div class="note">[!NOTE] - For more detailed information, refer to the topics linked in the [More Information](#more-information) section. - Avoid naming your methods the same as built-in functions within classes. Otherwise, the methods will "[hide](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbuilt_in_functions_hiding.htm)" the built-in functions. - The examples in the ABAP cheat sheet are not comprehensive in terms of functions covered, syntax options and parameters used. Always refer to the ABAP Keyword Documentation for more details. - [Disclaimer](./README.md#%EF%B8%8F-disclaimer)</div>
+<h2>Logical Functions</h2>
+<div class="note">[!NOTE] - Logical functions in ABAP return a [truth value](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abentruth_value_glosry.htm), either true or false. They are primarily used in [logical expressions](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlogexp.htm), for example, in control statements like `IF ... ELSE ... ENDIF`, and other statements that involve conditions. - Note that ABAP does not have a Boolean data type for truth values, nor does it support [Boolean data objects](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenboolean_data_object_glosry.htm). Instead, the `xsdbool` function can be used to represent truth values in various situations where the `abap_bool` type from the `abap` type pool, i.e. the values `abap_true` ('X') and `abap_false` (''), is expected. - Many of the examples in this section utilize the `xsdbool` function to visualize the truth value, rather than using `IF` control structures, for example. - For more information, see [here](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlogic_functions.htm).</div>
+<p>&lt;table&gt; &lt;tr&gt; &lt;td&gt; Function &lt;/td&gt; &lt;td&gt; Details/Code Snippet &lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt; &lt;code&gt;boolc&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Boolean function that returns a truth value. In this case, it is a single-character value of type &lt;code&gt;string&lt;/code&gt;. When true, it returns the string &lt;code&gt;X&lt;/code&gt;. When false, it returns a blank. The result is not to be compared with &lt;code&gt;abap_true&lt;/code&gt; and &lt;code&gt;abap_false&lt;/code&gt; (because of &lt;code&gt;c&lt;/code&gt; to &lt;code&gt;string&lt;/code&gt; conversion). To get the technical type &lt;code&gt;c&lt;/code&gt; (with the values &#x27;X&#x27; and &#x27;&#x27;), you can use the &lt;code&gt;xsdbool&lt;/code&gt; function. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;boolc returns an X or a blank of type string
+DATA(int) = 0.
+&quot;X
+DATA(boolc1) = CONV abap_bool( boolc( int IS INITIAL ) ). 
+
+&quot;#X#
+DATA(boolc2) = |#{ boolc( int IS INITIAL ) }#|. 
+
+&quot;# #
+DATA(boolc3) = |#{ boolc( int IS NOT INITIAL ) }#|. 
+
+&quot;Using the translate function to return a value other than X/blank
+&quot;1
+DATA(boolc4) = translate( val = boolc( int BETWEEN -3 AND 3 ) from = `X` to = `1` ). 
+
+&quot;0
+DATA(boolc5) = translate( val = boolc( int &lt;&gt; 0 ) from = ` ` to = `0` ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;xsdbool&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Boolean function that returns a truth value. Similar to &lt;code&gt;boolc&lt;/code&gt;, it returns the value &lt;code&gt;X&lt;/code&gt; for true, and a blank for false. Unlike &lt;code&gt;boolc&lt;/code&gt;, the return value is of type &lt;code&gt;c&lt;/code&gt; of length 1, and can be compared with &lt;code&gt;abap_true&lt;/code&gt; and &lt;code&gt;abap_false&lt;/code&gt;. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;abap_true
+DATA(xsdb1) = xsdbool( 3 &gt; 1 ). 
+
+&quot;#X#
+DATA(xsdb2) = |#{ xsdbool( 1 = 1 ) }#|. 
+
+&quot;##
+DATA(xsdb3) = |#{ xsdbool( 1 &lt;&gt; 1 ) }#|. 
+
+&quot;Comparison with boolc
+&quot;not equal
+IF boolc( 1 = 0 ) = xsdbool( 1 = 0 ).
+  DATA(res) = `equal`.
+ELSE.
+  res = `not equal`.
+ENDIF.
+
+&quot;Using xsdbool instead of, for example, an IF control
+&quot;structure or an expression with the COND operator
+&quot;abap_true
+DATA(xsdb4) = xsdbool( -1 &lt; 1 ). 
+
+DATA truth_value1 TYPE abap_bool.
+IF -1 &lt; 1.
+  truth_value1 = abap_true.
+ELSE.
+  truth_value1 = abap_false.
+ENDIF.
+
+DATA(truth_value2) = COND #( WHEN -1 &lt; 1 THEN abap_true ELSE abap_false ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt; &lt;code&gt;contains&lt;/code&gt;&lt;br&gt;&lt;code&gt;contains_any_of&lt;/code&gt;&lt;br&gt;&lt;code&gt;contains_any_not_of&lt;/code&gt; &lt;/td&gt; &lt;td&gt; &lt;ul&gt; &lt;li&gt;&lt;code&gt;contains&lt;/code&gt; &lt;ul&gt; &lt;li&gt;For checking a text string based on (optional) parameters&lt;/li&gt; &lt;li&gt;&lt;code&gt;val&lt;/code&gt;: Text string to be searched&lt;/li&gt; &lt;li&gt;&lt;code&gt;sub&lt;/code&gt;/&lt;code&gt;start&lt;/code&gt;/&lt;code&gt;end&lt;/code&gt;: Specifying a substring to be searched in &lt;code&gt;val&lt;/code&gt;&lt;/li&gt; &lt;li&gt;&lt;code&gt;off&lt;/code&gt;/&lt;code&gt;len&lt;/code&gt;: Specifying the search range&lt;/li&gt; &lt;li&gt;&lt;code&gt;case&lt;/code&gt;: Specifying the case-sensitivity (the search is case-sensistive by default)&lt;/li&gt; &lt;li&gt;&lt;code&gt;pcre&lt;/code&gt;: Specifying a regular expression&lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;&lt;code&gt;contains_any_of&lt;/code&gt;/&lt;code&gt;contains_any_not_of&lt;/code&gt; &lt;ul&gt; &lt;li&gt;The functions only check individual characters passed to &lt;code&gt;sub&lt;/code&gt;/&lt;code&gt;start&lt;/code&gt;/&lt;code&gt;end&lt;/code&gt; (or, in case of the negation, any characters that are not contained).&lt;/li&gt; &lt;li&gt;The &lt;code&gt;pcre&lt;/code&gt; parameter is not available.&lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/ul&gt;</p>
+<p>&lt;br&gt;</p>
+<pre><code>&quot;-------------------- contains --------------------
+&quot;Specifying the minimum mandatory parameters
+&quot;Unlike most of the following examples, this one uses an IF control structure to 
+&quot;visualize the truth value.
+DATA cont1 TYPE abap_bool.
+&quot;abap_true
+IF contains( val = `abdefghijklmn` sub = `ghi` ).
+  cont1 = abap_true.
+ELSE.
+  cont1 = abap_false.
+ENDIF.
+
+&quot;case (abap_true is the default)
+&quot;abap_false
+DATA(cont2) = xsdbool( contains( val = `ABCDE` start = `ab` case = abap_true ) ). 
+
+&quot;abap_true
+DATA(cont3) = xsdbool( contains( val = `ABCDE` start = `ab` case = abap_false ) ). 
+
+&quot;end
+&quot;abap_true
+DATA(cont4) = xsdbool( contains( val = `UVWXYZ` end = `xyz` case = abap_false ) ). 
+
+&quot;start
+&quot;abap_false
+DATA(cont5) = xsdbool( contains( val = `123` start = `2` ) ). 
+
+&quot;off/len can also be specified individually
+&quot;Not specifying off means 0 by default
+&quot;abap_false
+DATA(cont6) = xsdbool( contains( val = `##ab## ##cd##` sub = `cd` len = 5 ) ).
+
+&quot;abap_true
+DATA(cont7) = xsdbool( contains( val = `##ab## ##cd##` sub = `cd` off = 7 len = 5 ) ). 
+
+&quot;occ: False if there are more occurrences than specified for occ; i.e. in the following
+&quot;example, specifying the values 1, 2, 3 returns true
+&quot;abap_true is returned for the first 3 loop passes, abap_false for the fourth
+DO 4 TIMES.
+  DATA(cont8) = xsdbool( contains( val = `ab#ab#ab#cd#ef#gh` sub = `ab` occ = sy-index ) ).
+ENDDO.
+
+&quot;pcre
+&quot;In the example, a blank is searched.
+&quot;abap_true
+DATA(cont9) = xsdbool( contains( val = `Hallo world` pcre = `\s` ) ). 
+
+&quot;-------------------- contains_any_of --------------------
+&quot;abap_true
+DATA(cont10) = xsdbool( contains_any_of( val = `abcdefg` sub = `xyza` ) ).
+
+&quot;abap_false
+DATA(cont11) = xsdbool( contains_any_of( val = `abcdefg` sub = `xyz` ) ). 
+
+DATA(hi) = `1hallo`.
+DATA(abc) = `abcdefghijklmnopqrstuvwxyz`.
+&quot;abap_false
+DATA(cont12) = xsdbool( contains_any_of( val = hi start = abc ) ).
+
+&quot;abap_true
+DATA(cont13) = xsdbool( contains_any_of( val = hi end = abc ) ). 
+
+&quot;-------------------- contains_any_not_of --------------------
+&quot;abap_true
+DATA(cont14) = xsdbool( contains_any_not_of( val = hi start = abc ) ).
+
+&quot;abap_false
+DATA(cont15) = xsdbool( contains_any_not_of( val = hi end = abc ) ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt; &lt;code&gt;matches&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Comparing a search range of a value with a regular expression. More optional parameters are available (e.g. &lt;code&gt;case&lt;/code&gt;, &lt;code&gt;off&lt;/code&gt;, &lt;code&gt;len&lt;/code&gt;). &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;Checking validity of an email address
+&quot;abap_true
+DATA(matches) = xsdbool( matches( val  = `jon.doe@email.com`
+                                  pcre = `\w+(\.\w+)*@(\w+\.)+(\w{2,4})` ) ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;line_exists&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Checking whether a line exists in an internal table. A table expression must be specified. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>TYPES: BEGIN OF s,
+          comp1 TYPE i,
+          comp2 TYPE c LENGTH 3,
+        END OF s.
+DATA itab TYPE TABLE OF s WITH EMPTY KEY.
+itab = VALUE #( ( comp1 = 1 comp2 = &#x27;aaa&#x27; ) ( comp1 = 2 comp2 = &#x27;bbb&#x27; ) ( comp1 = 3 comp2 = &#x27;ccc&#x27; ) ).
+DATA(str_tab) = VALUE string_table( ( `abc` ) ( `def` ) ( `ghi` ) ).
+
+&quot;abap_true
+DATA(line_exists1) = xsdbool( line_exists( itab[ 1 ] ) ). 
+
+&quot;abap_false
+DATA(line_exists2) = xsdbool( line_exists( itab[ 4 ] ) ). 
+
+&quot;abap_true
+DATA(line_exists3) = xsdbool( line_exists( itab[ comp1 = 2 ] ) ). 
+
+&quot;abap_true
+DATA(line_exists4) = xsdbool( line_exists( str_tab[ 2 ] ) ). 
+
+&quot;abap_false
+DATA(line_exists5) = xsdbool( line_exists( str_tab[ table_line = `xxx` ] ) ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Numeric Functions</h2>
+<p>&lt;table&gt; &lt;tr&gt; &lt;td&gt; Function &lt;/td&gt; &lt;td&gt; Details/Code Snippet &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;abs&lt;/code&gt;&lt;br&gt;&lt;code&gt;sign&lt;/code&gt;&lt;br&gt;&lt;code&gt;ceil&lt;/code&gt;&lt;br&gt;&lt;code&gt;floor&lt;/code&gt;&lt;br&gt;&lt;code&gt;trunc&lt;/code&gt;&lt;br&gt;&lt;code&gt;frac&lt;/code&gt;&lt;br&gt;&lt;code&gt;ipow&lt;/code&gt; &lt;/td&gt; &lt;td&gt;</p>
+<pre><code>&quot;----------- abs: Returning the absolute value ----------- 
+&quot;4.756
+DATA(abs1) = abs( CONV decfloat34( &#x27;-4.756&#x27; ) ). 
+
+&quot;4
+DATA(abs2) = abs( -4 ). 
+
+&quot;----------- sign: Evaluating the sign ----------- 
+&quot;-1 if negative, 0 if 0, 1 if positive
+&quot;-1
+DATA(sign1) = sign( -789 ).
+
+&quot;0
+DATA(sign2) = sign( 5 - 5 ). 
+
+&quot;1
+DATA(sign3) = sign( -5 * -5 ).
+
+&quot;----- ceil: smallest integer not less than the value specified -----
+&quot;5
+DATA(ceil1) = ceil( CONV decfloat34( &#x27;4.999&#x27; ) ).
+
+&quot;5
+DATA(ceil2) = ceil( CONV decfloat34( &#x27;4.001&#x27; ) ).
+
+&quot;-4
+DATA(ceil3) = ceil( CONV decfloat34( &#x27;-4.999&#x27; ) ).
+
+&quot;-4
+DATA(ceil4) = ceil( CONV decfloat34( &#x27;-4.001&#x27; ) ). 
+
+&quot;----- floor: largest integer not less than the value specified -----
+&quot;4
+DATA(floor1) = floor( CONV decfloat34( &#x27;4.999&#x27; ) ). 
+
+&quot;4
+DATA(floor2) = floor( CONV decfloat34( &#x27;4.001&#x27; ) ).
+
+&quot;-5
+DATA(floor3) = floor( CONV decfloat34( &#x27;-4.999&#x27; ) ).
+
+&quot;-5
+DATA(floor4) = floor( CONV decfloat34( &#x27;-4.001&#x27; ) ). 
+
+&quot;------------- trunc: integer part -------------
+&quot;4
+DATA(trunc1) = trunc( CONV decfloat34( &#x27;4.999&#x27; ) ).
+
+&quot;4
+DATA(trunc2) = trunc( CONV decfloat34( &#x27;4.001&#x27; ) ). 
+
+&quot;-4
+DATA(trunc3) = trunc( CONV decfloat34( &#x27;-4.999&#x27; ) ). 
+
+&quot;-4
+DATA(trunc4) = trunc( CONV decfloat34( &#x27;-4.001&#x27; ) ). 
+
+&quot;------------- frac: decimal places -------------
+&quot;0.999
+DATA(frac1) = frac( CONV decfloat34( &#x27;4.999&#x27; ) ). 
+
+&quot;0.001
+DATA(frac2) = frac( CONV decfloat34( &#x27;4.001&#x27; ) ). 
+
+&quot;-0.999
+DATA(frac3) = frac( CONV decfloat34( &#x27;-4.999&#x27; ) ). 
+
+&quot;-0.001
+DATA(frac4) = frac( CONV decfloat34( &#x27;-4.001&#x27; ) ). 
+
+&quot;------------- ipow: Calculalting the power -------------
+&quot;8
+DATA(ipow1) = ipow( base = 2 exp = 3 ). 
+
+&quot;1
+DATA(ipow2) = ipow( base = 10 exp = 0 ). 
+
+&quot;Exception is raised
+TRY.
+    DATA(ipow3) = ipow( base = 10 exp = 100 ).
+  CATCH cx_sy_arithmetic_overflow. 
+ENDTRY.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;nmin&lt;/code&gt;&lt;br&gt;&lt;code&gt;nmax&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Numeric extremum functions that return the value of the largest or smallest of the passed arguments. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;A minimum of two, and a maximum of 9 arguments can be specified.
+&quot;Numeric data objects and numeric expressions are possible
+&quot;0.999
+DATA(nmin) =  nmin( val1 = CONV decfloat34( &#x27;1.34&#x27; )
+                     val2 = CONV decfloat34( &#x27;56.7&#x27; )
+                     val3 = CONV decfloat34( &#x27;890.123&#x27; )
+                     val4 = CONV decfloat34( &#x27;0.999&#x27; ) ). 
+
+&quot;890.123
+DATA(nmax) =  nmax( val1 = CONV decfloat34( &#x27;1.34&#x27; )
+                     val2 = CONV decfloat34( &#x27;56.7&#x27; )
+                     val3 = CONV decfloat34( &#x27;890.123&#x27; )
+                     val4 = CONV decfloat34( &#x27;0.999&#x27; ) ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;acos&lt;/code&gt;&lt;br&gt;&lt;code&gt;asin&lt;/code&gt;&lt;br&gt;&lt;code&gt;atan&lt;/code&gt;&lt;br&gt;&lt;code&gt;cos&lt;/code&gt;&lt;br&gt;&lt;code&gt;sin&lt;/code&gt;&lt;br&gt;&lt;code&gt;tan&lt;/code&gt;&lt;br&gt;&lt;code&gt;cosh&lt;/code&gt;&lt;br&gt;&lt;code&gt;sinh&lt;/code&gt;&lt;br&gt;&lt;code&gt;tanh&lt;/code&gt;&lt;br&gt;&lt;code&gt;exp&lt;/code&gt;&lt;br&gt;&lt;code&gt;log&lt;/code&gt;&lt;br&gt;&lt;code&gt;log10&lt;/code&gt;&lt;br&gt;&lt;code&gt;sqrt&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Regarding the details of the result and type conversion of floating point functions, refer to the ABAP Keyword Documentation. The following snippet shows a small selection. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;Calculating the square root
+&quot;3
+DATA(sqrt1) = sqrt( CONV decfloat34( &#x27;9&#x27; ) ). 
+
+&quot;6.4
+DATA(sqrt2) = sqrt( CONV decfloat34( &#x27;40.96&#x27; ) ). 
+
+&quot;Calculating the logarithm to base 10
+&quot;3
+DATA(log10) = log10( CONV decfloat34( &#x27;1000&#x27; ) ). 
+
+&quot;-0.988031...
+DATA(sine) = sin( &#x27;30&#x27; ). 
+
+&quot;0.525321...
+DATA(cosine) = cos( &#x27;45&#x27; ). 
+
+&quot;-1.9952...
+DATA(tangent) = tan( &#x27;90&#x27; ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;round&lt;/code&gt;&lt;br&gt;&lt;code&gt;rescale&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Rounding functions expect a decimal floating point number as argument. The return value is of type &lt;code&gt;decfloat34&lt;/code&gt;. The functions can be used to round to decimal places and &lt;a href=&quot;https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenprecision_glosry.htm&quot;&gt;precisions&lt;/a&gt;. In addition, rounding rules can be specified. For more details, refer to the ABAP Keyword Documentation. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;Rounding to decimal places
+&quot;1.24
+DATA(round1) = round( val = CONV decfloat34( &#x27;1.2374&#x27; ) dec = 2 ). 
+
+&quot;1.237
+DATA(round2) = round( val = CONV decfloat34( &#x27;1.2374&#x27; ) dec = 3 ). 
+
+&quot;Rounding to precision
+&quot;1.234567890E+12
+DATA(round3) = round( val = CONV decfloat34( &#x27;1234567890123&#x27; ) prec = 10 ). 
+
+&quot;1.23E+3
+DATA(round4) = round( val = CONV decfloat34( &#x27;1234&#x27; ) prec = 3 ). 
+
+&quot;Rescaling function
+&quot;Similar to the round function, the dec (for scaling) or prec (for precision)
+&quot;parameters must be specified. The input is rounded if required.
+&quot;1235
+DATA(rescale1) = rescale( val = CONV decfloat34( &#x27;1234.56789&#x27; ) dec = 0 ). 
+
+&quot;1234.6
+DATA(rescale2) = rescale( val = CONV decfloat34( &#x27;1234.56789&#x27; ) dec = 1 ). 
+
+&quot;1.23E+3
+DATA(rescale3) = rescale( val = CONV decfloat34( &#x27;1234.56789&#x27; ) prec = 3 ). 
+
+&quot;1234.567890
+DATA(rescale4) = rescale( val = CONV decfloat34( &#x27;1234.56789&#x27; ) prec = 10 ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;factorial&lt;/code&gt;&lt;br&gt;&lt;code&gt;binomial&lt;/code&gt; &lt;/td&gt; &lt;td&gt;</p>
+<p>&lt;code&gt;factorial&lt;/code&gt; calculates the factorial of positive integers. &lt;code&gt;binomial&lt;/code&gt; computes the binomial coefficient. Find more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/ABENFACTORIAL_BINOMIAL_FUNCTIONS.html">here</a>.</p>
+<p>&lt;br&gt;</p>
+<pre><code>TYPES: BEGIN OF demo_fact_struc,
+         n             TYPE i,
+         res        TYPE string,
+         res_simple TYPE string,
+       END OF demo_fact_struc.
+DATA factorial_tab TYPE TABLE OF demo_fact_struc WITH EMPTY KEY.
+DATA count TYPE i.
+DO 26 TIMES.
+  DATA(result) = factorial( count ).
+  APPEND VALUE #( n           = count
+                  res        = result
+                  res_simple = |{ result STYLE = SIMPLE }| ) TO factorial_tab.
+  count += 1.
+ENDDO.
+
+
+TYPES: BEGIN OF demo_bin_struc,
+         n             TYPE i,
+         k             TYPE i,
+         res        TYPE string,
+         res_simple TYPE string,
+       END OF demo_bin_struc.
+DATA bin_tab TYPE TABLE OF demo_bin_struc WITH EMPTY KEY.
+DATA n_val TYPE i VALUE 21.
+DATA k_val TYPE i VALUE 11.
+DO 21 TIMES.
+  n_val -= 1.
+  k_val -= 1.
+  DATA(bin_coeff) = binomial( n = n_val k = k_val ).
+  APPEND VALUE #( n          = n_val
+                  k          = k_val
+                  res        = bin_coeff
+                  res_simple = |{ bin_coeff STYLE = SIMPLE }| ) TO bin_tab.
+ENDDO.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>String Functions</h2>
+<p>&lt;table&gt; &lt;tr&gt; &lt;td&gt; Function &lt;/td&gt; &lt;td&gt; Details/Code Snippet &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;numofchar&lt;/code&gt;&lt;br&gt;&lt;code&gt;strlen&lt;/code&gt;&lt;br&gt;&lt;code&gt;xstrlen&lt;/code&gt; &lt;/td&gt; &lt;td&gt; For determining the length of a string, i.e. the number of characters contained in a string. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;numofchar: Trailing blanks are not counted in both strings of fixed and variable length
+&quot;strlen: Trailing blanks are not counted in strings of fixed length; in strings of
+&quot;        variable length, they are counted
+&quot;3
+DATA(numofchar1)   = numofchar( &#x27;abc   &#x27; ). 
+
+&quot;3
+DATA(numofchar2)   = numofchar( `abc   ` ). 
+
+&quot;3
+DATA(strlen1) = strlen( &#x27;abc   &#x27; ). 
+
+&quot;6
+DATA(strlen2) = strlen( `abc   ` ). 
+
+&quot;xstrlen for type xstring
+DATA(xstr) = CONV xstring( `480065006C006C006F00200077006F0072006C0064002100` ).
+&quot;24
+DATA(len_xstr) = xstrlen( xstr ). 
+&quot;xstring -&gt; string
+&quot;Hello world!
+DATA(conv_str) = cl_abap_conv_codepage=&gt;create_in( )-&gt;convert( xstr ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;cmin&lt;/code&gt;&lt;br&gt;&lt;code&gt;cmax&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Character-like extremum value functions return a string that contains the content of the smallest or biggest of a set of character-like arguments. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(cmin) =  cmin( val1 = `zzzzzzz`
+                    val2 = `zzazzzzzzzz` &quot;smallest argument
+                    val3 = `zzzzabc` ).
+
+DATA(cmax) =  cmax( val1 = `abcdef`      &quot;biggest argument
+                    val2 = `aaghij`
+                    val3 = `aaaaklmn`
+                    val4 = `aaaaaaopqrs`
+                    val5 = `aaaaaaaaaatuvwxy`
+                    val6 = `aaaaaaaaaaaaaz` ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;find&lt;/code&gt;&lt;br&gt;&lt;code&gt;find_end&lt;/code&gt;&lt;br&gt;&lt;code&gt;find_any_of&lt;/code&gt;&lt;br&gt;&lt;code&gt;find_any_not_of&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Search functions &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(str) = `Pieces of cakes.`.
+
+&quot;---------------- find ----------------
+&quot;The find function searches for the substring specified and returns the offset
+&quot;7
+DATA(find1) = find( val = str sub = `of` ). 
+
+&quot;-1 (no finding)
+DATA(find2) = find( val = str sub = `x` ). 
+
+&quot;case
+&quot;0
+DATA(find3) = find( val = str sub = `p` case = abap_false ). 
+
+&quot;off/len
+&quot;-1 (no finding)
+DATA(find4) = find( val = str sub = `ca` off = 4 len = 5 ). 
+&quot;10
+DATA(find5) = find( val = str sub = `ca` off = 4 len = 10 ). 
+
+&quot;occ
+&quot;4
+DATA(find6) = find( val = str sub = `es` occ = 1 ). 
+
+&quot;13
+DATA(find7) = find( val = str sub = `es` occ = 2 ). 
+
+&quot;-1 (no third occurrence)
+DATA(find8) = find( val = str sub = `es` occ = 3 ). 
+
+&quot;pcre
+&quot;15
+DATA(find9) = find( val = str pcre = `\.` ). 
+
+&quot;---------------- find_end ----------------
+&quot;find_end returns the sum of the offset of the occurrence plus the length of the match
+&quot;9 (7 + 2)
+DATA(find_end1) = find_end( val = str sub = `of` ). 
+
+&quot;7 (6 + 1)
+DATA(find_end2) = find_end( val = str pcre = `\s` ). 
+
+&quot;---------------- find_any_of ----------------
+&quot;find_any_of returns the offset of the occurrence of any character contained 
+&quot;in a substring. The search is always case-sensitive.
+&quot;2 (character e is found)
+DATA(find_any_of1) = find_any_of( val = str sub = `x523z4e` ).
+
+&quot;-1 
+DATA(find_any_of2) = find_any_of( val = str sub = `zwq85t` ). 
+
+&quot;---------------- find_any_not_of ----------------
+&quot;find_any_not_of is the negation of find_any_of
+&quot;0 (very first character in the searched string)
+DATA(find_any_not_of1) = find_any_not_of( val = str sub = `ieces` ). 
+
+&quot;1
+DATA(find_any_not_of2) = find_any_not_of( val = str sub = `P` ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;count&lt;/code&gt;&lt;br&gt;&lt;code&gt;count_any_of&lt;/code&gt;&lt;br&gt;&lt;code&gt;count_any_not_of&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Returning the number of all occurrences in a string &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(st) = `Pieces of cakes.`.
+
+&quot;---------------- count ----------------
+&quot;3
+DATA(count1) = count( val = st sub = `e` ). 
+
+&quot;0
+DATA(count2)  = count( val = st sub = `x` ). 
+
+&quot;case (case-sensitive by default)
+&quot;1
+DATA(count3)  = count( val = st sub = `p` case = abap_false ). 
+
+&quot;off/len (off is 0 by default; len is the length of sting by default minus offset)
+&quot;2
+DATA(count4)  = count( val = st sub = `es` off = 3 ). 
+
+&quot;1
+DATA(count5)  = count( val = st sub = `es` off = 9 ). 
+
+&quot;2
+DATA(count6)  = count( val = st sub = `es` off = 3 len = 12 ). 
+
+&quot;0
+DATA(count7)  = count( val = st sub = `es` len = 5 ). 
+
+&quot;pcre
+&quot;2
+DATA(count8)  = count( val = st pcre = `\s` ).
+
+&quot;16
+DATA(count9)  = count( val = st pcre = `.` ). 
+
+&quot;---------------- count_any_of ----------------
+&quot;3 (e characters)
+DATA(count_any_of1) = count_any_of( val = st sub = `x523z4e` ). 
+
+&quot;6 (3 e, 2 c, 1 o)
+DATA(count_any_of2) = count_any_of( val = st sub = `eco` ). 
+
+&quot;---------------- count_any_not_of ----------------
+&quot;14
+DATA(count_any_not_of1) = count_any_not_of( val = st sub = `fP` ). 
+
+&quot;0 (all are included)
+DATA(count_any_not_of2) = count_any_not_of( val = st sub = `Piecs ofak.` ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;distance&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Returning the Levenshtein distance between two strings, which reflects their similarity &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(str_to_check) = `abap`.
+&quot;0
+DATA(dist1) = distance( val1 = str_to_check val2 = `abap` ). 
+
+&quot;1
+DATA(dist2) = distance( val1 = str_to_check val2 = `axbap` ). 
+
+&quot;4
+DATA(dist3) = distance( val1 = str_to_check val2 = `yabyyapy` ). 
+
+&quot;5
+DATA(dist4) = distance( val1 = str_to_check val2 = `zabapzzzzzzzzzzzz` max = 5 ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;repeat&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Repeating strings as many times as specified &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;abapabapabapabapabap
+DATA(repeat1) = repeat( val = `abap` occ = 5 ).  
+
+&quot;#          #
+DATA(repeat2) = |#{ repeat( val = ` ` occ = 10 ) }#|. 
+
+&quot;Y (initial value returned)
+DATA(repeat3) = COND #( WHEN repeat( val = `a` occ = 0 ) = `` THEN `Y` ELSE `Z` ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;condense&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Condensing strings &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(str_to_condense) = ` ab   cd `.
+
+&quot;No parameters specified, i. e. their default values are provided.
+&quot;Works like CONDENSE statement without the NO-GAPS addition.
+&quot;ab cd
+DATA(condense1) = condense( str_to_condense ). 
+
+&quot;Parameters del/to not specified. from parameter with initial string
+&quot;(could also be a text field literal: from = &#x27; &#x27;). This way, leading and
+&quot;trailing blanks are removed.
+&quot;ab   cd
+DATA(condense2) = condense( val = str_to_condense from = `` ). 
+
+&quot;Parameter to specified with an initial string. No other parameters.
+&quot;Works like the CONDENSE statement with the NO-GAPS addition.
+&quot;abcd
+DATA(condense3) = condense( val = str_to_condense  to = `` ). 
+
+&quot;Parameter del specifies the leading/trailing characters to be removed.
+&quot;see###you
+DATA(condense4) = condense( val = `##see###you##` del = `#` ). 
+
+&quot;If from and to are specified along with del, leading/trailing characters
+&quot;specified in del are first removed. Then, in the remaining string, all 
+&quot;substrings composed of characters specified in from are replaced with the 
+&quot;first character of the string specified in the to parameter.
+&quot;Rock&#x27;n&#x27;Roll
+DATA(condense5) = condense( val  = `  Rock&#x27;xxx&#x27;Roller`
+                            del  = `re `
+                            from = `x`
+                            to   = `n` ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;concat_lines_of&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Concatenating internal tables into strings &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(stringtable) = VALUE string_table( ( `a` ) ( `b` ) ( `c` ) ).
+&quot;abc
+DATA(con1) = concat_lines_of( table = stringtable ). 
+
+&quot;a b c
+DATA(con2) = concat_lines_of( table = stringtable sep = ` ` ). 
+
+&quot;a/b/c
+DATA(con3) = concat_lines_of( table = stringtable sep = `/` ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;reverse&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Reversing strings &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;abap
+DATA(reverse) = reverse( `paba` ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;escape&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Escaping special characters according to the specification in the &lt;code&gt;format&lt;/code&gt; parameter. Suitable values for the &lt;code&gt;format&lt;/code&gt; parameter (which expects a data object of type &lt;code&gt;i&lt;/code&gt;) are available in the &lt;code&gt;CL_ABAP_FORMAT&lt;/code&gt; class (the constants starting with &lt;code&gt;E_&lt;/code&gt;). &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;Context: URLs
+&quot;...test%3A%205%408...
+DATA(esc1) = escape( val    = &#x27;...test: 5@8...&#x27;
+                     format = cl_abap_format=&gt;e_url_full ).
+
+&quot;Context: JSON
+&quot;some \&quot;test\&quot; json \\ with backslash and double quotes
+DATA(esc2) = escape( val    = &#x27;some &quot;test&quot; json \ with backslash and double quotes&#x27;
+                     format = cl_abap_format=&gt;e_json_string ).
+
+&quot;Context: String templates
+&quot;Special characters in string templates: \|, \\, \{, \}
+DATA(esc3) = escape( val    = &#x27;Special characters in string templates: |, \, {, }&#x27;
+                     format = cl_abap_format=&gt;e_string_tpl ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;insert&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Inserting strings &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(to_be_inserted) = `ABAP`.
+&quot;#ABAP
+DATA(insert1) = insert( val = to_be_inserted sub = `#` ). 
+
+&quot;A#BAP
+DATA(insert2) = insert( val = to_be_inserted sub = `#` off = 1 ). 
+
+&quot;ABAP#
+DATA(insert3) = insert( val = to_be_inserted sub = `#` off = strlen( to_be_inserted ) ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;match&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Returning substrings that match regular expressions &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;jon.doe@email.com
+DATA(match1) = match( val = `The email address is jon.doe@email.com.`
+                      pcre = `\w+(\.\w+)*@(\w+\.)+(\w{2,4})` ). 
+
+&quot;Find blank (without inlcuding it in the result indicated by \K) and
+&quot;the following 2 characters, second occurrence
+&quot;ad
+DATA(match2) = match( val = `The email address is jon.doe@email.com.`
+                      pcre = `\s\K..` 
+                      occ = 2 ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;replace&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Replacements in strings &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(to_be_replaced) = `Pieces of cakes.`.
+
+&quot;Piec# of cakes.
+DATA(replace1) = replace( val = to_be_replaced sub = `es` with = `#` ).
+
+&quot;case
+&quot;#ieces of cakes.
+DATA(replace2) = replace( val = to_be_replaced sub = `p` case = abap_false with = `#` ).
+
+&quot;occ
+&quot;Pieces of#cakes.
+DATA(replace3) = replace( val = to_be_replaced sub = ` ` occ = 2 with = `#` ).
+
+&quot;The value 0 in occ means respecting all occurrences.
+&quot;Pi#c#s of cak#s.
+DATA(replace4) = replace( val = to_be_replaced sub = `e` occ = 0 with = `#` ).
+
+&quot;pcre
+&quot;Pieces#of cakes.
+DATA(replace5) = replace( val = to_be_replaced pcre = `\s` with = `#` ).
+
+&quot;Pieces of#cakes.
+DATA(replace6) = replace( val = to_be_replaced pcre = `\s` occ = 2 with = `#` ).
+
+&quot;Replacement determined by offset/length specification only (no sub/pcre specification)
+&quot;Piece#s of cakes.
+DATA(replace7) = replace( val = to_be_replaced off = 5 with = `#` ).
+
+&quot;#s of cakes.
+DATA(replace8) = replace( val = to_be_replaced len = 5 with = `#` ).
+
+&quot;Pie#cakes.
+DATA(replace9) = replace( val = to_be_replaced off = 3 len = 7 with = `#` ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;segment&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Returning the occurrence of a segment that is defined by limits, which  are not part of the segments. &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;index: Number of segment
+&quot;sep: Substring specified is searched and used as limit
+&quot;Hallo
+DATA(segment1) = segment( val = `Hallo,world,123` index = 1 sep = `,` ). 
+
+&quot;123
+DATA(segment2) = segment( val = `Hallo,world,123` index = -1 sep = `,` ). 
+
+&quot;world
+DATA(segment3) = segment( val = `Hallo&lt;br&gt;world&lt;br&gt;123` index = 2 sep = `&lt;br&gt;` ). 
+
+&quot;space: Each individual character is searched and used as limit
+DATA(to_be_segmented) = `a/b#c d.e`.
+
+&quot;b
+DATA(segment4) = segment( val = `a/b#c d.e` index = 2 space = `. #/` ). 
+
+DATA segment_tab TYPE string_table.
+DO.
+  TRY.
+      INSERT segment( val   = to_be_segmented
+                      index = sy-index
+                      space = `. #/` ) INTO TABLE segment_tab.
+    CATCH cx_sy_strg_par_val.
+      EXIT.
+  ENDTRY.
+ENDDO.
+
+*Content of segment_tab
+*a           
+*b           
+*c           
+*d           
+*e       </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;shift_left&lt;/code&gt;&lt;br&gt;&lt;code&gt;shift_right&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Shifting content &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(to_be_shifted) = ` hallo `.
+
+&quot;------------------- shift_left -------------------
+&quot;&#x27;llo &#x27;
+DATA(shift_left1) = shift_left( val = to_be_shifted places = 3 ). 
+
+&quot;circular parameter: characters that are moved out of the string are
+&quot;added at the other end again
+&quot;&#x27;allo  h&#x27;
+DATA(shift_left2) = shift_left( val = to_be_shifted circular = 2 ). 
+
+&quot;&#x27;lo &#x27;
+DATA(shift_left3) = shift_left( val = to_be_shifted sub = ` hal` ). 
+
+&quot;No parameter except val: Behaves as if sub was passed a blank character
+&quot;&#x27;hallo &#x27; (works as the following example)
+DATA(shift_left4) = shift_left( val = to_be_shifted ). 
+
+&quot;&#x27;hallo &#x27;
+DATA(shift_left5) = shift_left( val = to_be_shifted sub = ` ` ). 
+
+&quot;------------------- shift_right -------------------
+&quot;&#x27; hal&#x27;
+DATA(shift_right1) = shift_right( val = to_be_shifted places = 3 ). 
+
+&quot;&#x27;o  hall&#x27;
+DATA(shift_right2) = shift_right( val = to_be_shifted circular = 2 ). 
+
+&quot;&#x27; hall&#x27;
+DATA(shift_right3) = shift_right( val = to_be_shifted sub = `o ` ). 
+
+&quot;&#x27; hallo&#x27;
+DATA(shift_right4) = shift_right( val = to_be_shifted ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;substring&lt;/code&gt;&lt;br&gt;&lt;code&gt;substring_after&lt;/code&gt;&lt;br&gt;&lt;code&gt;substring_before&lt;/code&gt;&lt;br&gt;&lt;code&gt;substring_to&lt;/code&gt;&lt;br&gt;&lt;code&gt;substring_from&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Processing substrings &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(s4func) = `Lorem ipsum dolor sit amet`.
+
+&quot;------------------- substring -------------------
+&quot;Extracting substring starting at a specific position
+&quot;&#x27;len&#x27; not specified means the rest of the remaining characters is
+&quot;respected
+&quot;ipsum dolor sit amet
+DATA(substr1) = substring( val = s4func off = 6 ). 
+
+&quot;Extracting substring with a specific length
+&quot;&#x27;off&#x27; is not specified and has the default value 0.
+&quot;Lorem
+DATA(substr2) = substring( val = s4func len = 5 ). 
+
+&quot;Specifying both off and len parameters
+&quot;ipsum
+DATA(substr3) = substring( val = s4func off = 6 len = 5 ). 
+
+&quot;------------------- substring_after -------------------
+&quot;Extracting a substring ...
+&quot;... after a specified substring
+&quot;em ipsum dolor sit amet (only the first occurrence is respected)
+DATA(substr_after1) = substring_after( val = s4func sub = `or` ). 
+
+&quot;... after a specified substring specifying the occurence in a string
+&quot;and restricting the length
+&quot;occ/case 
+&quot;&#x27; sit am&#x27;
+DATA(substr_after2) = substring_after( val = s4func sub = `oR` occ = 2 len = 7 case = abap_false ). 
+
+&quot;pcre
+&quot;olor sit amet
+DATA(substr_after3) = substring_after( val = s4func pcre = `\s.` occ = 2 ). 
+
+&quot;------------------- substring_before -------------------
+&quot;... before a specified substring
+&quot;Lorem ips
+DATA(substr_before) = substring_before( val = s4func sub = `um`  ). 
+
+&quot;------------------- substring_from -------------------
+&quot;... from a specified substring on. It includes the substring specified
+&quot;in sub. len/off and other parameters are possible.
+&quot;um dolor sit amet
+DATA(substr_from) = substring_from( val = s4func sub = `um` ). 
+
+&quot;Compared to substring_after
+&quot;&#x27; dolor sit amet&#x27;
+DATA(substr_after4) = substring_after( val = s4func sub = `um` ). 
+
+&quot;------------------- substring_to -------------------
+&quot;... up to a specified substring. It includes the substring specified
+&quot;in sub. len/off and other parameters are possible.
+&quot;Lorem ipsum
+DATA(substr_to) = substring_to( val = s4func sub = `um` ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;to_upper&lt;/code&gt;&lt;br&gt;&lt;code&gt;to_lower&lt;/code&gt;&lt;br&gt;&lt;code&gt;from_mixed&lt;/code&gt;&lt;br&gt;&lt;code&gt;to_mixed&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Transforming strings &lt;br&gt;&lt;br&gt;</p>
+<pre><code>&quot;------------------- to_upper -------------------
+&quot;ABAP
+DATA(upper1) = to_upper( `AbaP` ).
+DATA(upper2) = to_upper( `abap` ).
+
+&quot;------------------- to_lower -------------------
+&quot;abap
+DATA(lower1) = to_lower( `AbaP` ).
+DATA(lower2) = to_lower( `ABAP` ).
+
+&quot;------------------- from_mixed -------------------
+&quot;sep: Inserts the first character specified in sep before each uppercase letter 
+&quot;from left to right, starting with the second position
+&quot;A#B#A#P
+DATA(from_mixed1) = from_mixed( val = `ABAP` sep = `#` ). 
+
+&quot;If &#x27;case&#x27; is not specified or if the first character in the &#x27;case&#x27; parameter is an 
+&quot;uppercase letter, the entire string is transformed to uppercase, otherwise to 
+&quot;lowercase.
+&quot;ABA#P
+DATA(from_mixed2) = from_mixed( val = `AbaP` sep = `#` ). 
+
+&quot;Underscore is the default separator
+&quot;ABA_P
+DATA(from_mixed3) = from_mixed( val = `AbaP` ). 
+
+&quot;ABA#P (same as previous example)
+DATA(from_mixed4) = from_mixed( val = `AbaP` sep = `#` case = &#x27;X&#x27; ).
+
+&quot;aba#p
+DATA(from_mixed5) = from_mixed( val = `AbaP` sep = `#` case = &#x27;x&#x27; ). 
+
+&quot;min: Passing a positive number to specify a minimum number of characters 
+&quot;that must appear before an uppercase letter from the start of the string 
+&quot;or since the last insertion so that a separator is inserted. The default 
+&quot;value for &#x27;min&#x27; is 1.
+&quot;A#BA#P
+DATA(from_mixed6) = from_mixed( val = `ABaP` sep = `#` min = 1 ). 
+
+&quot;ABAA#AAAAA#AP
+DATA(from_mixed7) = from_mixed( val = `ABaaAaaaaAP` sep = `#` min = 3 ). 
+
+&quot;------------------- to_mixed -------------------
+&quot;Transforming all letters in the string to lowercase letters from the second 
+&quot;position on. From left to right from the second position on, it removes 
+&quot;occurrences of the first character specified in the &#x27;sep&#x27; parameter from the 
+&quot;string and transforms the next letter to an uppercase letter. 
+&quot;Default separator _
+&quot;AbcDeFgHi
+DATA(to_mixed1) = to_mixed( val = `Abc_de_fg_hi` ).
+
+&quot;AbcDeFgHi
+DATA(to_mixed2) = to_mixed( val = `Abc/de/fg/hi` sep = `/` ).
+
+&quot;Specifying the case parameter
+&quot;abcDeFgHi
+DATA(to_mixed3) = to_mixed( val = `AbcXdeXfgXhi` sep = `X` case = &#x27;x&#x27; ).
+
+&quot;Specifying the min operator
+&quot;AbcDeFgHi
+DATA(to_mixed4) = to_mixed( val = `Abc/de/fg/hi` sep = `/` min = 2 ).
+
+&quot;Abc/deFghijklmnoPq
+DATA(to_mixed5) = to_mixed( val = `Abc/de/fghijklmno/pq` sep = `/` min = 5 ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;translate&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Replacing characters &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(to_be_translated) = `___abc_def_____ghi_`.
+
+&quot;Each character that occurs in the &#x27;from&#x27; parameter is replaced by the character 
+&quot;that occurs in the same place in the &#x27;to&#x27; parameter as in the &#x27;from&#x27; parameter.
+&quot;If &#x27;to&#x27; is shorter than &#x27;from&#x27;, the surplus characters from &#x27;from&#x27; are removed 
+&quot;from the string.
+&quot;abcdefg#?
+DATA(translate1) = translate( val = to_be_translated from = `hi_` to = `#?` ). 
+
+&quot;###abc#def#####ghi#
+DATA(translate2) = translate( val = to_be_translated from = `_`  to = `#?` ).  </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Time Stamp Functions</h2>
+<p>&lt;table&gt; &lt;tr&gt; &lt;td&gt; Function &lt;/td&gt; &lt;td&gt; Details/Code Snippet &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;utclong_current&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Retrieving UTC time stamps &lt;br&gt;</p>
+<pre><code>&quot;The return value has the type utclong.
+&quot;e.g. 2024-01-01 15:45:46.2695940
+DATA(ts1) = utclong_current( ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;utclong_add&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Adding values to time stamps &lt;br&gt;</p>
+<pre><code>DATA(utc4calc) = CONV utclong( &#x27;2024-01-01 15:55:14.1173220&#x27; ).
+
+&quot;At least one parameter must be specified besides &#x27;val&#x27;.
+&quot;Note that there are no parameters for years and months.
+
+&quot;Adding one hour
+&quot;e.g. 2024-01-01 16:55:14.1173220
+DATA(ts2) = utclong_add( val = utc4calc
+                         hours = 1 ).
+
+&quot;Subtracting one hour by passing a negative integer value (no 
+&quot;separate substract function is available)
+&quot;e.g. 2024-01-01 14:55:14.1173220
+DATA(ts3) = utclong_add( val = utc4calc
+                         hours = -1 ).
+
+&quot;Using all parameters
+&quot;e.g. 2024-01-02 18:09:07.2373220
+DATA(ts4) = utclong_add( val = utc4calc
+                         days = 1 
+                         hours = 2 
+                         minutes = CONV int8( &#x27;13&#x27; )
+                         seconds = CONV decfloat34( &#x27;53.12&#x27; ) ).</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;utclong_diff&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Calculating the time difference between the values of two time stamp fields &lt;br&gt;</p>
+<pre><code>DATA(ts5) = CONV utclong( &#x27;2024-01-01 05:30:00&#x27; ).
+DATA(ts6) = CONV utclong( &#x27;2024-01-01 06:30:00&#x27; ).
+
+&quot;The return value has the type decfloat34. It contains the exact difference in seconds.
+&quot;3600
+DATA(ts_diff1) = utclong_diff( high = ts6
+                               low = ts5 ). 
+
+&quot;-3600
+DATA(ts_diff2) = utclong_diff( high = ts5
+                               low = ts6 ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Table Functions</h2>
+<div class="note">[!NOTE] See the `line_exists` function in the [Logical Functions](#logical-functions) section.</div>
+<p>&lt;table&gt; &lt;tr&gt; &lt;td&gt; Function &lt;/td&gt; &lt;td&gt; Details/Code Snippet &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;lines&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Returning the number of lines in internal tables &lt;br&gt;&lt;br&gt;</p>
+<pre><code>DATA(strtab) = VALUE string_table( ( `aaa` ) ( `bbb` ) ( `ccc` ) ( `ddd` ) ( `eee` ) ).
+
+&quot;5
+DATA(lines1) = lines( strtab ). 
+
+DELETE strtab INDEX 1.
+&quot;4
+DATA(lines2) = lines( strtab ). 
+
+CLEAR strtab.
+&quot;0
+DATA(lines3) = lines( strtab ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; &lt;code&gt;line_index&lt;/code&gt; &lt;/td&gt; &lt;td&gt; Returning the number of the line found using table expressions with respect to the table index used &lt;br&gt;&lt;br&gt;</p>
+<pre><code>TYPES: BEGIN OF st,
+          comp1 TYPE i,
+          comp2 TYPE c LENGTH 3,
+          comp3 TYPE c LENGTH 3,
+        END OF st.
+DATA itab_em TYPE TABLE OF st WITH EMPTY KEY.
+DATA itab_sec TYPE HASHED TABLE OF st
+              WITH UNIQUE KEY comp1
+              WITH NON-UNIQUE SORTED KEY sk COMPONENTS comp2.
+
+itab_em = VALUE #( ( comp1 = 1 comp2 = &#x27;e&#x27; comp3 = &#x27;z&#x27; )
+                   ( comp1 = 2 comp2 = &#x27;d&#x27; comp3 = &#x27;y&#x27; )
+                   ( comp1 = 3 comp2 = &#x27;c&#x27; comp3 = &#x27;x&#x27; )
+                   ( comp1 = 4 comp2 = &#x27;b&#x27; comp3 = &#x27;w&#x27; )
+                   ( comp1 = 5 comp2 = &#x27;a&#x27; comp3 = &#x27;v&#x27; ) ).
+
+itab_sec = itab_em.
+DATA(itab_str) = VALUE string_table( ( `aaa` ) ( `bbb` ) ( `ccc` ) ( `ddd` ) ( `eee` ) ).
+
+&quot;Note: 
+&quot;The table expression must be determined by a key specification (explicit table 
+&quot;key, free key).
+
+&quot;Using a free key
+&quot;1
+DATA(line_index1) = line_index( itab_em[ comp1 = 1 ] ). 
+
+&quot;2
+DATA(line_index2) = line_index( itab_em[ comp2 = &#x27;d&#x27; ] ). 
+
+&quot;Note: A hashed table does not have a primary table index. The result is -1.
+DATA(line_index3) = line_index( itab_sec[ KEY primary_key comp1 = 1 ] ). 
+
+&quot;Hashed tables can be assigned a secondary table index using a secondary 
+&quot;table key.
+&quot;4
+DATA(line_index4) = line_index( itab_sec[ KEY sk comp2 = &#x27;d&#x27; ] ). 
+
+&quot;1
+DATA(line_index5) = line_index( itab_sec[ KEY sk comp2 = &#x27;a&#x27; ] ). 
+
+&quot;Specifying the pseudo component table_line
+&quot;1
+DATA(line_index6) = line_index( itab_str[ table_line = `aaa` ] ). 
+
+&quot;0
+DATA(line_index7) = line_index( itab_str[ table_line = `zzz` ] ). </code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Built-In Functions for ABAP CDS and ABAP SQL</h2>
+<div class="note">[!NOTE] - The examples only demonstrate ABAP SQL statements. Refer to the [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_builtin_functions.htm) for the complete picture. - As with the previous examples, the following examples showcase a variety of available functions. - The examples use [typed literals](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abentyped_literal_glosry.htm) to ensure appropriate types are used and to provide self-contained examples.</div>
+<h3>Functions for Numeric Values</h3>
+<pre><code>SELECT SINGLE
+  &quot;Division, result rounded to an integer
+  &quot;2
+  div( 4, 2 ) AS div, 
+
+  &quot;Division, 3rd argument: result is rounded to the specified
+  &quot;number of decimals
+  &quot;0.33
+  division( 1, 3, 2 ) AS division,
+
+  &quot;Result is rounded to first greater integer
+  &quot;2
+  ceil( decfloat34`1.333` ) AS ceil,
+
+  &quot;Result is the remainder of division
+  &quot;1
+  mod( 3, 2 ) AS mod,
+
+  &quot;Largest integer value not greater than the specified value
+  &quot;1
+  floor( decfloat34`1.333` ) AS floor,
+
+  &quot;Returns the absolute number
+  &quot;2
+  abs( int4`-2` ) AS abs,
+
+  &quot;Result is rounded to the specified position after the decimal separator
+  &quot;1.34
+  round( decfloat34`1.337`, 2 ) AS round
+
+  FROM zdemo_abap_carr
+  WHERE carrid = &#x27;LH&#x27;
+  INTO @DATA(numeric_functions).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Functions for Strings</h3>
+<pre><code>SELECT SINGLE
+  carrid,    &quot;LH
+  carrname,  &quot;Lufthansa
+  url,       &quot;http://www.lufthansa.com
+
+  &quot;Concatenates strings, ignores trailing blanks
+  &quot;LHLufthansa
+  concat( carrid, carrname ) AS concat,
+
+  &quot;Concatenates strings, number denotes the blanks that are inserted
+  &quot;LH Lufthansa
+  concat_with_space( carrid, carrname, 1 ) AS concat_with_space,
+
+  &quot;First letter of a word -&gt; uppercase, all other letters -&gt; lowercase;
+  &quot;note that a space and other special characters means a new word.
+  &quot;Http://Www.Lufthansa.Com
+  initcap( url ) AS initcap,
+
+  &quot;Position of the first occurrence of the substring specified
+  &quot;6
+  instr( carrname,&#x27;a&#x27; ) AS instr,
+
+  &quot;String of length n starting from the left of an expression;
+  &quot;trailing blanks are ignored
+  &quot;Luft
+  left( carrname, 4 ) AS left,
+
+  &quot;Number of characters in an expression, trailing blanks are ignored
+  &quot;24
+  length( url ) AS length,
+
+  &quot;Checks if expression contains a PCRE expression;
+  &quot;case-sensitive by default (case_sensitive parameter can be specified)
+  &quot;Notes on the 1 = found, 0 = not found
+  &quot;1
+  like_regexpr( pcre  = &#x27;\..&#x27;,         &quot;Period that is followed by any character
+                value = url ) AS like_regex,
+
+  &quot;Returns position of a substring in an expression,
+  &quot;3rd parameter = specifies offset (optional)
+  &quot;4th parameter = determines the number of occurrences (optional)
+  &quot;9
+  locate( carrname, &#x27;a&#x27;, 0, 2 ) AS locate,
+
+  &quot;Searches a PCRE pattern, returns offset of match;
+  &quot;many optional parameters: occurrence, case_sensitive, start, group
+  &quot;21
+  locate_regexpr( pcre = &#x27;\..&#x27;,        &quot;Period followed by any character
+                  value = url,
+                  occurrence = 2 )     &quot;2nd occurrence in the string
+                  AS locate_regexpr,
+
+  &quot;Searches a PCRE pattern, returns offset of match + 1;
+  &quot;many optional parameters: occurrence, case_sensitive, start, group
+  &quot;2
+  locate_regexpr_after( pcre = &#x27;.&#x27;,     &quot;Any character
+                        value = url,
+                        occurrence = 1 ) AS locate_regexpr_after,
+
+  &quot;Removes leading characters as specified in the 2nd argument,
+  &quot;trailing blanks are removed
+  &quot;ufthansa
+  ltrim( carrname, &#x27;L&#x27; ) AS ltrim,
+
+  &quot;Counts all occurrences of found PCRE patterns
+  &quot;2
+  occurrences_regexpr( pcre = &#x27;\..&#x27;,    &quot;Period that is followed by any character
+                        value = url ) AS occ_regex,
+
+  &quot;Replaces the 2nd argument with the 3rd in an expression
+  &quot;Lufth#ns#
+  replace( carrname, &#x27;a&#x27;, &#x27;#&#x27; ) AS replace,
+
+  &quot;Replaces a found PCRE expression;
+  &quot;more parameters possible: occurrence, case_sensitive, start
+  &quot;http://www#ufthansa#om
+  replace_regexpr( pcre = &#x27;\..&#x27;,        &quot;Period that is followed by any character
+                    value = url,
+                    with = &#x27;#&#x27; ) AS replace_regex,
+
+  &quot;Extracts a string with the length specified starting from the right
+  &quot;hansa
+  right( carrname, 5 ) AS right,
+
+  &quot;Expands string to length n (2nd argument); trailing blanks produced
+  &quot;are replaced by the characters from the (3rd) argument
+  &quot;Note that if n is less than the string, the expression is truncated
+  &quot;on the right.
+  &quot;Lufthansa###
+  rpad( carrname, 12, &#x27;#&#x27; ) AS rpad,
+
+  &quot;All trailing characters that match the character of the 2nd argument
+  &quot;are removed; trailing blanks are removed, too
+  &quot;Lufthans
+  rtrim( carrname, &#x27;a&#x27; ) AS rtrim,
+
+  &quot;Returns a substring; 2nd argument = position from where to start;
+  &quot;3rd argument: length of the extracted substring
+  &quot;fth
+  substring( carrname, 3, 3 ) AS substring,
+
+  &quot;Searches for a PCRE expression and returns the matched substring
+  &quot;More parameters possible: occurrence, case_sensitive, start, group
+  &quot;.lu
+  substring_regexpr( pcre = &#x27;\...&#x27;, &quot;Period that is followed by any two characters
+                      value = url ) AS substring_regexpr,
+
+  &quot;All lower case letters are transformed to upper case letters
+  &quot;LUFTHANSA
+  upper( carrname ) AS upper
+
+  FROM zdemo_abap_carr
+  WHERE carrid = &#x27;LH&#x27;
+  INTO @DATA(string_functions).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Functions for Date, Time, and Time Stamps</h3>
+<pre><code>DATA da TYPE d VALUE &#x27;20240122&#x27;.
+DATA ti TYPE t VALUE &#x27;123456&#x27;.
+DATA utc TYPE utclong VALUE &#x27;2024-02-15 05:30:00&#x27;.
+DATA tmst TYPE timestamp VALUE &#x27;20240808112458&#x27;.
+DATA tmstlong TYPE timestampl VALUE &#x27;20240101081317.81011&#x27;.
+
+SELECT SINGLE FROM i_timezone
+FIELDS
+  &quot;---------------------- Date ----------------------
+  &quot;Generic date functions (types d, utclong)
+  &quot;type t also possible; 1
+  is_valid( @ti ) AS isvalid, 
+  &quot;In the following examples in this &#x27;section&#x27;, d and utclong are possible.
+  &quot;2024
+  extract_year( @utc ) AS extr_year, 
+
+  &quot;1
+  extract_month( @da ) AS extr_month, 
+
+  &quot;15
+  extract_day( @utc ) AS extr_day, 
+
+  &quot;Monday
+  dayname( @da ) AS day_name, 
+
+  &quot;February
+  monthname( @utc ) AS month_name, 
+
+  &quot;3
+  weekday( @utc ) AS week_day, 
+
+  &quot;10
+  days_between( @utc,utclong`2024-02-25 08:14:26` ) AS days_bw, 
+
+  &quot;20240124
+  add_days( @da,2 ) AS add_days,                        
+
+  &quot;2024-05-15 05:30:00.0000000
+  add_months( @utc,3 ) AS add_months, 
+  
+  &quot;Functions for the type datn
+  &quot;32
+  datn_days_between( datn`20240111`,datn`20240212` ) AS days_datn_bw, 
+  
+  &quot;20240115
+  datn_add_days( datn`20240111`,4 ) AS days_datn_add,   
+  
+  &quot;20240611
+  datn_add_months( datn`20240111`,5 ) AS months_datn_add, 
+
+  &quot;Functions for the type dats
+  &quot;1
+  dats_is_valid( dats`20240812` ) AS dats_valid, 
+  
+  &quot;5
+  dats_days_between( dats`20240812`,dats`20240817` ) AS days_dats_bw, 
+  
+  &quot;20240816
+  dats_add_days( dats`20240812`,4 ) AS days_dats_add,   
+  
+  &quot;20241112
+  dats_add_months( dats`20240812`,3 ) AS months_dats_add, 
+
+  &quot;---------------------- Time ----------------------
+  &quot;Generic time functions (types t and utclong)
+  &quot;As above, types d and utclong also possible; 1
+  is_valid( @ti ) AS time_is_valid, 
+  
+  &quot;5
+  extract_hour( @utc ) AS extr_hour, 
+  
+  &quot;34
+  extract_minute( @ti ) AS extr_min, 
+  
+  &quot;0
+  extract_second( @utc ) AS extr_sec, 
+
+  &quot;Function for the type tims
+  &quot;1
+  tims_is_valid( tims`231256` ) AS tims_is_valid, 
+
+  &quot;---------------------- Time Stamp ----------------------
+  &quot;Note: The type utclong can be used in the generic functions above.
+  &quot;Functions specific to the type utclong
+  &quot;Generates a UTC time stamp; e.g. 2024-01-01 12:58:58.5070000
+  utcl_current( ) AS utcl_current, 
+  
+  &quot;2024-02-15 05:30:05.0000000
+  utcl_add_seconds( @utc,5 ) AS sec_add_utc, 
+
+  &quot;51.0000000
+  utcl_seconds_between( utclong`2024-02-25 08:14:26`,utclong`2024-02-25 08:15:17` ) AS sec_bw_utc,
+  
+  &quot;Functions specific to the type timetamp
+  &quot;1
+  tstmp_is_valid( @tmst ) AS ts_is_valid, 
+  
+  &quot;20240312125858
+  tstmp_current_utctimestamp( ) AS ts_current, 
+  
+  &quot;The following two functions have an optional parameter on_error.
+  &quot;Check the ABAP Keyword Documentation
+  &quot;19
+  tstmp_seconds_between( tstmp1 = @tmst,
+                         tstmp2 = CAST( dec`20240808112517` AS DEC( 15,0 ) ) ) AS sec_bw_ts, 
+  
+  &quot;20240808112508
+  tstmp_add_seconds( tstmp    = @tmst,
+                     seconds  = CAST( dec`10` AS DEC( 15,0 ) ) ) AS sec_add_ts, 
+
+  &quot;---------------------- Functions for conversions ----------------------
+  &quot;Note: For the following functions, optional parameters are possible.
+  &quot;For more details, check the ABAP Keyword Documentation.
+  &quot;20240808
+  tstmp_to_dats( tstmp = @tmst,
+                 tzone =  CAST( char`EST` AS CHAR( 6 ) ) ) AS tstmp_to_dats, 
+  
+  &quot;072458
+  tstmp_to_tims( tstmp = @tmst,
+                 tzone = CAST( char`EST` AS CHAR( 6 ) ) ) AS tstmp_to_tims, 
+  
+  &quot;X
+  tstmp_to_dst( tstmp = @tmst,
+                tzone = CAST( char`EST` AS CHAR( 6 ) ) ) AS tstmp_to_dst, 
+  
+  &quot;20240122173456
+  dats_tims_to_tstmp( date = @da,
+                      time = @ti,
+                      tzone = CAST( char`EST` AS CHAR( 6 ) ) ) AS dats_tims_to_tstmp, 
+  
+  &quot;2024-01-01 08:13:17.8101100
+  tstmpl_to_utcl( tstmpl = @tmstlong ) AS tstmpl_to_utcl, 
+  
+  &quot;20240215053000.0000000
+  tstmpl_from_utcl( utcl = @utc ) AS tstmpl_from_utcl, 
+  
+  &quot;20240812
+  dats_to_datn( dats = dats`20240812` ) AS dats_to_datn, 
+  
+  &quot;20240111
+  dats_from_datn( datn = datn`20240111` ) AS dats_from_datn, 
+  
+  &quot;231256
+  tims_to_timn( tims = tims`231256` ) AS tims_to_timn,  
+
+  &quot;155432
+  tims_from_timn( timn = timn`155432` ) AS tims_from_timn 
+
+WHERE TimeZoneID = char`EST`
+INTO @DATA(time_and_date_functions).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>More (Special) Functions</h3>
+<pre><code>SELECT SINGLE
+  carrid,
+
+  &quot;Type conversion: string of fixed length (e.g. of type c) to variable
+  &quot;length string of type string
+  to_clob( carrid ) AS clob,
+
+  &quot;Byte string -&gt; character string
+  bintohex( raw`1234` ) AS bintohex,
+
+  &quot;Character string -&gt; byte string
+  hextobin( char`1234` ) AS hextobin,
+
+  &quot;Byte field of type RAW to a byte string (BLOB) of type RAWSTRING
+  to_blob( raw`1234` ) AS blob,
+
+  &quot;Unit and currency conversion functions
+  &quot;More parameters are available.
+
+  &quot;Converts miles to kilometers
+  unit_conversion( quantity = d34n`1`,
+                    source_unit = unit`MI`,
+                    target_unit = unit`KM` ) AS miles_to_km,
+
+  &quot;Creating a unique UUID for each row
+  uuid( ) AS uuid
+
+  FROM zdemo_abap_carr
+  WHERE carrid = char`LH`
+  INTO @DATA(special_functions).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>coalesce Function</h3>
+<pre><code>&quot;The null value is a special value that is returned by a database. It indicates an
+&quot;undefined value or result. Note that, in ABAP, there are no special null values. Do
+&quot;not confuse the null value with a type-dependent initial value. When using SELECT
+&quot;statements to read data, null values can be produced by, for example, outer joins.
+&quot;When the null values are passed to a data object, they are transformed to the
+&quot;type-dependent initial values. For more information, refer to the ABAP Keyword Documentation.
+&quot;The following example uses a left outer join to intentionally create null values. For
+&quot;this purpose, two demo database tables of the ABAP cheat sheet repository are cleared and
+&quot;populated with specific values to visualize null values.
+DELETE FROM zdemo_abap_tab1.
+DELETE FROM zdemo_abap_tab2.
+MODIFY zdemo_abap_tab1 FROM TABLE @( VALUE #( ( key_field = 1 char1 = &#x27;a&#x27; char2 = &#x27;y&#x27; )
+                                              ( key_field = 2 char1 = &#x27;b&#x27; char2 = &#x27;z&#x27; ) ) ).
+MODIFY zdemo_abap_tab2 FROM TABLE @( VALUE #( ( key_field = 1 char1 = &#x27;a&#x27; )
+                                              ( key_field = 2 char1 = &#x27;a&#x27; )
+                                              ( key_field = 3 char1 = &#x27;b&#x27; )
+                                              ( key_field = 4 ) ) ).
+
+&quot;Note that for the entry &#x27;key_field = 4&#x27; no char1 value was passed.
+&quot;char1 is a shared column of the two database tables, and which is used in
+&quot;the ON condition of the join. Since there is no entry in char1 for &#x27;key_field = 4&#x27;,
+&quot;the joined values are null in that case.
+&quot;The coalesce function is used to replace null values produced by an outer join with
+&quot;a different value.
+SELECT tab2~key_field,
+       coalesce( tab1~char1, &#x27;-&#x27; ) AS coalesced1,
+       coalesce( tab1~char2, &#x27;#&#x27; ) AS coalesced2
+    FROM zdemo_abap_tab2 AS tab2
+    LEFT OUTER JOIN zdemo_abap_tab1 AS tab1 ON tab1~char1 = tab2~char1
+    INTO TABLE @DATA(join_w_null).
+
+*Example table content
+*KEY_FIELD    COALESCED1    COALESCED2
+*1            a             y         
+*2            a             y         
+*3            b             z         
+*4            -             #       </code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>More Information</h2>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbuilt_in_functions.htm">Built-in functions in ABAP</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbuilt_in_functions_overview.htm">Overview of functions</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_builtin_functions.htm">Built-in functions that can be used by ABAP CDS and ABAP SQL</a></li>
+</ul>
+<h2>Executable Example</h2>
+<p><a href="./src/zcl_demo_abap_builtin_func.clas.abap">zcl_demo_abap_builtin_func</a></p>
+<div class="note">[!NOTE] - The steps to import and run the code are outlined [here](README.md#-getting-started-with-the-examples). - [Disclaimer](./README.md#%EF%B8%8F-disclaimer)</div>
+</body>
+</html>

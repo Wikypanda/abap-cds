@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>27 Exceptions - ABAP Cheat Sheet</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #95a5a6;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4, h5, h6 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+<p>&lt;a name=&quot;top&quot;&gt;&lt;/a&gt;</p>
+<h1>Exceptions and Runtime Errors</h1>
+<ul>
+<li><a href="#exceptions-and-runtime-errors">Exceptions and Runtime Errors</a></li>
+<li><a href="#exceptions">Exceptions</a></li>
+<li><a href="#exception-classes">Exception Classes</a></li>
+<li><a href="#exception-categories">Exception Categories</a></li>
+<li><a href="#components-of-exception-classes">Components of Exception Classes</a></li>
+<li><a href="#raising-class-based-exceptions">Raising Class-Based Exceptions</a></li>
+<li><a href="#handling-exceptions-using-try-control-structures">Handling Exceptions Using TRY Control Structures</a></li>
+<li><a href="#try-control-structures">TRY Control Structures</a></li>
+<li><a href="#catch--into--storing-exception-objects-and-evaluation">CATCH ... INTO ...: Storing Exception Objects and Evaluation</a></li>
+<li><a href="#cleanup-statements">CLEANUP Statements</a></li>
+<li><a href="#retry-statements">RETRY Statements</a></li>
+<li><a href="#resume-statements-and-resumable-additions">RESUME Statements and RESUMABLE Additions</a></li>
+<li><a href="#using-messages-as-exception-texts">Using Messages as Exception Texts</a></li>
+<li><a href="#system-interfaces-for-messages">System Interfaces for Messages</a></li>
+<li><a href="#excursion-message-statements">Excursion: MESSAGE Statements</a></li>
+<li><a href="#syntax-variants-of-raise-exceptionthrow">Syntax Variants of RAISE EXCEPTION/THROW</a></li>
+<li><a href="#runtime-errors">Runtime Errors</a></li>
+<li><a href="#programmatically-raising-runtime-erros">Programmatically Raising Runtime Erros</a></li>
+<li><a href="#assertions">Assertions</a></li>
+<li><a href="#excursions">Excursions</a></li>
+<li><a href="#local-exception-classes">Local Exception Classes</a></li>
+<li><a href="#messages-in-rap">Messages in RAP</a></li>
+<li><a href="#violations-of-abap-contract-checks-causing-runtime-errors">Violations of ABAP Contract Checks Causing Runtime Errors</a></li>
+<li><a href="#classic-exceptions">Classic Exceptions</a></li>
+<li><a href="#more-information">More Information</a></li>
+<li><a href="#executable-example">Executable Example</a></li>
+</ul>
+<p>This cheat sheet includes an overview about syntax in the context of exceptions and runtime errors in ABAP.</p>
+<div class="note">[!NOTE] Several code snippets in the cheat sheet use artifacts from the [executable example](#executable-example).</div>
+<h2>Exceptions</h2>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenexception_glosry.htm">Exceptions</a> ...</p>
+<ul>
+<li>are error situations that occur during the execution of an ABAP program and interrupt the program flow. You can implement exception handling to appropriately react to these situations. Consider, for example, the implementation of a simple calculation. If there is a division by zero, the program will be terminated with a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenruntime_error_glosry.htm">runtime error</a> unless you handle the exception appropriately.</li>
+</ul>
+<pre><code>  &quot;The following statement raises an exception because of zero division. 
+  &quot;Since the exception is not handled, a runtime error occurs.
+  DATA(div_result) = 1 / 0.</code></pre>
+<ul>
+<li>can be raised programmatically or by the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_runtime_frmwk_glosry.htm">ABAP runtime framework</a>, typically from errors not detected by static program checks. The division by zero is such an example.</li>
+<li>should, in modern ABAP, only be designed as <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclass_based_exception_glosry.htm">class-based exceptions</a>. Exceptions are represented by <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenobject_glosry.htm">objects</a> of classes, i.e. instances of exception classes. Global and local exception classes are possible, with global classes usually using the naming convention <code>[...]CX_...</code>.</li>
+<li>are either <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencatchable_exception_glosry.htm">catchable</a> (they are based on predefined or self-defined exception classes) or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenuncatchable_exception_glosry.htm">uncatchable</a> (they directly produce runtime errors, i. e. error situations cannot be handled appropriately).</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Exception Classes</h2>
+<p>Exception classes ...</p>
+<pre><code>  METHODS divide
+    IMPORTING num1              TYPE i
+              num2              TYPE i
+    RETURNING VALUE(div_result) TYPE decfloat34
+    RAISING   cx_sy_zerodivide.</code></pre>
+<ul>
+<li>are special classes that form the basis of catchable exceptions.</li>
+<li>When an exception is raised, an object of an exception class is created, making exceptions instances of these classes.</li>
+<li>Using components of raised exception classes, you can retrieve and evaluate information on the exception.</li>
+<li>are available as predefined and globally available exception classes for exceptions of the ABAP runtime framework, typically following the the naming convention <code>CX_...</code> instead of <code>CL_...</code> to distinguish them from <em>regular</em> classes (e.g. <code>CX_SY_ZERODIVIDE</code> for zero division).</li>
+<li>can be self-defined as global or local exception classes (typically following the naming conventions <code>ZCX_...</code>/<code>YCX_...</code> or <code>LCX_...</code> ) to react on issues that are specific to your ABAP program.</li>
+<li>are direct or indirect subclasses of the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabstract_glosry.htm">abstract</a> <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensuperclass_glosry.htm">superclasses</a>:</li>
+<li><code>CX_STATIC_CHECK</code></li>
+<li><code>CX_DYNAMIC_CHECK</code></li>
+<li><code>CX_NO_CHECK</code></li>
+<li>They represent different exception categories and are themselves subclasses of the abstract superclass <code>CX_ROOT</code>.</li>
+<li>are typically specified in signatures of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenprocedure_glosry.htm">procedures</a> such as methods of classes using the <code>RAISING</code> addition.</li>
+</ul>
+<div class="note">[!NOTE] - Non-class-based exceptions are obsolete and should no longer be used in new developments. See the [guidelines (F1 docu for standard ABAP)](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenclass_exception_guidl.htm). -  Unhandled exceptions raised by the ABAP runtime environment trigger a corresponding runtime error. For example, the exception class `CX_SY_ZERODIVIDE` causes the runtime error `COMPUTE_INT_ZERODIVIDE`. For self-defined exception classes, unhandled exceptions generally trigger the runtime error `UNCAUGHT_EXCEPTION`.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Exception Categories</h3>
+<p>Exception classes are subclasses of three abstract classes, which in turn are subclasses of the root class <code>CX_ROOT</code>:</p>
+<pre><code>CX_ROOT
+  |
+  |--CX_STATIC_CHECK
+  |
+  |--CX_DYNAMIC_CHECK
+  |
+  |--CX_NO_CHECK</code></pre>
+<p>Notes on the superclasses of exception classes:</p>
+<p>&lt;table&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; Superclass of Exception Classes &lt;/td&gt; &lt;td&gt; Notes &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><code>CX_STATIC_CHECK</code></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>Users must handle exceptions.</li>
+<li>Exceptions that may occur in procedures should be handled locally within the implementation or explicitly declared in the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenparameter_interface_glosry.htm">procedure interface</a> so callers know what errors to expect.</li>
+<li>Exception classes of type <code>CX_STATIC_CHECK</code> enforce this by performing a static check at compile time. Procedure users must handle the exception locally in a <code>TRY</code> control structure or declare it in their procedure interface to propagate the exception. If not, a warning is produced.</li>
+</ul>
+<p>Example:</p>
+<pre><code>  &quot;Method definition using the RAISING parameter
+   CLASS-METHODS get_uuid
+      RETURNING VALUE(uuid) TYPE sysuuid_x16
+      RAISING   cx_uuid_error.
+
+  ...
+ 
+  &quot;Method implementation
+  METHOD get_uuid.
+    uuid = cl_system_uuid=&gt;create_uuid_x16_static( ) .
+  ENDMETHOD.
+
+  ...
+  
+  &quot;Method call: Somewhere in the code of a user that calls the method
+  &quot;Exception handled locally in a TRY control structure
+   TRY.
+      DATA(uuid) = get_uuid( ).
+
+      CATCH cx_uuid_error.
+        ...
+    ENDTRY.
+
+  &quot;If the statement is specified without the TRY control structure, 
+  &quot;a warning is shown.
+  DATA(uuid2) = get_uuid( ).</code></pre>
+<ul>
+<li>A method signature might look like this. The <code>RAISING</code> addition in method signatures declares one or more class-based exceptions that can be propagated to the caller.</li>
+<li>When users implement the method, they are aware that an error might occur, and a specific exception can be raised.</li>
+<li><code>CX_UUID_ERROR</code> is a predefined exception class derived from <code>CX_STATIC_CHECK</code>. Method users should prepare their code accordingly.</li>
+</ul>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><code>CX_DYNAMIC_CHECK</code></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>For exceptions that can be checked and avoided by preconditions:</li>
+<li>Unlike exception classes derived from <code>CX_STATIC_CHECK</code>, exception classes derived from <code>CX_DYNAMIC_CHECK</code> do not enforce local handling or declaration in procedure interfaces.</li>
+<li>However, proper exception handling is necessary when you cannot prevent the exceptions from being raised in your program logic.</li>
+<li>Runtime checks verify whether local handling or explicit declaration in procedure interfaces are available only if the exception is raised.</li>
+<li>If, at runtime, such an exception is neither locally handled nor properly declared in an interface and the exception is raised, a new exception of type <code>CX_SY_NO_HANDLER</code> is raised, with the <code>PREVIOUS</code> attribute referencing the original exception.</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>The predefined class <code>CX_SY_ZERODIVIDE</code> is derived from <code>CX_SY_ARITHMETIC_ERROR</code>, which is derived from <code>CX_DYNAMIC_CHECK</code>.</li>
+<li>Operands in a calculation should be checked (e.g., ensuring the second operand is not 0 in a division) before performing the arithmetic operation to avoid exceptions.</li>
+</ul>
+<p>&lt;br&gt;</p>
+<pre><code>  &quot;Method definition using the RAISING parameter
+  CLASS-METHODS divide
+    IMPORTING num1              TYPE i
+              num2              TYPE i
+    RETURNING VALUE(div_result) TYPE decfloat34
+    RAISING   cx_sy_zerodivide.
+
+  ...
+ 
+  &quot;Method implementation
+  METHOD divide.
+    div_result = num1 / num2.
+  ENDMETHOD.
+ 
+  ...
+  
+  &quot;Method call: Somewhere in the code of a user that calls the method
+  &quot;Unlike procedures specifying an exception class derived from CX_STATIC_CHECK,
+  &quot;procedures specifying an exception class derived from CX_DYNAMIC_CHECK do not
+  &quot;enforce the local handling of exceptions. So, the following statement does
+  &quot;not show a warning.
+  DATA(div_result1) = divide( num1 = 5 num2 = 2 ).
+
+  &quot;Exception handled locally in a TRY control structure
+  TRY.
+      DATA(div_result2) = divide( num1 = 5 num2 = 0 ).
+    CATCH cx_sy_zerodivide.
+  ENDTRY.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p><code>CX_NO_CHECK</code></p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<ul>
+<li>For errors that may occur anytime, cannot be handled locally in a meaningful way, or cannot be avoided even after a check.</li>
+<li>An example of such an error is a lack of memory. If such exceptions were checked statically or dynamically, it would require specification in each procedure interface, which is not ideal for clear program structure.</li>
+<li>Note that exceptions derived from <code>CX_NO_CHECK</code> are always implicitly declared in all procedure interfaces.</li>
+</ul>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<div class="note">[!NOTE] - Basic rule: [Use a suitable exception category (F1 docu for standard ABAP)](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenexception_category_guidl.htm). - Directly deriving from `CX_ROOT` is not possible. - As covered in the following sections, exception classes have specific components so that exceptions can be evaluated.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Components of Exception Classes</h3>
+<ul>
+<li>The following list covers a selection of exception class components relevant, for example, to evaluate exceptions raised using exception objects.</li>
+<li>Exception classes include instance methods because of inheriting from the root class <code>CX_ROOT</code>:</li>
+<li><code>get_text</code>: Returns the exception text</li>
+<li><code>get_source_position</code>: Returns the program name, the name of a possible <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abeninclude_program_glosry.htm">include program</a>, and the line number of the statement that raised the exception.</li>
+<li>Additionally, instance attributes are available:</li>
+<li><code>textid</code>: Key for the database table <code>T100</code> used for exception texts (retrievable using <code>get_text</code>); usually set by the constructor</li>
+<li><code>previous</code>: Reference to a previous exception; the type is a reference to <code>CX_ROOT</code>; also usually set by the constructor</li>
+<li><code>is_resumable</code>: Flag for <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenresumable_exception_glosry.htm">resumable exceptions</a>; indicates whether the exception can be resumed and leave a <code>CATCH BEFORE UNWIND</code> block</li>
+</ul>
+<div class="note">[!NOTE] - Further additions may be available depending on the exception object. - Usually, instances of exception classes are created when exceptions are raised. However, instances can also be created programmatically, e.g., with the `NEW` operator (if the classes are not abstract). - It is possible to define additional methods and attributes in exception classes, for example, for passing more information about error situations to handlers. Custom attributes should be defined as `READ-ONLY`. - Find examples in the section below, covering `CATCH ... INTO ...`.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Raising Class-Based Exceptions</h3>
+<pre><code>      DATA(div_result) = 1 / 0.</code></pre>
+<ul>
+<li>Class-based exceptions are raised in two ways:</li>
+<li>The ABAP runtime framework raises predefined exceptions.</li>
+<li>Taking zero division as an example, not handling the class-based exception <code>CX_SY_ZERODIVIDE</code> causes the ABAP runtime framework to raise an exception and cause a runtime error.</li>
+<li>You raise exceptions programmatically using dedicated statements. Both predefined and self-defined exceptions can be raised programmatically.</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapraise_exception_class.htm"><code>RAISE EXCEPTION</code></a> statements raise class-based exceptions and thus interrupt the execution of the current statement block.</li>
+<li>The <code>COND</code> and <code>SWITCH</code> operators include the optional addition <code>THROW</code> to raise class-based exceptions.</li>
+<li>Same as above, if these exceptions raised are not handled, a runtime error occurs.</li>
+</ul>
+<p>Syntax examples for raising exceptions programmatically:</p>
+<div class="note">[!NOTE] More variants of the statements shown are possible. They are covered in a [separate section below](#syntax-variants-of-raise-exceptionthrow) because they relate to topics covered in the following sections.</div>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; RAISE EXCEPTION statements 
+*&amp;---------------------------------------------------------------------*
+
+&quot;RAISE EXCEPTION statement with the TYPE addition, specifying
+&quot;the name of a visible exception class; an exception
+&quot;object is created (if necessary, see the ABAP Keyword Documentation
+&quot;for more details)
+RAISE EXCEPTION TYPE cx_sy_zerodivide.
+
+&quot;RAISE EXCEPTION statement specifying an exception object (an object
+&quot;reference variable pointing to an exception class)
+DATA(exc) = NEW cx_sy_zerodivide( ).
+RAISE EXCEPTION exc.
+
+&quot;Creating an exception object inline using the NEW operator
+RAISE EXCEPTION NEW cx_sy_zerodivide( ).
+
+&quot;Note: Instances of abstract classes cannot be created. So, the
+&quot;following statements are not possible.
+&quot;RAISE EXCEPTION NEW cx_sy_arithmetic_error( ).
+&quot;RAISE EXCEPTION NEW cx_static_check( ).
+&quot;RAISE EXCEPTION NEW cx_dynamic_check( ).
+&quot;RAISE EXCEPTION NEW cx_no_check( ).
+&quot;RAISE EXCEPTION NEW cx_root( ).
+
+&quot;Dynamic creation of an exception object with CREATE OBJECT
+DATA dyn_exc TYPE REF TO cx_root.
+CREATE OBJECT dyn_exc TYPE (&#x27;CX_SY_ZERODIVIDE&#x27;).
+RAISE EXCEPTION dyn_exc.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; COND/SWITCH operators with THROW addition
+*&amp;---------------------------------------------------------------------*
+
+&quot;THROW addition in conditional expressions with the COND and SWITCH operators
+&quot;enabling raising class-based exceptions in operand positions
+&quot;The addition works like RAISE EXCEPTION TYPE statements.
+
+&quot;COND operator
+DATA(int1) = 1.
+DATA(int2) = 0.
+&quot;The statement considers ABAP &quot;allowing&quot; zero division when both operands are 0.
+DATA(res1) = COND decfloat34( WHEN ( int1 &lt;&gt; 0 AND int2 &lt;&gt; 0 ) OR ( int1 = 0 AND int2 &lt;&gt; 0 ) THEN int1 / int2
+                              ELSE THROW cx_sy_zerodivide( ) ).
+
+&quot;SWITCH operator
+&quot;The following example shows SWITCH with the THROW addition
+&quot;and uses cx_sy_zerodivide for demo purposes.
+DO 5 TIMES.
+  DATA(num) = SWITCH #( sy-index
+                        WHEN 1 THEN `one`
+                        WHEN 2 THEN `two`
+                        WHEN 3 THEN `three`
+                        WHEN 4 THEN `four`
+                        ELSE THROW cx_sy_zerodivide( ) ).
+ENDDO.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Handling Exceptions Using TRY Control Structures</h3>
+<h4>TRY Control Structures</h4>
+<pre><code>  TRY.
+      ...
+      &quot;Statement block
+    CATCH ...
+      ... &quot;Statements  
+  ENDTRY.</code></pre>
+<ul>
+<li>Exceptions can be handled locally using <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaptry.htm"><code>TRY</code></a> control structures</li>
+<li>To be prepared for potential exceptions that are raised when executing statements, statements can be included and executed within such a <code>TRY</code> control structure representing a <em>protected area</em>.</li>
+<li>In doing so, it is possible for the ABAP runtime framework to catch exceptions, and you can react on error situations.</li>
+<li>A <code>TRY</code> control structure is initiated with <code>TRY</code> and ended with <code>ENDTRY</code>. The statements expect a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcatch_try.htm"><code>CATCH</code></a> block, otherwise a syntax warning occurs.</li>
+</ul>
+<ul>
+<li>One or more class-based exceptions can be handled in one or more subsequent <code>CATCH</code> blocks.</li>
+<li>The <code>CATCH</code> statement should include a class-based exception suitable for the error handling.</li>
+</ul>
+<pre><code>  TRY.    
+    DATA(div1) = 1 / 0.
+
+    &quot;Predefined exception class cx_sy_zerodivide as suitable exception class to be used here.
+    &quot;If the exception is not handled, the program is terminated and the runtime error
+    &quot;COMPUTE_INT_ZERODIVIDE occurs.
+    CATCH cx_sy_zerodivide.
+      ... &quot;CATCH block
+  ENDTRY.
+
+  &quot;Example for catching an exception in the context of a table expression
+  TRY.
+    &quot;Copying a line of an internal table
+    DATA(line) = some_itab[ 12345 ].
+
+    &quot;Predefined exception class cx_sy_itab_line_not_found as suitable exception class to be used here.
+    &quot;If the exception is not handled, the program is terminated and the runtime error
+    &quot;ITAB_LINE_NOT_FOUND occurs.
+    CATCH cx_sy_itab_line_not_found.
+      ... &quot;CATCH block
+  ENDTRY.
+
+  &quot;Multiple classes in a list and CATCH blocks can be specified
+  &quot;Note: If there are multiple CATCH blocks for exceptions that are in an inheritance
+  &quot;relationship, you must pay attention that the more special exceptions are specified
+  &quot;before the more general ones.
+  TRY.
+      ... &quot;TRY block
+    CATCH cx_abc cx_bla cx_blabla.
+      ... &quot;CATCH block
+    CATCH cx_la cx_lala.
+      ... &quot;CATCH block
+    CATCH cx_lalala.
+      ... &quot;CATCH block
+  ENDTRY.</code></pre>
+<ul>
+<li>Note the inheritance relationships in exception classes. For example, open the exception class <code>CX_SY_ZERODIVIDE</code> to check that it inherits from <code>CX_SY_ARITHMETIC_ERROR</code>, which is derived from <code>CX_DYNAMIC_CHECK</code>.</li>
+<li>Specifying the exception root class <code>CX_ROOT</code> after <code>CATCH</code> is possible to catch all exceptions. However, it is advisable to choose specific exception classes to clarify which exceptions to expect.</li>
+</ul>
+<pre><code>    TRY.
+      &quot;TRY block
+      DATA(div2) = 1 / 0.
+
+      &quot;A CATCH block is in this example not only valid for cx_sy_zerodivide as specified above
+      &quot;but also for all derived exceptions classes.
+      &quot;In the following CATCH block, the predefined exception class cx_sy_arithmetic_error
+      &quot;is specified. cx_sy_zerodivide is derived from cx_sy_arithmetic_error.
+      &quot;Hence, cx_sy_arithmetic_error can be specified and handle the exception, too.
+      CATCH cx_sy_arithmetic_error.
+        ... &quot;CATCH block
+    ENDTRY.
+
+    &quot;Example demonstrating the exception root class cx_root specifying after CATCH to 
+    &quot;catch all catchable exception.
+     DO 3 TIMES.
+      TRY.
+          CASE sy-index.
+            WHEN 1.
+              RAISE EXCEPTION TYPE cx_sy_zerodivide.
+            WHEN 2.
+              RAISE EXCEPTION TYPE cx_uuid_error.
+            WHEN 3.
+              RAISE EXCEPTION TYPE cx_sy_itab_line_not_found.
+          ENDCASE.
+        CATCH cx_root.
+        &quot;Instead of explicit specification of potential exception classes involved
+        &quot;CATCH cx_sy_zerodivide cx_uuid_error cx_sy_itab_line_not_found.
+      ENDTRY.
+    ENDDO.</code></pre>
+<ul>
+<li>Regarding the program flow:</li>
+<li>The statement block following <code>TRY</code> is always executed. If an exception is raised within this <code>TRY</code> block, the system searches for a <code>CATCH</code> block that can handle the exception.</li>
+<li>If there is no <code>CATCH</code> block that can handle the exception, or if the code is not within a <code>TRY</code> structure, the exception is propagated to the caller.</li>
+<li>Exceptions can be handled locally using a <code>TRY</code> structure or be propagated to the caller, making the caller responsible for handling the error. This approach allows for better code structure by managing errors centrally rather than checking each procedure call individually.</li>
+<li>If the exception cannot be caught and handled, the program terminates with a runtime error.</li>
+<li>If the exception is handled or no exception is raised, processing continues after <code>ENDTRY</code>.</li>
+<li>Options for how to continue after an exception is raised and caught may include ignoring the error, correcting and retrying, evaluating the error situation (see notes on the <code>INTO</code> addition to the <code>CATCH</code> statement), showing an error message to the user, logging the error, etc.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>CATCH ... INTO ...: Storing Exception Objects and Evaluation</h4>
+<ul>
+<li>If you specify <code>INTO</code> in the <code>CATCH</code> statement, it stores a reference to the exception object.</li>
+<li>This helps to determine and evaluate the specific exception.</li>
+<li>You can specify ...</li>
+<li>an existing object reference variable with a suitable static type. You can use a reference to the root class <code>CX_ROOT</code> to cover all possible exception objects.</li>
+<li>a data object created inline using <code>DATA</code> or <code>FINAL</code>, which automatically receives a suitable type.</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>In the code snippet above, the exception class <code>CX_SY_ZERODIVIDE</code> is used. Consider a calculator. It should not only handle errors like zero division, but also arithmetic overflows. The predefined exception class <code>CX_SY_ARITHMETIC_OVERFLOW</code> is available. It is derived from <code>CX_SY_ARITHMETIC_ERROR</code>. If you specify the exception class <code>CX_SY_ARITHMETIC_ERROR</code>, which is higher in the inheritance hierarchy and can handle both error situations (<code>CX_SY_ARITHMETIC_OVERFLOW</code> and <code>CX_SY_ZERODIVIDE</code>), the specific exception raised becomes unclear.</li>
+<li>Using the <code>INTO</code> clause and the stored exception object, you can perform tasks like retrieving and displaying the exception text.</li>
+<li>Many code snippets in the cheat sheet use <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrun_time_type_identific_glosry.htm">Runtime Type Identification (RTTI)</a>. Find more information in the <a href="06_Dynamic_Programming.md">Dynamic Programming cheat sheet</a>.</li>
+</ul>
+<pre><code>&quot;Note the specification of the root class cx_root
+DATA exception TYPE REF TO cx_root. 
+
+TRY.
+    ... &quot;TRY block
+
+  &quot;Storing a reference to the exception object.
+  &quot;Note: The type is cx_root since attributes and methods of the root class that are defined there can be accessed.
+  CATCH INTO exception.
+    ... &quot;CATCH block
+ENDTRY.
+
+&quot;Inline creation of exception object reference and getting exception texts
+TRY.
+    ... &quot;TRY block
+
+  &quot;The object reference variable can be created inline, for example, using DATA(...).
+  CATCH cx_sy_arithmetic_error INTO DATA(error_oref).
+    ... &quot;catch block
+
+ENDTRY.
+
+*******************************************************************************************************************
+&quot;Copyable example
+DO 2 TIMES.
+  TRY.
+      IF sy-index = 1.
+        DATA(div) = CONV decfloat34( 1 / 0 ).
+      ELSE.
+        DATA(powers) = ipow( base = 10 exp = 100 ).
+      ENDIF.
+    CATCH cx_sy_arithmetic_error INTO DATA(error_arithm).
+      DATA(text) = error_arithm-&gt;get_text( ).
+      &quot;Using RTTI to retrieve the relative name of the class
+      DATA(cl_name) = CAST cl_abap_classdescr( cl_abap_typedescr=&gt;describe_by_object_ref( 
+            error_arithm ) )-&gt;get_relative_name( ).
+      
+      &quot;Results:
+      &quot;---- sy-index = 1 ----
+      &quot;text: &quot;Division by zero&quot;
+      &quot;cl_name = CX_SY_ZERODIVIDE
+      &quot;---- sy-index = 2 ----
+      &quot;text: Overflow in the operation IPOW
+      &quot;cl_name = CX_SY_ARITHMETIC_OVERFLOW
+  ENDTRY.
+ENDDO.</code></pre>
+<p>Examples for evaluating exception information accessible via components of the exception object specified after <code>INTO</code>. See <a href="#components-of-exception-classes">Components of Exception Classes</a>.</p>
+<pre><code>TRY.
+    DATA(div_result) = CONV decfloat34( 1 / 0 ).
+  CATCH cx_sy_zerodivide INTO DATA(error).
+    &quot;Getting short text
+    DATA(text) = error-&gt;get_text( ).
+
+    &quot;Getting source code position of where the error occured
+    error-&gt;get_source_position(
+      IMPORTING
+        program_name = DATA(program_name)
+        include_name = DATA(include_name)
+        source_line  = DATA(source_line)
+    ).
+ENDTRY.</code></pre>
+<p>Demonstrating the instance attribute <code>previous</code>:</p>
+<pre><code>&quot;Demonstrating the instance attribute &#x27;previous&#x27; with
+&quot;nested TRY control structures.
+&quot;Consider the following scenario: A method is called and
+&quot;an exception is raised. Once evaluated, another exception
+&quot;is raised, and the previous exception (i.e. a reference to
+&quot;the previous exception object) is passed on to the caller.
+&quot;The caller can then evaluate the exceptions raised.
+&quot;The following example includes nested TRY control structures.
+&quot;In CATCH blocks, further exceptions are raised. There, the
+&quot;exception object is passed. In a WHILE loop, several pieces
+&quot;of information are retrieved, including the use of RTTI. 
+&quot;Once the information has been retrieved, the previous attribute
+&quot;is used to assign the previous exception object. Note the cast.
+
+DATA info TYPE string_table.
+
+TRY.
+    TRY.
+        TRY.
+            RAISE EXCEPTION NEW cx_sy_zerodivide( ).
+          CATCH cx_sy_zerodivide INTO DATA(err1).
+            RAISE EXCEPTION NEW cx_sy_arithmetic_overflow( previous = err1 ).
+        ENDTRY.
+      CATCH cx_sy_arithmetic_overflow INTO DATA(err2).
+        RAISE EXCEPTION NEW cx_sy_itab_line_not_found( previous = err2 ).
+    ENDTRY.
+  CATCH cx_sy_itab_line_not_found INTO DATA(err3).
+ENDTRY.
+
+DATA(acc_err) = CAST cx_root( err3 ).
+WHILE acc_err IS BOUND.
+  DATA(txt) = acc_err-&gt;get_text( ).
+
+  acc_err-&gt;get_source_position(
+    IMPORTING
+      program_name = DATA(prog_name)
+      include_name = DATA(incl_name)
+      source_line  = DATA(src_line)
+  ).
+
+  &quot;Using RTTI to gather more information on the exception
+  &quot;See the Dynamic Programming cheat sheet about RTTI.
+  DATA(tdo) = CAST cl_abap_classdescr( cl_abap_typedescr=&gt;describe_by_object_ref( acc_err ) ).
+  DATA(cl_relative_name) = tdo-&gt;get_relative_name( ).
+  DATA(attributes) = tdo-&gt;attributes.
+  DATA(superclass) = tdo-&gt;get_super_class_type( )-&gt;get_relative_name( ).
+
+  &quot;Populating info table
+  APPEND repeat( val = `-` occ = 110 ) TO info.
+  APPEND |Text: { txt }| TO info.
+  APPEND |Position of raised exception: { prog_name } / { incl_name } / { src_line }| TO info.
+  APPEND |Exception class name: { cl_relative_name }| TO info.
+  APPEND |Superclass of exception class: { superclass }| TO info.
+
+  &quot;Using the previous attribute to assign the previous exception
+  &quot;object
+  acc_err = acc_err-&gt;previous.
+  &quot;If there was no cast to cx_root, a cast would be required here,
+  &quot;for example, as follows.
+  &quot;acc_err = CAST #( acc_err-&gt;previous ).
+ENDWHILE.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>CLEANUP Statements</h4>
+<ul>
+<li><code>CLEANUP</code> statements introduce statement blocks within a <code>TRY</code> control structure.</li>
+<li>They include implementations to create consistent states before further processing.</li>
+<li>The blocks&#x27; implementations are executed when an exception is raised, but the exception is handled externally, not within the same <code>TRY</code> structure.</li>
+<li>See notes in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcleanup.htm">ABAP Keyword Documentation</a> for details on executing the <code>CLEANUP</code> blocks.</li>
+<li><code>CLEANUP</code> blocks must be executed completely. Statements leaving the block (e.g., using <code>RETURN</code>) are not allowed, and any raised exceptions must be handled within the block.</li>
+<li>The <code>INTO</code> addition can optionally store a reference to the exception object.</li>
+</ul>
+<pre><code>&quot;The following example shows nested TRY control structures.
+&quot;The inner TRY control structure includes a CLEANUP block.
+&quot;The example demonstrates that an exception raised cannot
+&quot;be handled by the TRY control structure where it is raised.
+&quot;No meaningful &#x27;cleanup&#x27; action is performed in the example&#x27;s
+&quot;CLEANUP block. For demonstration purposes, an info table is 
+&quot;populated demonstrating the execution of the block.
+
+DATA info_tab TYPE string_table.
+DATA cleanup TYPE REF TO cx_root.
+DO 2 TIMES.
+  APPEND |---- Loop pass { sy-index } ----| TO info_tab.
+  TRY.
+      TRY.
+
+          IF sy-index = 1.
+            DATA(calc) = CONV decfloat34( 1 / 0 ).
+          ELSE.
+            DATA(strtab) = VALUE string_table( ( `a` ) ( `b` ) ( `c` ) ).
+            DATA(line_4) = strtab[ 4 ].
+          ENDIF.
+
+        CATCH cx_sy_zerodivide INTO cleanup.
+          APPEND `---- Catching cx_sy_zerodivide ----` TO info_tab.
+          APPEND cleanup-&gt;get_text( ) TO info_tab.
+
+        CLEANUP.
+          APPEND `#### Executing CLEANUP block ####` TO info_tab.
+          APPEND `d` TO strtab.
+
+          &quot;CLEANUP block must be executed completely
+          &quot;Leaving the block prematurely causes a runtime error. If it is statically known
+          &quot;that it is not possible to return to the block, a syntax error is shown.
+          &quot;So, the following statement is not allowed in the CLEANUP block.
+          &quot;RETURN.
+      ENDTRY.
+    CATCH cx_sy_itab_line_not_found INTO cleanup.
+      APPEND `---- Catching cx_sy_itab_line_not_found ----` TO info_tab.
+      APPEND cleanup-&gt;get_text( ) TO info_tab.
+      TRY.
+          line_4 = strtab[ 4 ].
+          APPEND `Since the row was added in the CLEANUP block, it is now in the table.` TO info_tab.
+        CATCH cx_sy_itab_line_not_found INTO DATA(line_not_found).
+          APPEND `The row is not in the table.` TO info_tab.
+      ENDTRY.
+  ENDTRY.
+ENDDO.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; INTO addition
+*&amp;---------------------------------------------------------------------*
+
+&quot;The example is the same as above. Here, the CLEANUP statement is specified
+&quot;with the addition INTO. If required, you can evaluate the exception information
+&quot;as shown above.
+
+DATA info_tab_b TYPE string_table.
+DATA cleanup_b TYPE REF TO cx_root.
+DO 2 TIMES.
+  APPEND |---- Loop pass { sy-index } ----| TO info_tab_b.
+  TRY.
+      TRY.
+
+          IF sy-index = 1.
+            DATA(calc_b) = CONV decfloat34( 1 / 0 ).
+          ELSE.
+            DATA(strtab_b) = VALUE string_table( ( `a` ) ( `b` ) ( `c` ) ).
+            DATA(line_4_b) = strtab_b[ 4 ].
+          ENDIF.
+
+        CATCH cx_sy_zerodivide INTO cleanup_b.
+          APPEND `---- Catching cx_sy_zerodivide ----` TO info_tab_b.
+          APPEND cleanup_b-&gt;get_text( ) TO info_tab_b.
+
+        CLEANUP INTO cleanup_b.
+          APPEND `#### Executing CLEANUP block ####` TO info_tab_b.
+          &quot;USing RTTI to find out the absolute name of the class of the raised execption
+          DATA(cl_name) = cl_abap_classdescr=&gt;get_class_name( p_object = cleanup_b ).
+          APPEND cl_name TO info_tab_b.
+          APPEND `d` TO strtab_b.
+
+          &quot;CLEANUP block must be executed completely
+          &quot;Leaving the block prematurely causes a runtime error. If it is statically known
+          &quot;that it is not possible to return to the block, a syntax error is shown.
+          &quot;So, the following statement is not allowed in the CLEANUP block.
+          &quot;RETURN.
+      ENDTRY.
+    CATCH cx_sy_itab_line_not_found INTO cleanup_b.
+      APPEND `---- Catching cx_sy_itab_line_not_found ----` TO info_tab_b.
+      APPEND cleanup_b-&gt;get_text( ) TO info_tab_b.
+  ENDTRY.
+ENDDO.</code></pre>
+<p>Examples:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>RETRY Statements</h4>
+<p><code>RETRY</code> statements ...</p>
+<ul>
+<li>exit the exception handling in the <code>CATCH</code> block and continue with the <code>TRY</code> block of the current control structure.</li>
+<li>cause the entire <code>TRY</code> control structure to process again. Remove the exception cause before or after <code>RETRY</code> in the <code>TRY</code> block executed again.</li>
+<li>can only be specified within <code>CATCH</code> blocks of <code>TRY</code> control structures.</li>
+</ul>
+<pre><code>&quot;The following example includes a division of 1 by another number.
+&quot;In a DO loop 1 is divided by all numbers from 10 to -10.
+&quot;When the zero division exception is caught, the exception cause is
+&quot;removed by changing the first operand&#x27;s value to 0, too (Note: ABAP
+&quot;&#x27;allows&#x27; zero division) before the RETRY statement. The RETRY statement
+&quot;triggers the execution of the TRY control structure again, now
+&quot;resulting in 0 as division result. After that, and to have a self-contained
+&quot;example, the operand value is changed back to 1.
+DATA division_result_tab TYPE TABLE OF decfloat34 WITH EMPTY KEY.
+DATA(number1) = 1.
+DATA(number2) = 11.
+DATA division_result TYPE decfloat34.
+DO.
+  number2 -= 1.
+  TRY.
+      division_result = number1 / number2.
+      APPEND division_result TO division_result_tab.
+    CATCH cx_sy_zerodivide.
+      &quot;Removing the exception cause by setting a value that
+      &quot;does not raise the zero division exception
+      number1 = 0.
+      DATA(retry_flag) = abap_true.
+      &quot;Processing the TRY control structure again
+      RETRY.
+  ENDTRY.
+
+  &quot;Resetting of number1 value to 1
+  IF retry_flag = abap_true.
+    number1 = 1.
+    retry_flag = abap_false.
+  ENDIF.
+
+  IF sy-index = 21.
+    EXIT.
+  ENDIF.
+ENDDO.</code></pre>
+<p>Example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>RESUME Statements and RESUMABLE Additions</h4>
+<ul>
+<li><code>RESUME</code> statements ...</li>
+<li>exit the exception handling in the <code>CATCH</code> block of a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenresumable_exception_glosry.htm">resumable exception</a> and continue processing from where the exception was raised.</li>
+<li>The exception context is preserved, and <code>CLEANUP</code> blocks are not executed.</li>
+<li>Can only be specified within <code>CATCH BEFORE UNWIND</code> blocks of <code>TRY</code> control structures.</li>
+<li>As a prerequisite, exceptions ...</li>
+<li>must be raised using <code>RAISE EXCEPTION</code> statements or <code>THROW</code> additions of the <code>COND</code> and <code>SWITCH</code> operators with the <code>RESUMABLE</code> addition.</li>
+<li>must be declared with the <code>RESUMABLE</code> addition in the <code>RAISING</code> clause of procedure signatures.</li>
+<li>You can use the <code>is_resumable</code> attribute of exception objects to check if resuming is possible.</li>
+</ul>
+<pre><code>CLASS zcl_demo_abap DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+    &quot;The following demo method declaration shows one prerequisite of resumable
+    &quot;exceptions. The RAISING clause specifies a demo exception class with the
+    &quot;RESUMABLE addition.
+    CLASS-METHODS meth_resumable
+      IMPORTING num1              TYPE i
+                num2              TYPE i
+      RETURNING VALUE(div_result) TYPE string
+      RAISING   RESUMABLE(zcx_demo_abap_error_b).
+ENDCLASS.
+
+
+CLASS zcl_demo_abap IMPLEMENTATION.
+
+  METHOD if_oo_adt_classrun~main.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; CATCH BEFORE UNWIND
+*&amp;---------------------------------------------------------------------*
+
+    &quot;Example using the method
+    &quot;The following example creates a table containing integers from -5 to 5. This
+    &quot;table is looped across to have different values for divisions. Here, this
+    &quot;value represents the second operand. The first operand is the sy-tabix
+    &quot;value. The result is added to an internal table. When the second operand&#x27;s
+    &quot;value is 0, the exception is raised. In the CATCH BEFORE UNWIND block, the
+    &quot;is_resumable attribute is evaluated. An info message is added to the internal
+    &quot;table, and the processing continues after executing the RESUME statement.
+
+    DATA restab TYPE string_table.
+    TYPES ty_inttab TYPE TABLE OF i WITH EMPTY KEY.
+    DATA(inttab) = REDUCE ty_inttab( INIT tab = VALUE ty_inttab( )
+                                     FOR  i = -5 UNTIL i &gt; 5
+                                     NEXT tab = VALUE #( BASE tab ( i ) ) ).
+
+    LOOP AT inttab INTO DATA(wa).
+      TRY.
+          DATA(divres) = meth_resumable(
+            num1 = sy-tabix
+            num2 = wa
+          ).
+          APPEND |{ sy-tabix } / { wa } = { divres }| TO restab.
+        CATCH BEFORE UNWIND zcx_demo_abap_error_b INTO DATA(error_resume).
+          DATA(is_resumable) = error_resume-&gt;is_resumable.
+          IF is_resumable IS NOT INITIAL.
+            APPEND |Exception raised. Is resumable? -&gt; &quot;{ is_resumable }&quot;| TO restab.
+            RESUME.
+          ENDIF.
+      ENDTRY.
+    ENDLOOP.
+
+    out-&gt;write( data = restab name = `restab` ).
+
+*Content of the result table:
+*1 / -5 = 0.2-
+*2 / -4 = 0.5-
+*3 / -3 = 1-
+*4 / -2 = 2-
+*5 / -1 = 5-
+*Exception raised. Is resumable? -&gt; &quot;X&quot;
+*6 / 0 = No result. Resumed!
+*7 / 1 = 7
+*8 / 2 = 4
+*9 / 3 = 3
+*10 / 4 = 2.5
+*11 / 5 = 2.2
+
+  ENDMETHOD.
+
+  METHOD meth_resumable.
+
+    &quot;Demo method implementation demonstrating a RAISE EXCEPTION statement
+    &quot;with the RESUMABLE addition (and an example for statement using the COND
+    &quot;operator commented out)
+
+    IF num2 = 0 AND num1 &lt;&gt; 0.
+      RAISE RESUMABLE EXCEPTION TYPE zcx_demo_abap_error_b.
+      div_result = `No result. Resumed!`.
+    ELSE.
+      div_result = num1 / num2.
+    ENDIF.
+
+    &quot;Statement with COND operator using RESUMABLE
+    &quot;div_result = COND #( WHEN num2 = 0 AND num1 &lt;&gt; 0 THEN num1 / num2
+    &quot;                     ELSE THROW RESUMABLE zcx_demo_abap_error( ) ).
+
+  ENDMETHOD.
+
+ENDCLASS.</code></pre>
+<p>Example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Using Messages as Exception Texts</h2>
+<ul>
+<li>Each exception has an <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenexception_text_glosry.htm">exception text</a> that describes the error and can be retrieved as outlined above. This helps you analyze the error. Imagine using exceptions in user interfaces; if a user encounters an error, the exception texts may be displayed on the UI.</li>
+<li>Typically, messages are texts organized in message classes and accessed using the <code>MESSAGE</code> statement. In <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclassic_abap_glosry.htm">classic ABAP</a>, these statements are relevant for classic UIs, which are not supported in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_cloud_glosry.htm">ABAP Cloud</a>. However, messages can also be used as exception texts for exception classes.</li>
+<li>In ABAP for Cloud Development, you can define exception texts using message classes to describe raised exceptions.</li>
+<li>Message classes group messages by an identifier.</li>
+<li>Messages are identified by a key consisting of the message class name and a 3-digit message number.</li>
+<li>If an exception is raised and ...</li>
+<li>not handled, the exception text is displayed in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenshort_dump_glosry.htm">short dump</a> of the runtime error.</li>
+<li>handled, the text can be retrieved using the <code>get_text</code> method as shown above.</li>
+<li>As outlined in the next section, exception classes must implement one of the system interfaces (or inherit from classes implementing them) for messages to use exception texts.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>System Interfaces for Messages</h3>
+<ul>
+<li>Exception classes must implement one of the system interfaces for messages to use exception texts:</li>
+<li><code>IF_T100_MESSAGE</code>:</li>
+<li>Contains the <code>T100KEY</code> structured attribute (type <code>SCX_T100KEY</code>), specifying a message in the <code>T100</code> database table. Components are: <code>msgid</code> for the message class, <code>msgno</code> for the message number, and <code>attr1</code>/<code>attr2</code>/<code>attr3</code>/<code>attr4</code> for potential placeholders in message texts.</li>
+<li>Used for statically assigning exception texts to messages of a message class. When you raise an exception programmatically, you pass an actual parameter to the optional <code>textid</code> parameter of the instance constructor, determining the exception text. If not passed, a predefined exception text can be used. The instance constructor must be implemented accordingly.</li>
+<li>Exception texts are typically assigned to messages using constant structures defining the message attributes (message id, number, and attributes for placeholders) in the public visibility section of the exception class.</li>
+<li>You can add attributes for placeholders as optional importing parameters to the instance constructor.</li>
+<li>To create the constant structures for each exception text, you can use the <code>textIdExceptionClass</code> code template in ADT. Write <code>text</code> in the public visibility section of the class, choose <em>CTRL + Space</em>, and select the template.</li>
+<li>Use the constants defined in the exception class for the message when referring to specific texts and passing using <code>textid</code>, rather than creating the message properties manually (e.g., using <code>VALUE scx_t100key( ... )</code>) in statements raising exceptions programmatically.</li>
+<li><code>IF_T100_DYN_MSG</code>:</li>
+<li>Includes <code>IF_T100_MESSAGE</code> and is a more modern, recommended interface for handling messages, particularly designed for class-based exceptions.</li>
+<li>The interface includes attributes to handle message-related attributes automatically for more comfortable message handling.</li>
+<li>The interface can associate any messages with exception classes.</li>
+<li>When exception classes implement the interface, more additions to ABAP statements are possible than with <code>IF_T100_MESSAGE</code>, such as <code>MESSAGE</code> and <code>WITH</code>. For example, the <code>MESSAGE</code> addition to <code>RAISE EXCEPTION</code> statements and <code>THROW</code> automatically assigns the correct values to the required exception class attributes, mapping the correct values to the <code>t100key</code> structure. <code>msgid</code> is assigned the message class, <code>msgno</code> is assigned the message number, and <code>attr1</code>/<code>attr2</code>/<code>attr3</code>/<code>attr4</code> are assigned the values of <code>if_t100_dyn_msg~msgv1</code> to <code>if_t100_dyn_msg~msgv4</code> (when including the <code>WITH</code> addition).</li>
+<li>Optionally, up to four placeholders (<code>&amp;1</code>, <code>&amp;2</code>, <code>&amp;3</code>, <code>&amp;4</code>) can be specified for messages. At runtime, placeholders are replaced by values specified with the attributes.</li>
+</ul>
+<div class="note">[!NOTE] When you create global exception classes in ADT, and you specify one of the exception superclasses to inherit from in the creation wizard, the resulting class code contains required implementations such as the instance constructor.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Excursion: MESSAGE Statements</h3>
+<ul>
+<li>Apart from using messages in exceptions and accessing them via <code>get_text</code>, you can also access them with <code>MESSAGE</code> statements.</li>
+<li>The <code>MESSAGE</code> addition in statements populates the attributes of the <code>IF_T100_DYN_MSG</code> interface with values (see the <code>WITH</code> addition as well).</li>
+<li>When using <code>MESSAGE</code>, do not pass a value to the <code>textid</code> input parameter. This parameter is only for predefined exception texts.</li>
+<li>In <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclassic_abap_glosry.htm">classic ABAP</a>, <code>MESSAGE</code> statements are suitable for classic UIs (e.g., error dialogs), which ABAP Cloud does not support. Therefore, several additions are unavailable in ABAP Cloud.</li>
+<li>In ABAP for Cloud Development, the variant <code>MESSAGE ... INTO ...</code> is possible. It adds short message texts to a field and populates <code>sy</code> components (<code>sy-msgid</code>, <code>sy-msgno</code>, <code>sy-msgty</code>, <code>sy-msgv1</code> to <code>sy-msgv4</code>).</li>
+</ul>
+<pre><code>&quot;The following examples demonstrate several MESSAGE statements. 
+&quot;The message class from the executable demo example is used. So, 
+&quot;the content of msg shows the specified example text, and includes
+&quot;the specified parameters.
+
+&quot;After MESSAGE, a message type is specified (which is not of relevance in ABAP for Cloud
+&quot;Development). These types can be the following: A, E, I, S, W, or X. See the ABAP Keyword
+&quot;Documentation for information. For example, E representing an error message.
+&quot;The character is followed by the message number. The message class name is directly
+&quot;specified within a pair of parentheses.
+MESSAGE e001(zdemo_abap_messages) INTO DATA(msg).
+&quot;msg: An error occured (Nr. 001)
+
+DATA(msgid) = sy-msgid. &quot;ZDEMO_ABAP_MESSAGES
+DATA(msgty) = sy-msgty. &quot;E
+
+MESSAGE e004(zdemo_abap_messages)
+        WITH &#x27;A&#x27; &#x27;B&#x27; &#x27;C&#x27; &#x27;D&#x27;
+        INTO msg.
+&quot;msg: Message (Nr. 004) p1: &quot;A&quot; p2: &quot;B&quot; p3: &quot;C&quot; p4: &quot;D&quot;
+
+msgid = sy-msgid. &quot;ZDEMO_ABAP_MESSAGES
+msgty = sy-msgty. &quot;E
+DATA(msgv1) = sy-msgv1. &quot;A
+DATA(msgv2) = sy-msgv2. &quot;B
+DATA(msgv3) = sy-msgv3. &quot;C
+DATA(msgv4) = sy-msgv4. &quot;D
+
+MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27;
+    TYPE &#x27;E&#x27;
+    NUMBER &#x27;005&#x27;
+    WITH &#x27;E&#x27; &#x27;F&#x27; &#x27;G&#x27; &#x27;H&#x27;
+    INTO msg.
+&quot;msg: E F G H
+
+msgid = sy-msgid. &quot;ZDEMO_ABAP_MESSAGES
+msgty = sy-msgty. &quot;E
+msgv1 = sy-msgv1. &quot;E
+msgv2 = sy-msgv2. &quot;F
+msgv3 = sy-msgv3. &quot;G
+msgv4 = sy-msgv4. &quot;H</code></pre>
+<p>Example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Syntax Variants of RAISE EXCEPTION/THROW</h2>
+<ul>
+<li>This section provides examples of <code>RAISE EXCEPTION</code> statements and the <code>THROW</code> addition to the <code>COND</code> and <code>SWITCH</code> operators.</li>
+<li>Note that the <code>RESUMABLE</code> addition is not covered. See more details above.</li>
+<li>The variants of statements covered in the example include the use of these additions. Check the ABAP Keyword Documentation for details and all possible syntax options.</li>
+<li><code>RAISE EXCEPTION TYPE ...</code></li>
+<li><code>RAISE EXCEPTION TYPE ... EXPORTING ...</code></li>
+<li><code>RAISE EXCEPTION object_reference_variable.</code></li>
+<li><code>RAISE EXCEPTION TYPE ... MESSAGE ...</code></li>
+<li><code>RAISE EXCEPTION TYPE ... MESSAGE ... WITH ...</code></li>
+<li><code>RAISE EXCEPTION TYPE ... MESSAGE ID ... TYPE ... NUMBER ...</code></li>
+<li><code>RAISE EXCEPTION TYPE ... MESSAGE ID ... TYPE ... NUMBER ... WITH ...</code></li>
+<li><code>RAISE EXCEPTION TYPE ... USING MESSAGE.</code></li>
+<li><code>... THROW exc( ) ...</code></li>
+<li><code>... THROW exc( ... ) ...</code></li>
+<li><code>... THROW exc( MESSAGE ... ) ...</code></li>
+<li><code>... THROW exc( MESSAGE ... WITH ... ) ...</code></li>
+<li><code>... THROW exc( MESSAGE ID ... TYPE ... NUMBER ... ) ...</code></li>
+<li><code>... THROW exc( MESSAGE ID ... TYPE ... NUMBER ... WITH ... ) ...</code></li>
+<li><code>... THROW exc( USING MESSAGE ) ...</code></li>
+</ul>
+<div class="note">[!NOTE] - The code snippets below use exception classes, a message class and messages from the executable demo example. - The snippets include additions that are only available when exception classes implement the `IF_T100_DYN_MSG` interface. - In the executable example, `zcx_demo_abap_error_a` implements the `IF_T100_MESSAGE` interface and  `zcx_demo_abap_error_b` implements `IF_T100_DYN_MSG`.</div>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; RAISE EXCEPTION statements 
+*&amp;---------------------------------------------------------------------*
+
+&quot;Multiple additions and variants are possible. The following examples
+&quot;demonstrate a selection.
+&quot;Note that the examples include additions that are only available when
+&quot;exception classes implement the if_t100_dyn_msg interface.
+
+&quot;----- TYPE addition -----
+&quot;Raises an exception of a specified exception class
+RAISE EXCEPTION TYPE zcx_demo_abap_error_b.
+
+&quot;----- TYPE addition including EXPORTING -----
+&quot;Assigns actual parameters to input parameters of the instance constructor
+&quot;particularly for classes implementing if_t100_message. The example uses
+&quot;a constant structure having the same name as the exception class.
+RAISE EXCEPTION TYPE zcx_demo_abap_error_a EXPORTING textid = zcx_demo_abap_error_a=&gt;zcx_demo_abap_error_a.
+
+&quot;Assigning values to replace placeholders of a message (see the executable example)
+&quot;In this case, replacing the placeholders &amp;1 and &amp;2 in a message.
+RAISE EXCEPTION TYPE zcx_demo_abap_error_a
+  EXPORTING
+    textid  = zcx_demo_abap_error_a=&gt;error_003
+    p_003_a = `a`
+    p_003_b = `b`.
+
+&quot;----- Specifying an exception object -----
+DATA(cx_oref) = NEW zcx_demo_abap_error_a( textid = zcx_demo_abap_error_a=&gt;error_005
+                                            p_005_a = `Some`
+                                            p_005_b = `error` ).
+
+RAISE EXCEPTION cx_oref.
+
+&quot;Object reference created inline
+RAISE EXCEPTION NEW zcx_demo_abap_error_a( textid  = zcx_demo_abap_error_a=&gt;error_004
+                                            p_004_a = `f`
+                                            p_004_b = `g` ).
+
+
+&quot;----- MESSAGE addition -----
+&quot;For passing message specification to an exception object
+&quot;Note that EXPORTING can also be specified
+&quot;After MESSAGE, a message type is specified (which is not of relevance in ABAP for Cloud
+&quot;Development). These types can be the following: A, E, I, S, W, or X. See the ABAP Keyword
+&quot;Documentation for information. For example, E representing an error message.
+&quot;The character is followed by the message number. The message class name is directly
+&quot;specified within a pair of parentheses.
+RAISE EXCEPTION TYPE zcx_demo_abap_error_a MESSAGE e002(zdemo_abap_messages).
+
+&quot;----- MESSAGE, ID, TYPE, NUMBER additions -----
+&quot;Specifying the message class, the message type, and the message number following
+&quot;dedicated additions
+&quot;The example is an alternative to the one above.
+RAISE EXCEPTION TYPE zcx_demo_abap_error_a MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27; TYPE &#x27;E&#x27; NUMBER &#x27;002&#x27;.
+
+&quot;Specifying the values using data objects, not as literals as above.
+&quot;Note that uppercase letters are expected.
+DATA(msgid) = &#x27;ZDEMO_ABAP_MESSAGES&#x27;.
+DATA(msgtype) = &#x27;E&#x27;.
+DATA(msgnum) = &#x27;002&#x27;.
+
+RAISE EXCEPTION TYPE zcx_demo_abap_error_a MESSAGE ID msgid TYPE msgtype NUMBER msgnum.
+
+&quot;----- WITH addition -----
+&quot;Placeholders are replaced by the values specified after WITH
+&quot;Note that the positions of the operands determine which placeholders are replaced.
+&quot;The first specified operand replaces &amp;1 and so on.
+
+RAISE EXCEPTION TYPE zcx_demo_abap_error_b MESSAGE e005(zdemo_abap_messages) WITH &#x27;Hello&#x27; &#x27;world&#x27;.
+
+RAISE EXCEPTION TYPE zcx_demo_abap_error_b MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27;
+                                                   TYPE &#x27;E&#x27;
+                                                   NUMBER &#x27;004&#x27;
+                                                   WITH &#x27;abc&#x27; &#x27;def&#x27; &#x27;ghi&#x27;.
+
+&quot;----- USING MESSAGE addition -----
+&quot;Implicitly passing message properties
+&quot;The examples show MESSAGE statement before RAISE EXCEPTION
+&quot;statements.
+&quot;In ABAP for Cloud Development, the message must be stored in
+&quot;a data object using the INTO addition.
+
+MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27; TYPE &#x27;E&#x27; NUMBER &#x27;004&#x27;
+        WITH &#x27;abc&#x27; &#x27;def&#x27; &#x27;ghi&#x27; &#x27;jkl&#x27;
+        INTO DATA(msg1).
+
+RAISE EXCEPTION TYPE zcx_demo_abap_error_b USING MESSAGE.
+
+DATA: mid     TYPE sy-msgid VALUE &#x27;ZDEMO_ABAP_MESSAGES&#x27;,
+      mtype   TYPE sy-msgty VALUE &#x27;E&#x27;,
+      msg_num TYPE sy-msgno VALUE &#x27;002&#x27;.
+
+MESSAGE ID mid TYPE mtype NUMBER msg_num INTO DATA(msg2).
+
+RAISE EXCEPTION TYPE zcx_demo_abap_error_b USING MESSAGE.
+
+&quot;Alternative MESSAGE statement
+MESSAGE e002(zdemo_abap_messages) INTO DATA(msg3).
+
+RAISE EXCEPTION TYPE zcx_demo_abap_error_b USING MESSAGE.
+
+&quot;Alternative MESSAGE statement
+&quot;Here, specifying the WITH addition.
+MESSAGE e005(zdemo_abap_messages) WITH &#x27;a&#x27; &#x27;b&#x27; &#x27;c&#x27; &#x27;d&#x27; INTO DATA(msg4).
+
+RAISE EXCEPTION TYPE zcx_demo_abap_error_b USING MESSAGE.
+
+&quot;The RAISE EXCEPTION statement with USING MESSAGE can be considered
+&quot;as a short form of the following statement. Note that with the
+&quot;MESSAGE statement the system fields are populated.
+MESSAGE e005(zdemo_abap_messages) WITH &#x27;a&#x27; &#x27;b&#x27; &#x27;c&#x27; &#x27;d&#x27; INTO DATA(msg5).
+
+RAISE EXCEPTION TYPE zcx_demo_abap_error_b MESSAGE ID sy-msgid
+                                                   TYPE sy-msgty
+                                                   NUMBER sy-msgno
+                                                   WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; COND operator, THROW addition 
+*&amp;---------------------------------------------------------------------*
+
+DATA(flag) = &#x27;X&#x27;.
+
+&quot;Specifying the exception class after THROW including a mandatory pair of parentheses
+&quot;even if no messages or actual parameters are passed. EXPORTING cannot be specified.
+DATA(cond_w_throw_1) = COND #( WHEN flag IS INITIAL THEN `works`
+                               ELSE THROW zcx_demo_abap_error_a( ) ).
+
+&quot;Passing actual parameters
+DATA(cond_w_throw_2) = COND #( WHEN flag IS INITIAL THEN `works`
+                               ELSE THROW zcx_demo_abap_error_a( textid  = zcx_demo_abap_error_a=&gt;error_004
+                                                                 p_004_a = `cond_a`
+                                                                 p_004_b = `cond_b` ) ).
+
+&quot;MESSAGE addition
+DATA(cond_w_throw_3) = COND #( WHEN flag IS INITIAL THEN `works`
+                               ELSE THROW zcx_demo_abap_error_a( MESSAGE e005(zdemo_abap_messages)
+                                                                 p_005_a = `An exception raised with COND` )  ).
+
+DATA(cond_w_throw_4) = COND #( WHEN flag IS INITIAL THEN `works`
+                               ELSE THROW zcx_demo_abap_error_b( MESSAGE e005(zdemo_abap_messages)
+                                                                 WITH &#x27;Lorem&#x27; &#x27;ipsum&#x27; )  ).
+
+&quot;MESSAGE addition including ID, TYPE, NUMBER
+DATA(cond_w_throw_5) = COND #( WHEN flag IS INITIAL THEN `works`
+                               ELSE THROW zcx_demo_abap_error_a( MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27;
+                                                                 TYPE &#x27;E&#x27;
+                                                                 NUMBER &#x27;002&#x27; ) ).
+
+DATA(cond_w_throw_6) =  COND #( WHEN flag IS INITIAL THEN `works`
+                                ELSE THROW zcx_demo_abap_error_a( MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27;
+                                                                          TYPE &#x27;E&#x27;
+                                                                          NUMBER &#x27;005&#x27;
+                                                                          p_005_a = `blabla` ) ).
+
+&quot;MESSAGE addition including ID, TYPE, NUMBER, WITH
+DATA(cond_w_throw_7) = COND #( WHEN flag IS INITIAL THEN `works`
+                               ELSE THROW zcx_demo_abap_error_b( MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27;
+                                                                         TYPE &#x27;E&#x27;
+                                                                         NUMBER &#x27;005&#x27;
+                                                                         WITH `lorem ipsum` ) ).
+
+&quot;USING MESSAGE addition
+MESSAGE e005(zdemo_abap_messages) WITH &#x27;Some message&#x27; INTO DATA(msg6).
+
+DATA(cond_w_throw_8) = COND #( WHEN flag IS INITIAL THEN `works`
+                               ELSE THROW zcx_demo_abap_error_b( USING MESSAGE ) ).
+
+*&amp;---------------------------------------------------------------------*
+*&amp; SWITCH operator, THROW addition 
+*&amp;---------------------------------------------------------------------*
+
+DATA(switch_w_throw_1) = SWITCH #( flag WHEN &#x27;&#x27; THEN `works`
+                                   ELSE THROW zcx_demo_abap_error_a( ) ).
+
+DATA(switch_w_throw_2) = SWITCH #( flag WHEN &#x27;&#x27; THEN `works`
+                                   ELSE THROW zcx_demo_abap_error_a( textid  = zcx_demo_abap_error_a=&gt;error_004
+                                                                     p_004_a = `switch_a`
+                                                                     p_004_b = `switch_b` ) ).
+
+DATA(switch_w_throw_3) = SWITCH #( flag WHEN &#x27;&#x27; THEN `works`
+                                   ELSE THROW zcx_demo_abap_error_a( MESSAGE e005(zdemo_abap_messages)
+                                                                     p_005_a = `An exception raised with SWITCH` ) ).
+
+DATA(switch_w_throw_4) = SWITCH #( flag WHEN &#x27;&#x27; THEN `works`
+                                   ELSE THROW zcx_demo_abap_error_b( MESSAGE e005(zdemo_abap_messages)
+                                                                     WITH &#x27;Test&#x27; &#x27;message&#x27; ) ).
+
+DATA(switch_w_throw_5) = SWITCH #( flag WHEN &#x27;&#x27; THEN `works`
+                                   ELSE THROW zcx_demo_abap_error_a( MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27;
+                                                                             TYPE &#x27;E&#x27;
+                                                                             NUMBER &#x27;005&#x27;
+                                                                             p_005_a = `lorem ipsum` ) ).
+
+DATA(switch_w_throw_6) = SWITCH #( flag WHEN &#x27;&#x27; THEN `works`
+                                   ELSE THROW zcx_demo_abap_error_b( MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27;
+                                                                                 TYPE &#x27;E&#x27;
+                                                                                 NUMBER &#x27;005&#x27;
+                                                                                 WITH `lorem ipsum` ) ).
+
+MESSAGE e005(zdemo_abap_messages) WITH &#x27;Some message&#x27; INTO DATA(msg7).
+
+DATA(switch_w_throw_7) = SWITCH #( flag WHEN &#x27;&#x27; THEN `works`
+                                   ELSE THROW zcx_demo_abap_error_b( USING MESSAGE ) ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Runtime Errors</h2>
+<p>Runtime errors ...</p>
+<ul>
+<li>occur when the execution of an ABAP program cannot continue and is terminated.</li>
+<li>are caused in the following situations:</li>
+<li>Unhandled catchable exceptions</li>
+<li>Uncatchable exceptions</li>
+<li>Programmatically raised by statements</li>
+<li>Failed assertions</li>
+<li>are identified by a name.</li>
+<li>lead to a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abendatabase_rollback_glosry.htm">database rollback</a>.</li>
+<li>trigger the generation of a short dump, an error log that is displayed and stored.</li>
+<li>When you execute a program, and a runtime error occurs, a popup appears in ADT informing you of the error.</li>
+<li>You can check the details by choosing the &quot;Show&quot; button in the popup.</li>
+<li>You can also directly go to the ABAP Debugger.</li>
+<li>You can also check the content of the <em>Feed Reader</em> tab in ADT. There, expand your project and find the runtime errors caused by you.</li>
+</ul>
+<p>Example of a catchable exception not handled:</p>
+<pre><code>  Short Text  Division by 0 (type I or INT8)  
+  Runtime Error  COMPUTE_INT_ZERODIVIDE  
+  Exception  CX_SY_ZERODIVIDE    
+  Program  ZCL_DEMO_ABAP=================CP
+  ...</code></pre>
+<ul>
+<li>In ADT, run a class (e.g. <code>zcl_demo_abap</code>) that, for example, contains the statement <code>DATA(res) = 1 / 0.</code>, without a <code>TRY</code> control structure to handle the exception.</li>
+<li>When running the class, a popup is displayed.</li>
+<li>Clicking the <em>Show</em> button opens the short dump, providing information such as the following:</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Programmatically Raising Runtime Erros</h3>
+<ul>
+<li>Runtime errors can be raised using ...</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapraise_shortdump.htm"><code>RAISE SHORTDUMP</code></a> statments or</li>
+<li>the <code>THROW SHORTDUMP</code> addition in the context of <code>COND</code> and <code>SWITCH</code> operators</li>
+<li>Note that the statements have similar variants (using messages, specifying actual parameters for importing parameters, etc.) than those of <code>RAISE EXCEPTION</code> statements. They are not outlined here. For more information, see the sections above and the ABAP Keyword Documentation.</li>
+</ul>
+<pre><code>RAISE SHORTDUMP TYPE cx_sy_zerodivide.
+
+DATA(flag) = &#x27;X&#x27;.
+DATA(cond_w_throw_shortdump) = COND #( WHEN flag IS INITIAL THEN `works`
+                                       ELSE THROW SHORTDUMP zcx_demo_abap_error_b( ) ).
+
+DATA(switch_w_throw_shortdump) = SWITCH #( flag WHEN &#x27;&#x27; THEN `works`
+                                           ELSE THROW SHORTDUMP zcx_demo_abap_error_b( ) ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Assertions</h3>
+<ul>
+<li>Assertions are defined as conditional checkpoints using <code>ASSERT</code> statements.</li>
+<li><code>ASSERT</code> is followed by a logical expression.</li>
+<li>If the expression is false, the program is terminated and an uncatchable exception is raised, resulting in the runtime error <code>ASSERTION_FAILED</code>.</li>
+</ul>
+<pre><code>&quot;The ASSERT keyword is followed by a logical expression.
+&quot;If the expression is false, the program is terminated and an uncatchable exception is raised
+&quot;resulting in the runtime error ASSERTION_FAILED.
+
+DATA(number) = 0.
+ASSERT number IS INITIAL.
+ASSERT number &gt; -1.
+number = 1.
+ASSERT number = 1.
+
+DATA(flag) = abap_false.
+&quot;Raises a runtime error
+ASSERT flag = abap_true.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Excursions</h2>
+<h3>Local Exception Classes</h3>
+<ul>
+<li>You can create local exception classes within your class pool for exceptions specific to your program that are not needed globally.</li>
+<li>The following simplified example explores a local exception class. It uses a message class that is part of the ABAP cheat sheet repository.</li>
+<li>In the example, the global class uses the exception class in a private method&#x27;s signature. Therefore, the exception class declaration is placed in the <em>Class-Relevant Local Types</em> tab (<a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenccdef_glosry.htm">CCDEF include</a>). Its implementation is in the <em>Local Types</em> tab (<a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenccimp_glosry.htm">CCIMP include</a>) in ADT.</li>
+<li>You can add the following code to the three class includes of a demo class (the global class&#x27;s name is <code>zcl_demo_abap</code> in the example), activate, and run the class using F9. The implementation of the private method, that includes the local exception class in the signature, contains several <code>RAISE EXCEPTION</code> statements demonstrating various syntax options of these statements. The example is designed to write exception texts to the console.</li>
+</ul>
+<p>&lt;table&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt; Class include &lt;/td&gt; &lt;td&gt; Code &lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Global class</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<pre><code>CLASS zcl_demo_abap DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+    METHODS raise_local_exception IMPORTING num TYPE i
+                                  RAISING   lcx_error.
+ENDCLASS.
+
+
+CLASS zcl_demo_abap IMPLEMENTATION.
+
+  METHOD if_oo_adt_classrun~main.
+    DO 6 TIMES.
+      TRY.
+          raise_local_exception( sy-index ).
+        CATCH lcx_error INTO DATA(error).
+          out-&gt;write( error-&gt;get_text( ) ).
+      ENDTRY.
+    ENDDO.
+  ENDMETHOD.
+
+  METHOD raise_local_exception.
+    CASE num.
+      WHEN 1.
+        RAISE EXCEPTION TYPE lcx_error EXPORTING textid = lcx_error=&gt;lcx_error.
+      WHEN 2.
+        RAISE EXCEPTION TYPE lcx_error EXPORTING textid = lcx_error=&gt;some_error text = `Some error text`.
+      WHEN 3.
+        RAISE EXCEPTION TYPE lcx_error MESSAGE e002(zdemo_abap_messages).
+      WHEN 4.
+        RAISE EXCEPTION TYPE lcx_error MESSAGE e005(zdemo_abap_messages) WITH &#x27;Some&#x27; &#x27;error&#x27; &#x27;occurred&#x27;.
+      WHEN 5.
+        RAISE EXCEPTION TYPE lcx_error MESSAGE ID &#x27;ZDEMO_ABAP_MESSAGES&#x27; TYPE &#x27;E&#x27; NUMBER &#x27;005&#x27; WITH &#x27;Hello&#x27; &#x27;world&#x27;.
+      WHEN OTHERS.
+        &quot;Default message
+        RAISE EXCEPTION TYPE lcx_error.
+    ENDCASE.
+  ENDMETHOD.
+
+ENDCLASS.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Class-Relevant Local Types tab (CCDEF include)</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<pre><code>CLASS lcx_error DEFINITION INHERITING FROM cx_static_check.
+  PUBLIC SECTION.
+    INTERFACES if_t100_dyn_msg.
+
+    CONSTANTS:
+      BEGIN OF lcx_error,
+        msgid TYPE symsgid VALUE &#x27;ZDEMO_ABAP_MESSAGES&#x27;,
+        msgno TYPE symsgno VALUE &#x27;001&#x27;,
+        attr1 TYPE scx_attrname VALUE &#x27;&#x27;,
+        attr2 TYPE scx_attrname VALUE &#x27;&#x27;,
+        attr3 TYPE scx_attrname VALUE &#x27;&#x27;,
+        attr4 TYPE scx_attrname VALUE &#x27;&#x27;,
+      END OF lcx_error.
+
+    CONSTANTS:
+      BEGIN OF some_error,
+        msgid TYPE symsgid VALUE &#x27;ZDEMO_ABAP_MESSAGES&#x27;,
+        msgno TYPE symsgno VALUE &#x27;005&#x27;,
+        attr1 TYPE scx_attrname VALUE &#x27;TEXT&#x27;,
+        attr2 TYPE scx_attrname VALUE &#x27;&#x27;,
+        attr3 TYPE scx_attrname VALUE &#x27;&#x27;,
+        attr4 TYPE scx_attrname VALUE &#x27;&#x27;,
+      END OF some_error.
+
+    DATA text TYPE string READ-ONLY.
+
+    METHODS constructor
+      IMPORTING
+        textid   LIKE if_t100_message=&gt;t100key OPTIONAL
+        previous LIKE previous OPTIONAL
+        text     TYPE string OPTIONAL.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;tr&gt; &lt;td&gt;</p>
+<p>Local Types tab (CCIMP include)</p>
+<p>&lt;/td&gt;</p>
+<p>&lt;td&gt;</p>
+<pre><code>CLASS lcx_error IMPLEMENTATION.
+  METHOD constructor ##ADT_SUPPRESS_GENERATION.
+    super-&gt;constructor( previous = previous ).
+
+    me-&gt;text = text.
+    CLEAR me-&gt;textid.
+    IF textid IS INITIAL.
+      if_t100_message~t100key = if_t100_message=&gt;default_textid.
+    ELSE.
+      if_t100_message~t100key = textid.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.</code></pre>
+<p>&lt;/td&gt; &lt;/tr&gt;</p>
+<p>&lt;/table&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Messages in RAP</h3>
+<ul>
+<li>In ABAP EML, the relevant <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_derived_type_glosry.htm">BDEF derived type</a> is <code>TYPE ... REPORTED</code>, available in the context of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_response_glosry.htm">RAP responses</a>.</li>
+<li>The <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_response_param_glosry.htm">RAP response parameter</a> <code>reported</code> includes the <code>%msg</code> component of BDEF derived types.</li>
+<li><code>%msg</code> provides an instance of the message interface <code>IF_ABAP_BEHV_MESSAGE</code>.</li>
+<li>If you need a custom implementation for your messages, you can implement the interface. Find an example in the <a href="https://help.sap.com/docs/ABAP_Cloud/f055b8bf582d4f34b91da667bc1fcce6/d0ba40477fba4ad5a373670c99d2956c.html">Development Guide for the ABAP RESTful Application Programming Model</a>. Otherwise, you can use the inherited methods <code>new_message</code> or <code>new_message_with_text</code> for a standard implementation.</li>
+</ul>
+<p>The following example is from an ABAP EML cheat sheet example. Here, the standard implementation is used.</p>
+<pre><code>...
+APPEND VALUE #( %tky = &lt;fs_res&gt;-%tky
+                %msg = new_message_with_text(
+                  severity = if_abap_behv_message=&gt;severity-error
+                  text = &#x27;Validation failed!&#x27; )
+              ) TO reported-root.
+...              </code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Violations of ABAP Contract Checks Causing Runtime Errors</h3>
+<p>ABAP contract checks include ...</p>
+<ul>
+<li>RAP BO contract checks</li>
+<li>They define rules for the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_provider_glosry.htm">RAP BO provider</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_bo_consumer_glosry.htm">RAP BO consumer</a> implementation to ensure consistency and reliability.</li>
+<li>They include transactional contract checks, too.</li>
+<li>More information:</li>
+<li><a href="https://help.sap.com/docs/ABAP_Cloud/f055b8bf582d4f34b91da667bc1fcce6/3a402c5cf6a74bc1a1de080b2a7c6978.html">Development guide for the ABAP RESTful Application Programming Model, section RAP Business Object Contract (SAP Help Portal)</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaprap_impl_rules.htm">RAP Implementation Rules (ABAP Keyword Documentation)</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapinvalid_stmts_in_rap_methods.htm">Restrictions in RAP Handler and Saver Methods (ABAP Keyword Documentation)</a></li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>Violation: Missing <code>%cid</code></li>
+<li><code>%cid</code> should always be filled in RAP creation requests</li>
+<li>You can try out the following:</li>
+<li>You are in your SAP BTP ABAP environment.</li>
+<li>Provided that you have imported the ABAP cheat sheet repository, you can add the following ABAP EML create request in a class that implements the classrun (<code>if_oo_adt_classrun</code>).</li>
+<li>The <code>%cid</code> specification in the code snippet is intentionally commented out, so <code>%cid</code> is not specified.</li>
+<li>Run the class.</li>
+<li>The <code>BEHAVIOR_CONTRACT_VIOLATION</code> runtime error will be raised.</li>
+<li>To avoid the runtime error, specify <code>%cid</code> explicitly or use the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapmodify_entity_entities_fields.htm"><code>AUTO FILL CID</code></a> addition to create <code>%cid</code> automatically.</li>
+</ul>
+<pre><code>    DELETE from zdemo_abap_rapt1.
+
+    MODIFY ENTITIES OF zdemo_abap_rap_ro_m
+        ENTITY root
+        CREATE FIELDS ( key_field field1 field2 field3 field4 )
+        WITH VALUE #( ( &quot;%cid = &#x27;cid1&#x27;
+                        key_field = 1
+                        field1    = &#x27;aaa&#x27;
+                        field2    = &#x27;bbb&#x27;
+                        field3    = 10
+                        field4    = 11 ) )
+        MAPPED FINAL(mapped)
+        FAILED FINAL(failed)
+        REPORTED FINAL(reported).
+
+    COMMIT ENTITIES.
+
+    SELECT SINGLE * from zdemo_abap_rapt1 where key_field = 1 into @FINAL(entry).</code></pre>
+<ul>
+<li>Transactional contract checks</li>
+<li>Implemented in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencontrolled_sap_luw_glosry.htm">controlled SAP LUW</a> concept.</li>
+<li>Check for transactional consistency violations in a transactional phase.</li>
+<li>Transactional contracts specify which ABAP statements and operations are allowed and which are not allowed in a transactional phase.</li>
+<li>Such a transactional phase is either the <em>modify</em> or the <em>save</em> transactional phase.</li>
+<li>The phases are set either implicitly (e.g. in RAP handler and saver methods), or explicitly using the static methods of the <code>CL_ABAP_TX</code> class.</li>
+<li>In RAP, the <em>modify</em> transactional phase includes the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_int_phase_glosry.htm">RAP interaction phase</a> and the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenearly_rap_save_phase_glosry.htm">RAP early save phase</a> of the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrap_save_seq_glosry.htm">RAP save sequence</a>. The <em>save</em> transactional phase includes the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlate_rap_save_phase_glosry.htm">RAP late save phase</a>.</li>
+<li>Transactional contracts can be set explicitly by API classifications (starting with <code>IF_ABAP_TX...</code>, for example, <code>IF_ABAP_TX_SAVE</code>).</li>
+<li>More information:</li>
+<li><a href="17_SAP_LUW.md#controlled-sap-luw">Controlled SAP LUW (SAP LUW cheat sheet)</a></li>
+<li><a href="08_EML_ABAP_for_RAP.md#ensuring-data-consistency-in-a-rap-transaction">Ensuring Data Consistency in a RAP Transaction (ABAP EML cheat sheet)</a></li>
+<li><a href="https://help.sap.com/docs/ABAP_Cloud/f2961be2bd3d403585563277e65d108f/80fe04141e30456c80cc90c5cc838e94.html">Controlled SAP LUW (SAP Help Portal)</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapapi_classification.htm">API Classifications (ABAP Keyword Documentation)</a></li>
+</ul>
+<pre><code>    &quot;Activating the modify transactional phase
+    cl_abap_tx=&gt;modify( ).
+
+    &quot;The following database modification statement is not allowed in the
+    &quot;modify transactional phase. In certain contexts, e.g. in ABAP Cloud,
+    &quot;the runtime error BEHAVIOR_ILLEGAL_STMT_IN_CALL occurs.
+    MODIFY zdemo_abap_carr FROM TABLE @( VALUE #(
+        ( carrid = &#x27;XY&#x27;
+          carrname = &#x27;XY Airlines&#x27;
+          currcode = &#x27;EUR&#x27;
+          url =  &#x27;some_url&#x27; ) ) ).
+
+    ...
+
+    &quot;Activating the save transactional phase
+    cl_abap_tx=&gt;save( ).
+
+    &quot;In this phase, database modifications are allowed.
+    MODIFY zdemo_abap_carr FROM TABLE @( VALUE #(
+        ( carrid = &#x27;XY&#x27;
+          carrname = &#x27;XY Airlines&#x27;
+          currcode = &#x27;EUR&#x27;
+          url =  &#x27;some_url&#x27; ) ) ).
+    ...</code></pre>
+<p>Example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Classic Exceptions</h3>
+<ul>
+<li>In older ABAP code, you may encounter non-class-based exceptions, the predecessors of class-based exceptions.</li>
+<li>They should not be used in new developments.</li>
+<li>They are specified in method signatures with the <code>EXCEPTIONS</code> addition.</li>
+<li>Find more details in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenexceptions_non_class.htm">ABAP Keyword Documentation</a>.</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>The following example shows the longer available <code>describe_by_name</code> method available in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrun_time_type_identific_glosry.htm">Runtime Type Identification (RTTI)</a> class <code>cl_abap_typedescr</code> (find more information in the <a href="06_Dynamic_Programming.md">Dynamic Programming</a> cheat sheet).</li>
+<li>This method specifies <code>EXCEPTIONS</code> in the method signature.</li>
+<li>The example intentionally uses a class name that is (most probably) not available in the system.</li>
+<li>The exception is raised, and the <code>sy-subrc</code> value is evaluated.</li>
+<li>The example is implemented in a way that a more modern class-based exception is raised (using a demo exception and message class from the executable example) following the raising of the non-class-based exception.</li>
+</ul>
+<pre><code>TRY.
+    cl_abap_typedescr=&gt;describe_by_name( EXPORTING p_name = &#x27;CL_THAT_DOES_NOT_EXIST&#x27;
+                                         RECEIVING p_descr_ref = DATA(tdo_type)
+                                         EXCEPTIONS type_not_found = 4 ).
+
+    IF sy-subrc &lt;&gt; 0.
+      RAISE EXCEPTION TYPE zcx_demo_abap_error_b MESSAGE e005(zdemo_abap_messages) WITH &#x27;Type not found&#x27;.
+    ELSE.
+      DATA(tdo_cl) = CAST cl_abap_classdescr( tdo_type ).
+
+      &quot;Getting more type information; find more information in the Dynamic Programming cheat sheet
+      ...
+    ENDIF.
+  CATCH zcx_demo_abap_error_b INTO DATA(err).
+    DATA(text) = err-&gt;get_text( ).
+ENDTRY.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>More Information</h2>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_exceptions.htm">ABAP Keyword Documentation</a></p>
+<h2>Executable Example</h2>
+<p><a href="./src/zcl_demo_abap_error_handling.clas.abap">zcl_demo_abap_error_handling</a></p>
+<div class="note">[!NOTE] - The example involves the following artifacts: - One executable class `zcl_demo_abap_error_handling` - Two self-defined example exception classes `zcx_demo_abap_error_a` and `zcx_demo_abap_error_b`  (one implements the `IF_T100_DYN_MSG`, the other implements `IF_T100_MESSAGE`) - One message class `zdemo_abap_messages` with 5 message texts that are used as exception texts - The example explores syntax described and uses code snippets in the cheat sheet. It does not represent best practice implementations, and only focuses on demonstrating ABAP syntax. - The executable example of the [Program Flow Logic](13_Program_Flow_Logic.md) cheat sheet also includes examples with error handling. - The steps to import and run the code are outlined [here](README.md#-getting-started-with-the-examples). - [Disclaimer](./README.md#%EF%B8%8F-disclaimer)</div>
+</body>
+</html>

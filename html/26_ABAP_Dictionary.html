@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>26 ABAP Dictionary - ABAP Cheat Sheet</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #95a5a6;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4, h5, h6 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+<p>&lt;a name=&quot;top&quot;&gt;&lt;/a&gt;</p>
+<h1>ABAP Dictionary (DDIC)</h1>
+<ul>
+<li><a href="#abap-dictionary-ddic">ABAP Dictionary (DDIC)</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#data-types-in-ddic">Data Types in DDIC</a></li>
+<li><a href="#built-in-abap-dictionary-types">Built-in ABAP Dictionary Types</a></li>
+<li><a href="#ddic-data-types">DDIC Data Types</a></li>
+<li><a href="#ddic-data-elements">DDIC Data Elements</a></li>
+<li><a href="#ddic-domains">DDIC Domains</a></li>
+<li><a href="#ddic-structures">DDIC Structures</a></li>
+<li><a href="#ddic-table-types">DDIC Table Types</a></li>
+<li><a href="#predefined-types-in-ddic">Predefined Types in DDIC</a></li>
+<li><a href="#ddic-database-tables">DDIC Database Tables</a></li>
+<li><a href="#abap-cds-objects-as-global-types">ABAP CDS Objects as Global Types</a></li>
+<li><a href="#cds-types-usable-as-elementary-types">CDS Types Usable as Elementary Types</a></li>
+<li><a href="#cds-built-in-types">CDS Built-In Types</a></li>
+<li><a href="#cds-simple-types">CDS Simple Types</a></li>
+<li><a href="#cds-enumerated-types">CDS Enumerated Types</a></li>
+<li><a href="#cds-entities-usable-as-structured-types">CDS Entities Usable as Structured Types</a></li>
+<li><a href="#crud-operations-using-cds-artifacts">CRUD Operations Using CDS Artifacts</a></li>
+<li><a href="#excursions">Excursions</a></li>
+<li><a href="#built-in-database-functions">Built-in Database Functions</a></li>
+<li><a href="#finding-released-repository-objects-in-the-system">Finding Released Repository Objects in the System</a></li>
+<li><a href="#retrieving-repository-objects-information-and-creating-repository-object-programmatically-with-xco">Retrieving Repository Objects Information and Creating Repository Object Programmatically with XCO</a></li>
+<li><a href="#more-information">More Information</a></li>
+<li><a href="#executable-example">Executable Example</a></li>
+</ul>
+<p>This cheat sheet ...</p>
+<ul>
+<li>covers a selection of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrepository_object_glosry.htm">repository objects</a> in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_dictionary_glosry.htm">ABAP Dictionary (DDIC)</a> that represent <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenglobal_type_glosry.htm">global types</a>. Additionally, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_object_glosry.htm">CDS objects</a> also representing global types are mentioned.</li>
+<li>focuses on <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_for_cloud_dev_glosry.htm">ABAP for Cloud Development</a>, and therefore, does not cover certain DDIC topics and functionalities that are not relevant or supported in this context.</li>
+<li>invites you to a more in-depth exploration. Make sure that you refer to the documentation for more details and the complete picture.</li>
+</ul>
+<div class="note">[!NOTE] - While several DDIC objects are still supported in [ABAP Cloud](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_cloud_glosry.htm) (excluding, for example, classic DDIC views), it is recommended to use their ABAP CDS-based successors for new developments.</div>
+<h2>Introduction</h2>
+<ul>
+<li>The ABAP Dictionary (DDIC) serves as a persistent repository for type definitions represented by dictionary objects.</li>
+<li>These objects constitute global data types that are accessible by other repository objects.</li>
+<li>Many of these objects can also be accessed in CDS objects and ABAP itself.</li>
+<li>DDIC provides built-in and predefined data types, but also allows for the creation of custom data types.</li>
+<li>The data types that can be defined in the DDIC, similar to the ABAP language, include the following:</li>
+<li>Elementary types</li>
+<li>Structured types</li>
+<li>Table types</li>
+<li>Reference types</li>
+<li>They provide the same functionality as the local types that can be defined in ABAP programs with <code>TYPES</code> statements.</li>
+<li>DDIC also enables the creation of additional objects, such as database tables, which are then created in the underlying database.</li>
+<li>Furthermore, the DDIC includes objects that support development in various contexts, such as lock objects related to the <a href="17_SAP_LUW.md">SAP LUW concept</a> and more. They are not outlined here.</li>
+<li>DDIC offers many objects and functionalities particularly suited for classic ABAP technologies and user interfaces, such as dynpros. However, these are not relevant in ABAP Cloud and are not covered in this cheat sheet. For example, DDIC search helps (that are used to create value lists for input fields on dynpros) can be replaced by CDS-based search helps.</li>
+<li>The more modern concept, ABAP CDS, is integrated into the DDIC, allowing for the creation of dedicated CDS objects that can replace DDIC objects to be used in newer concepts like RAP.</li>
+<li>DDIC objects are transportable.</li>
+<li>In terms of repository objects in ABAP Cloud, you can use only those SAP-delivered repository objects that are released as APIs for the ABAP language version ABAP for Cloud Development, in addition to your custom repository objects. See a list of released APIs <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenreleased_apis.htm">here</a>. Also, ABAP development tools for Eclipse (ADT) are the only supported tools for creating repository objects.</li>
+<li>Many repository objects are created from source code using dedicated data definition languages, as opposed to the form-based creation you may be familiar from <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclassic_abap_glosry.htm">classic ABAP</a>.</li>
+</ul>
+<div class="note">[!NOTE] - DDIC provides a centralized location for defining and managing types that are frequently (re)used in DDIC, ABAP CDS, or ABAP programs. This means that a type change in DDIC will automatically update in all relevant places, potentially causing inconsistencies and making adjustments necessary. To find the users of a particular type in ADT, right-click the type and select *Get Where-Used List*. - Global access to types is only possible if the package concept does not specify otherwise. A package, which encapsulates repository objects into self-contained units, can be set to disallow external access. Find more information [here](https://help.sap.com/docs/abap-cloud/abap-development-tools-user-guide/editing-abap-packages?locale=en-US&version=sap_btp).</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Data Types in DDIC</h2>
+<p>DDIC supports the following data types:</p>
+<ul>
+<li>Data elements that describe elementary types and reference types</li>
+<li>Structured types</li>
+<li>Table types</li>
+</ul>
+<h3>Built-in ABAP Dictionary Types</h3>
+<ul>
+<li>Built-in ABAP dictionary types ...</li>
+<li>serve as the foundation for elementary types in all repository objects, including structured and table types, as well as ABAP CDS.</li>
+<li>allow for the creation of custom types.</li>
+<li>In data definition languages, you can refer to these types using <code>abap.type</code>.</li>
+<li>are not directly usable in ABAP, except for types specified in ABAP SQL. You can use them through DDIC or CDS objects that include the built-in dictionary types.</li>
+<li>In ABAP programs, the built-in dictionary types are mapped to corresponding ABAP data types.</li>
+<li>For all available types and more details, refer to the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_builtin_types.htm">ABAP Keyword Documentation</a>. The following list shows a selection of available built-in dicitionary types:</li>
+</ul>
+<table>
+<thead><tr>
+<th>Built-in Dictionary Type</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>int4</code></td>
+<td>Represents 4-byte integers &lt;br&gt;Mapped to the ABAP type <code>i</code></td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>Represents strings of fixed length &lt;br&gt;Mapped to the ABAP type <code>c</code> with a dedicated length &lt;br&gt;For example, in database tables and fields of CDS entities, the maximum length is 1333 characters. &lt;br&gt;&lt;br&gt;The built-in dictionary type <code>clnt</code> is a special character-like type and has special semantics. It denotes the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclient_column_glosry.htm">client column</a> in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenclient_dependent_glosry.htm">client-dependent</a> DDIC database tables. The type is mapped to the ABAP type <code>c</code>, length 3.</td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td>Represents strings of variable length&lt;br&gt;In DDIC, it is handled like a character large object/CLOB. &lt;br&gt;A maximum length can be specified, but there is no upper limit. The type cannot be used to specify key fields in database tables. In the tables, a maximum length of at least 256 can be specfied to restrict the length of database table fields. &lt;br&gt;Mapped to the identically named ABAP type <code>string</code> &lt;br&gt;&lt;br&gt;Another built-in dicitionary type mapped to the ABAP type <code>string</code> is <code>sstring</code>, which represents shorter text strings having a maximum length of 1333. It is handled like <code>char</code> and can be used as type for a database table key field (unlike <code>string</code>; note that trailing blanks are removed).</td>
+</tr>
+<tr>
+<td><code>datn</code>/<code>timn</code></td>
+<td>Represent date and time formats &lt;br&gt;Mapped to <code>d</code>/<code>t</code> &lt;br&gt;&lt;br&gt;<code>dats</code>/<code>tims</code> are older types. <code>datn</code>/<code>timn</code> are preferred because <code>dats</code>/<code>tims</code> require conversion to actual date and time types.</td>
+</tr>
+<tr>
+<td><code>utclong</code></td>
+<td>Represents time stamps &lt;br&gt;Mapped to the identically named ABAP data type <code>utclong</code></td>
+</tr>
+<tr>
+<td><code>numc</code></td>
+<td>Represents numeric text &lt;br&gt;Mapped to <code>n</code></td>
+</tr>
+<tr>
+<td><code>raw</code></td>
+<td>Represents byte strings &lt;br&gt;Mapped to <code>x</code></td>
+</tr>
+</tbody>
+</table>
+<div class="note">[!NOTE] - There are restrictions when using strings in ABAP CDS and ABAP SQL. For more information, see [here](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_character_byte_types.htm). - Built-in dictionary types cannot be used directly in ABAP, e.g. for typing local data objects. However, the types can be used in ABAP SQL, and also ABAP CDS, in the context of [typed literals](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abentyped_literal_glosry.htm). Find more information in the [ABAP SQL](03_ABAP_SQL.md#typed-literals) cheat sheet.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>DDIC Data Types</h3>
+<p>They can be ...</p>
+<ul>
+<li>defined in the DDIC and represent <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenglobal_type_glosry.htm">global types</a>.</li>
+<li>accessed by all repository objects (as long as the package concept allows it).</li>
+<li>referenced in ABAP programs, for example, using <code>TYPES</code> and <code>DATA</code> statements.</li>
+<li>used to type components in other repository objects.</li>
+</ul>
+<h4>DDIC Data Elements</h4>
+<ul>
+<li>DDIC data elements ...</li>
+<li>are used to create elementary and reference data types.</li>
+<li>specify the type of components in repository objects, such as database table fields, or in ABAP programs to create local data types and objects.</li>
+<li>include both technical and semantic properties.</li>
+<li>Technical properties of ...</li>
+<li>elementary types are based on a built-in dictionary type. Length, decimal places, and other attributes (if applicable) can be specified either directly in the data element or inherited from a domain.</li>
+<li>reference types allow for the creation of data and object references. Data references can refer to existing DDIC types or built-in types, or be the generic type <code>data</code>. Object references can refer to classes and interfaces, or be the generic type <code>object</code>. Reference types cannot be used to type database table fields.</li>
+<li>The technical properties specified depend on the built-in type. For example, the output length includes the total number of characters. For the <code>dec</code> type used for packed numbers, a length of 5 with 2 decimals means the output length is 6, including a decimal point. If a sign is selected, the first character is reserved for the + or - sign, making the output length 7.</li>
+<li>Details on semantic properties for data elements can be found <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_data_elements_sema.htm">here</a>.</li>
+<li>Some semantic properties apply only to classic ABAP, particularly classic UIs, and cannot be specified in ABAP for Cloud Development.</li>
+<li>Field labels, primarily for classic ABAP UIs, can be specified. The <em>Medium Text</em> field label is exposed to OData.</li>
+<li>Domains provide additional semantic properties, such as a value range.</li>
+</ul>
+<div class="note">[!NOTE] - CDS simple types represent successor artifacts of DDIC data elements. - As is true for all the global types discussed, locally defined types hide identically named global types in ABAP programs.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>DDIC Domains</h4>
+<ul>
+<li>DDIC domains are standalone dictionary objects.</li>
+<li>They define both technical and semantic properties of elementary data types, which multiple data elements can reuse.</li>
+<li>When a data element references a domain, it inherits the domain&#x27;s properties.</li>
+<li>Although domains define type properties, they cannot be used to declare types and data objects with <code>TYPES</code> and <code>DATA</code> in ABAP programs. They cannot be reused in repository objects other than data elements.</li>
+<li>You can specify value ranges to set fixed values or intervals as a semantic property. These are typically used for input checks in classic ABAP UIs, which ABAP Cloud does not support. While these value ranges have no effect when used in ABAP statements, they can be used for value helps in the context of CDS views.</li>
+</ul>
+<div class="note">[!NOTE] In modern ABAP, CDS enumerated types offer a similar functionality for fixed values.</div>
+<p><strong>Example: DDIC Data Elements/Domains</strong></p>
+<ul>
+<li>You have accessed your SAP BTP ABAP Environment in ADT.</li>
+<li>Create a data element based on a built-in dicitionary type</li>
+<li>In your target package, choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>Filter for <em>data element</em> and choose <em>Next</em> and walk through the wizard.</li>
+<li>As the data element name, use <em>ZDEMO_ABAP_DTEL_PR</em>.</li>
+<li>On the screen displayed, you have several specification options. Make the following entries:</li>
+<li>Category: Predefined type</li>
+<li>Data type: Choose Browse. From the list displayed, select <em>CHAR</em>.</li>
+<li>Length: 3</li>
+<li>Save and activate.</li>
+<li>Create a domain</li>
+<li>In your target package, choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>Filter for <em>domain</em> and choose <em>Next</em> and walk through the wizard.</li>
+<li>As the domain name, use <em>ZDEMO_ABAP_DOMA</em>.</li>
+<li>On the screen displayed, you have several specification options. Make the following entries:</li>
+<li>Data type: Choose Browse. From the list displayed, select <em>CHAR</em>.</li>
+<li>Length/Output Length: 1</li>
+<li>Save and activate.</li>
+<li>Create a data element based on a domain</li>
+<li>Proceed as above and use the name <em>ZDEMO_ABAP_DTEL_DO</em>.</li>
+<li>Category: Domain</li>
+<li>Type name: <em>ZDEMO_ABAP_DOMA</em></li>
+<li>Save and activate.</li>
+<li>Create a data element based on a reference type</li>
+<li>Proceed as above and use the name <em>ZDEMO_ABAP_DTEL_REF</em>.</li>
+<li>Category: Reference to predefined type</li>
+<li>Data type: <em>CHAR</em></li>
+<li>Length: 10</li>
+<li>Save and activate.</li>
+</ul>
+<pre><code>&quot;Using data elements for local types and data objects
+
+&quot;Data element based on a built-in dicitionary type
+TYPES ty_dtel1 TYPE zdemo_abap_dtel_pr.
+DATA char3_dtel TYPE zdemo_abap_dtel_pr.
+
+&quot;Data element based on a domain
+TYPES ty_dtel2 TYPE zdemo_abap_dtel_do.
+DATA char1_dtel TYPE zdemo_abap_dtel_do.
+
+&quot;Data element based on a reference type
+TYPES ty_dtel3 TYPE zdemo_abap_dtel_ref.
+DATA char10_dtel_ref TYPE zdemo_abap_dtel_ref.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>DDIC Structures</h4>
+<ul>
+<li>DDIC structures ...</li>
+<li>define structured types.</li>
+<li>are complex types, composed of other data types such as elementary, reference, structured, and table types.</li>
+<li>can be flat, nested, or deep. Refer to the <a href="02_Structures.md">Structures</a> cheat sheet for more details on these variants.</li>
+<li>can be used in other DDIC objects like database tables or to define structured types and data objects in ABAP programs.</li>
+<li>can be incorporated into other structures. A suffix can be assigned to the components of the included substructure.</li>
+<li>In ADT, structures are created using data definition language:</li>
+<li>The primary syntax element to define a structure in DDIC is <code>DEFINE STRUCTURE</code>.</li>
+<li>Before this syntax, annotations are used to define structure properties. These include a descriptive text and the enhancement category that determines specific classifications (e.g., <code>#NOT_EXTENSIBLE</code> indicates that the object cannot be enhanced). Find more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_structures_enh_cat.htm">here</a>.</li>
+<li>Structure components are listed and separated by semicolons; includes are possible.</li>
+<li>Structure components can also be specified with annotations.</li>
+<li>The following list contains a selection of possible types that can be defined for components:</li>
+<li>Elementary types of components can be specified using data elements or built-in types using <code>abap.type</code> (technical properties such as length are specified in parentheses).</li>
+<li>Reference types: Data elements having reference types and the syntax <code>REFERENCE TO someType</code>.</li>
+<li>Structures (DDIC structures or database tables) as substructures.</li>
+<li>An include structure can be specified using <code>INCLUDE</code>; optionally, a three-character suffix can be specified.</li>
+<li>Table types</li>
+<li>For comprehensive details and more annotations, refer to the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddicddl_define_structure.htm">ABAP Keyword Documentation</a>.</li>
+</ul>
+<div class="note">[!NOTE] DDIC database tables and several CDS entities also represent structured types that can be used as such in ABAP programs.</div>
+<p><strong>Example: DDIC Structures</strong></p>
+<p>The following example creates two DDIC structures exploring several options:</p>
+<pre><code>    @EndUserText.label : &#x27;Demo flat DDIC structure&#x27;
+    @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+    define structure zdemo_abap_struc_flat {
+
+      chars : abap.char(3);
+      num   : abap.int4;
+      cuky  : abap.cuky;
+      @Semantics.amount.currencyCode : &#x27;zdemo_abap_struc_flat.cuky&#x27;
+      curr  : abap.curr(8,2);
+      id    : zdemo_abap_dtel_pr;
+      flag  : zdemo_abap_dtel_do;
+
+    }</code></pre>
+<pre><code>    @EndUserText.label : &#x27;Demo deep DDIC structure&#x27;
+    @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+    define structure zdemo_abap_struc_deep {
+
+      bt_elem1   : abap.char(5);
+      bt_elem2   : abap.int4;
+      bt_elem3   : abap.dec(8,2);
+      bt_elem4   : abap.cuky;
+      @Semantics.amount.currencyCode : &#x27;zdemo_abap_struc_deep.bt_elem4&#x27;
+      bt_elem5   : abap.curr(5,2);
+      dtel_elem1 : land1;
+      dtel_elem2 : tzntstmpl;
+      dref1      : reference to abap.char(3);
+      dref2      : reference to abap_boolean;
+      dref3      : reference to data;
+      oref1      : reference to cl_abap_math;
+      oref2      : reference to object;
+      iref       : reference to if_oo_adt_classrun;
+      struc1     : zdemo_abap_tab1;
+      struc2     : include zdemo_abap_carr;
+      struc3     : include zdemo_abap_fli with suffix _in;
+      tab1       : string_table;
+      tab2       : xstring_table;
+
+    }</code></pre>
+<pre><code>        struc2: include zdemo_abap_carr;
+        struc3: include zdemo_abap_fli;</code></pre>
+<ul>
+<li>You have accessed your SAP BTP ABAP Environment in ADT.</li>
+<li>Create a flat DDIC structure</li>
+<li>In your target package, choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>Filter for <em>structure</em> and choose <em>Next</em> and walk through the wizard.</li>
+<li>As the structure name, use <em>ZDEMO_ABAP_STRUC_FLAT</em>.</li>
+<li>Insert the following code:</li>
+<li>Save and activate.</li>
+<li>Create a deep DDIC structure</li>
+<li>As the structure name, use <em>ZDEMO_ABAP_STRUC_DEEP</em>.</li>
+<li>Insert the following code:</li>
+<li>Notes on the example:</li>
+<li><code>bt_elem*</code> represents components with elementary types using built-in DDIC types</li>
+<li><code>bt_elem5</code> represents a type that requires additional specifications. The type alone is not possible since it is a currency field that must relate to a currency code field. The annotation can be added using an ADT quick fix.</li>
+<li><code>dtel_elem*</code> represents components with elementary types using data elements. The data elements used are all released for ABAP for Cloud Development.</li>
+<li><code>dref*</code> represents components with data references. The example covers references to built-in types, data elements and the generic type data.</li>
+<li><code>oref*</code>/<code>iref</code> represents components with object/interface references. Random released classes/interfaces and the generic type <code>object</code> are used.</li>
+<li><code>struc*</code> represent components with structured types. The example does not cover DDIC structures, but DDIC database tables. Tables from the ABAP cheat sheet repository are used. Two structures represent include structures. One of them is specified with suffix. The following would not be possible in the example case since both tables contain some identically named components that would prevent an activation:</li>
+<li><code>tab*</code> represents components with table types. The example uses released table types with elementary line types.</li>
+<li>Save and activate.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>DDIC Table Types</h4>
+<ul>
+<li>DDIC table types ...</li>
+<li>are complex types that describe internal tables in ABAP.</li>
+<li>are defined by the following properties. For additional details, refer to the <a href="01_Internal_Tables.md">Internal Tables</a> cheat sheet.</li>
+<li>Line type (can be elementary, reference, or structured types; the latter may use DDIC database tables; note: CDS entities are not allowed)</li>
+<li>Table category (options include standard, sorted, hashed, or generic category index for standard and sorted)</li>
+<li>Table key (the primary table key can be empty, standard, or consist of specific components; secondary table keys and an alias name an be specified)</li>
+<li>are not to be confused with DDIC database tables, which represent tables on the database.</li>
+</ul>
+<p><strong>Example: DDIC Table Type</strong></p>
+<p>The following example creates three DDIC table types exploring several options:</p>
+<ul>
+<li>You have accessed your SAP BTP ABAP Environment in ADT.</li>
+<li>Create a table type with elementary line type, no explicit key specification</li>
+<li>In your target package, choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>Filter for <em>table type</em> and choose <em>Next</em> and walk through the wizard.</li>
+<li>As the table type name, use <em>ZDEMO_ABAP_TT_STR</em>.</li>
+<li>On the screen displayed, you have several specification options. Make the following entries:</li>
+<li>Category: Predefined type</li>
+<li>Length: 0</li>
+<li>Leave the other fields as they are. This type basically corresponds to the released table type <code>string_table</code>.</li>
+<li>Save and activate.</li>
+<li>Create a table type with flat line type (based on a DDIC structure created above), with explicit key specifications</li>
+<li>Proceed as described above, and use the name <em>ZDEMO_ABAP_TT_SO</em>.</li>
+<li>Make the following entries:</li>
+<li>Category: Dictionary type</li>
+<li>Type name: <em>ZDEMO_ABAP_STRUC_FLAT</em></li>
+<li>Initialization and Access section:</li>
+<li>Access: Sorted Table</li>
+<li>Primary Key Details section:</li>
+<li>Key Definition: Key Components</li>
+<li>Key Category: Unique</li>
+<li>Alias: <em>ch</em></li>
+<li>Key components section:</li>
+<li>Enter <em>CHARS</em> (i.e. the component <em>chars</em> of the demo structure)</li>
+<li>Key overview section:</li>
+<li>Right-click <em>&lt;Secondary Keys&gt;</em>, and choose <em>Create Secondary Key</em></li>
+<li>Select <em>&lt;initial&gt;</em></li>
+<li>Secondary Keys Details section:</li>
+<li>Name: <em>sec_key</em></li>
+<li>Key Definition: Key Components</li>
+<li>Key Access: Unique Sorted</li>
+<li>Key Components: <em>NUM</em> (i.e. the component <em>num</em> of the demo structure)</li>
+<li>Save and activate.</li>
+<li>Create a table type with reference type</li>
+<li>Proceed as described above, and use the name <em>ZDEMO_ABAP_TT_REF</em>.</li>
+<li>Make the following entries:</li>
+<li>Category: Reference to Dictionary Type</li>
+<li>Data type: <em>data</em> (to create a table type with reference to the generic type data)</li>
+<li>Save and activate.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Predefined Types in DDIC</h3>
+<ul>
+<li>Multiple DDIC types are predefined and accessible in the system.</li>
+<li>In ABAP for Cloud Development, only released APIs can be used. See the section <a href="#finding-released-repository-objects-in-the-system">Finding Released Repository Objects in the System</a> further down.</li>
+<li>The list below showcases a selection of available predefined types:</li>
+<li>A large number of data elements (and domains) is available. See, for example, the following data elements for built-in dictionary types. In these cases, the data elements have the same names as the built-in dictionary types.</li>
+</ul>
+<pre><code>    DATA a TYPE int1.
+    DATA b TYPE int2.
+    DATA c TYPE int4.
+    DATA d TYPE d16n.
+    DATA e TYPE d34n.
+    DATA f TYPE datn.
+    DATA g TYPE timn.
+    DATA h TYPE utcl.
+    
+    &quot;Respective built-in DDIC types cannot be specified directly 
+    &quot;in ABAP programs. So, the following data object declaration 
+    &quot;using a built-in DDIC type is not possible.
+    &quot;DATA i type rawstring.
+    
+    &quot;Note: The following type definition emphasizes that local 
+    &quot;types hide global type names.
+    TYPES rawstring TYPE xstring.
+    DATA j TYPE rawstring.
+
+    &quot;Programmatically retrieving information about which released APIs are available 
+    &quot;The following statement retrieves released data elements and domains.
+    SELECT ReleasedObjectType, ReleasedObjectName, ReleaseState
+      FROM i_apisforclouddevelopment
+      WHERE releasestate = &#x27;RELEASED&#x27;
+      AND ( ReleasedObjectType = &#x27;DTEL&#x27; OR ReleasedObjectType = &#x27;DOMA&#x27; )
+      ORDER BY ReleasedObjectType, ReleasedObjectName
+      INTO TABLE @DATA(released_dtel_doma).</code></pre>
+<ul>
+<li>Truth values: For the data type, it is recommended that you use the <code>abap_boolean</code> data element. The released <code>abap</code> type pool provides <code>abap_true</code> (&#x27;X&#x27;) and <code>abap_false</code> (&#x27;&#x27;) to be used as constant values.</li>
+</ul>
+<pre><code>    &quot;Using the data element abap_boolean as type in the data object declaration.
+    DATA is_true TYPE abap_boolean.
+
+    DATA(str) = `Hello#ABAP##World#`.
+    IF str CS `#`.
+      &quot;Using abap_true/abap_false from the released abap type pool as constant values
+      is_true = abap_true.
+    ELSE.
+      is_true = abap_false.
+    ENDIF.</code></pre>
+<ul>
+<li>Many predefined data types are used in operand positions of ABAP statements.</li>
+</ul>
+<pre><code>    DATA(some_string) = `Hello#ABAP##World#`.
+
+    &quot;The RESULTS addition to the FIND statement can expect 
+    &quot;the table type match_result_tab that contains search results. 
+    DATA findings TYPE match_result_tab.
+    FIND ALL OCCURRENCES OF `#` IN some_string RESULTS findings.
+    ASSERT lines( findings ) = 4.
+
+    &quot;Dynamic method call and specifying a parameter table of 
+    &quot;type abap_parmbind_tab.
+    DATA(oref) = NEW zcl_demo_abap_objects( ).
+    &quot;Creating parameter table
+    DATA(ptab) = VALUE abap_parmbind_tab( ( name  = &#x27;I_OP&#x27;
+                                            kind  = cl_abap_objectdescr=&gt;exporting
+                                            value = NEW i( 3 ) )
+                                          ( name  = &#x27;R_TRIPLE&#x27;
+                                            kind  = cl_abap_objectdescr=&gt;returning
+                                            value = NEW i( ) ) ).
+
+    &quot;The example method triplse the value specified for i_op.
+    CALL METHOD oref-&gt;(&#x27;TRIPLE&#x27;) PARAMETER-TABLE ptab.
+    ASSERT ptab[ name = &#x27;R_TRIPLE&#x27; ]-value-&gt;* = 9.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>DDIC Database Tables</h2>
+<ul>
+<li>DDIC Database tables ...</li>
+<li>are DDIC objects that describe physical database tables in the current standard database.</li>
+<li>function as two-dimensional matrices with rows and columns.</li>
+<li>include a table key, which is a field or combination of fields that uniquely identifies each row. Every database table must have a primary key.</li>
+<li>Note the concept of foreign keys, where one or more columns in a database table can serve as primary keys in another table. See more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_database_tables_forkey.htm">here</a>.</li>
+<li>have a non-nested structured type.</li>
+<li>include both technical and semantic properties.</li>
+<li>act as structured types and can be referenced as such in ABAP.</li>
+<li>can be accessed using ABAP SQL, for example, in <code>SELECT</code> statements to retrieve database table entries into an internal table.</li>
+<li>are created in ADT and ABAP Cloud using source code (dictionary definition language).</li>
+<li>The typical table category of a DDIC database table is a transparent table. When activated, a physical database table is created on the underlying database. This table has the same component names, but they may not be in the same order, allowing extra fields to be added to a DDIC database table without affecting the underlying database object.</li>
+<li>DDIC database table specifications include table fields, which represent the table columns:</li>
+<li>These must have unique names.</li>
+<li>Reference types, substructures, and table types are not allowed.</li>
+<li>One or more key fields must be specified at the beginning to uniquely identify table entries.</li>
+<li>Among others, key fields cannot be of the types <code>string</code> and <code>rawstring</code>.</li>
+<li>The <code>NOT NULL</code> flag is always set for key fields, meaning they cannot have a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abennull_value_glosry.htm">null value</a>.</li>
+<li>Typically, the first column of DDIC database tables is a key field with the built-in type <code>clnt</code>, indicating the table is client-dependent. Tables in the delivery class A are generally client-dependent.</li>
+<li>Some field types, such as <code>curr</code> (currency) or <code>quan</code> (quantity), require specific specifications and must have reference tables specified.</li>
+<li>For table field typing, you can use built-in types and data elements.</li>
+<li>You can specify non-nested structures to be included in tables to avoid redundant structure definitions.</li>
+<li>Specific technical and semantic properties for DDIC database tables can or must be specified. More information is available <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_database_tables_techspec.htm">here</a>. Among the specifications are the following. They are added by default when creating a new DDIC database table. Certain specifications are added by default when creating a new DDIC database table.</li>
+</ul>
+<table>
+<thead><tr>
+<th>Specification</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>@EndUserText.label : &#x27;Demo database table&#x27;</code></td>
+<td>Providing a short description</td>
+</tr>
+<tr>
+<td><code>@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE</code></td>
+</tr>
+<tr>
+<td><code>@AbapCatalog.tableCategory : #TRANSPARENT</code></td>
+<td>The default table category is transparent table &lt;br&gt;The defined DDIC database table has an identically named variant with the same columns in the underlying database.</td>
+</tr>
+<tr>
+<td><code>@AbapCatalog.deliveryClass : #A</code></td>
+<td>The delivery class controls the transport of table data in installations, upgrades, and so on. &lt;br&gt;<em>A</em> stands for an application table for master and transaction data.</td>
+</tr>
+<tr>
+<td><code>@AbapCatalog.dataMaintenance : #RESTRICTED</code></td>
+<td>Defines whether it is possible to display/maintain a database table or view its contents using tools. In the example, the table can be displayed using Data Preview in ADT.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Find more information about DDIC database tables in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenddic_database_tables.htm">ABAP Keyword Documentation</a>.</li>
+</ul>
+<p><strong>Example: DDIC Database Tables</strong></p>
+<p>The following example creates two DDIC database tables exploring several options:</p>
+<pre><code>    @EndUserText.label : &#x27;Demo DDIC database table&#x27;
+    @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+    @AbapCatalog.tableCategory : #TRANSPARENT
+    @AbapCatalog.deliveryClass : #A
+    @AbapCatalog.dataMaintenance : #RESTRICTED
+    define table zdemo_abap_tabl1 {
+
+      key client : abap.clnt not null;
+      key num    : abap.int4 not null;
+      chars      : abap.char(5);
+      id         : zdemo_abap_dtel_pr;
+      flag       : zdemo_abap_dtel_do;
+      str        : abap.string(0);
+      cuky       : abap.cuky;
+      @Semantics.amount.currencyCode : &#x27;zdemo_abap_tabl1.cuky&#x27;
+      curr       : abap.curr(8,2);
+
+    }</code></pre>
+<pre><code>    @EndUserText.label : &#x27;Demo DDIC database table&#x27;
+    @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+    @AbapCatalog.tableCategory : #TRANSPARENT
+    @AbapCatalog.deliveryClass : #A
+    @AbapCatalog.dataMaintenance : #RESTRICTED
+    define table zdemo_abap_tabl2 {
+
+      key client    : abap.clnt not null;
+      key key_field : abap.int4 not null;
+      include zdemo_abap_struc_flat;
+
+    }</code></pre>
+<ul>
+<li>You have accessed your SAP BTP ABAP Environment in ADT.</li>
+<li>Create DDIC database tables</li>
+<li>In your target package, choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>Filter for <em>database table</em> and choose <em>Next</em> and walk through the wizard.</li>
+<li>As the database table name, use <em>ZDEMO_ABAP_TABL1</em>.</li>
+<li>Insert the following code:</li>
+<li>Note: The numeric specification <code>abap.string(0);</code> for a component with type <code>string</code> (and also <code>rawstring</code>) means to specify the maximum length of the component. <code>0</code> in <code>abap.string(0);</code> means there is no restriction, <code>256</code> in <code>abap.string(256);</code> means restricting the length to 256. This restriction is checked in read and write operations.</li>
+<li>Save and activate.</li>
+<li>Proceed as above and create another DDIC database table using the name <em>ZDEMO_ABAP_TABL2</em>.</li>
+<li>Insert the following code. The example includes a flat DDIC structure (created above) using the <code>include</code> specification. In doing so, you can avoid an extra declaration of table fields.</li>
+<li>Save and activate.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>ABAP CDS Objects as Global Types</h2>
+<ul>
+<li>ABAP CDS objects are integrated into DDIC.</li>
+<li>Like DDIC objects, many ABAP CDS objects represent global types usable in ABAP. For example, CDS view entities can be used as data sources in ABAP SQL statements.</li>
+<li>Although DDIC objects can be used in CDS objects, the reverse is not true. For example, a CDS view entity cannot be used in a DDIC database table.</li>
+<li>While ABAP Cloud still supports several DDIC objects, some have ABAP CDS-based successors. These successors offer advanced functionalities and support modern concepts such as ABAP RAP, which relies on data models defined in ABAP CDS and RAP behavior definitions that determine the model behavior.</li>
+</ul>
+<div class="note">[!NOTE] - This cheat sheet only emphasizes ABAP CDS objects as global types to be used in ABAP. It does not cover use cases, data modeling aspects, annotations, syntax, and more. Refer to the [documentation](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds.htm) for the complete picture. The executable example of the [CDS View Entities](15_CDS_View_Entities.md) cheat sheet provides a demonstration of a selection of CDS-related syntax. - ABAP CDS objects are created in ADT from source code.</div>
+<h3>CDS Types Usable as Elementary Types</h3>
+<h4>CDS Built-In Types</h4>
+<p>CDS built-in types...</p>
+<ul>
+<li>Are elementary types derived from the built-in dictionary types.</li>
+<li>Can be used in various ABAP CDS contexts, such as elements in CDS entities (for example, elements in CDS abstract entities, typed literals in CDS view entities, etc.) or in CDS simple types, and for casting in ABAP CDS.</li>
+<li>Are denoted using <code>abap.type</code>, with optional or mandatory length and decimal specifications in parentheses. For example, <code>abap.char(len)</code> corresponds to the DDIC type <code>char</code> with a length specification.</li>
+<li>A comprehensive list can be found <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_overview_builtin_types.htm">here</a>.</li>
+</ul>
+<h4>CDS Simple Types</h4>
+<ul>
+<li>CDS simple types are user-defined types in ABAP CDS that define elementary data types.</li>
+<li>They represent successors to DDIC domains and data elements.</li>
+<li>The types available for use include:</li>
+<li>Most built-in CDS types</li>
+<li>DDIC data elements</li>
+<li>Other simple types</li>
+<li>They can be used ...</li>
+<li>in ABAP CDS for typing elements or parameters and for casting</li>
+<li>in ABAP for defining types</li>
+<li>CDS annotations can enhance these types with metadata, which frameworks like RAP evaluate (for example, in the context of OData). When using a data element, DDIC properties are inherited. For more information, see <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_dtel.htm">this topic</a>.</li>
+<li>CDS simple types support type stacking.</li>
+<li>Find more information <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_define_simple_type.htm">here</a>.</li>
+</ul>
+<p><strong>Example: CDS Simple Types</strong></p>
+<p>The following example creates CDS simple types:</p>
+<pre><code>    @EndUserText.label: &#x27;Demo CDS simple type&#x27;
+    define type ZDEMO_ABAP_CDS_TYPE : abap.char(5)</code></pre>
+<pre><code>    @EndUserText.label: &#x27;Demo CDS simple type&#x27;
+    define type ZDEMO_ABAP_CDS_TYPE : land1</code></pre>
+<pre><code>    @EndUserText.label: &#x27;Demo CDS simple type&#x27;
+    define type ZDEMO_ABAP_CDS_TYPE : ZDEMO_ABAP_CDS_ST_BT</code></pre>
+<ul>
+<li>You have accessed your SAP BTP ABAP Environment in ADT.</li>
+<li>Create a CDS simple type based on a CDS built-in type</li>
+<li>In your target package, choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>Filter for <em>type</em> (under Core Data Services) and choose <em>Next</em> and walk through the wizard.</li>
+<li>As the type name, use <em>ZDEMO_ABAP_CDS_TYPE</em>.</li>
+<li>Insert the following code:</li>
+<li>Save and activate.</li>
+<li>More syntax options:</li>
+<li>CDS simple type based on a DDIC data element</li>
+<li>Another CDS simple type (assuming a type with that name exists)</li>
+</ul>
+<pre><code>&quot;Using CDS simple types in ABAP, for example, to declare local
+&quot;types and data objects
+&quot;Elementary types/data objects
+TYPES ty_cds_simple TYPE zdemo_abap_cds_type.
+DATA dobj_w_simple_type TYPE zdemo_abap_cds_type.
+&quot;Typing a structure component with a CDS simple type
+DATA: BEGIN OF struc_w_st,
+        comp1 type string,
+        comp2 type i,
+        comp3 type zdemo_abap_cds_type,
+      END OF struc_w_st.
+&quot;Internal table with elementary line type represented by the
+&quot;CDS simple type
+DATA itab_w_st TYPE TABLE OF zdemo_abap_cds_type WITH EMPTY KEY.
+
+&quot;Retrieving type information using RTTI
+DATA(tdo_cds_simple_type) = CAST cl_abap_elemdescr( cl_abap_typedescr=&gt;describe_by_name( `ZDEMO_ABAP_CDS_TYPE` ) ).
+DATA(type_category_cds_st) = tdo_cds_simple_type-&gt;kind.
+DATA(type_kind_cds_st) = tdo_cds_simple_type-&gt;type_kind.
+DATA(is_ddic_type_cds_st) = tdo_cds_simple_type-&gt;is_ddic_type( ).
+&quot;If you use abap.char(5) as type in the CDS simple type, the following data object contains X
+TYPES c5 TYPE c LENGTH 5.
+DATA(applies_to_data_cds_st) = tdo_cds_simple_type-&gt;applies_to_data( CONV c5( &#x27;abcde&#x27; ) ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>CDS Enumerated Types</h4>
+<ul>
+<li>CDS enumerated types are user-defined types in ABAP CDS.</li>
+<li>Such an <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenenum_type_glosry.htm">enumerated type</a> is a data type that specifies a value set in addition to the actual type properties.</li>
+<li>The value set can be used to validate allowed values, similar to fixed values in DDIC domains.</li>
+<li>They can be used ...</li>
+<li>in ABAP CDS to type elements or parameters, for casting, and in comparisons. More details and examples are available <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_use_enum_type.htm">here</a>.</li>
+<li>in ABAP for <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenenumerated_variable_glosry.htm">enumerated variables</a>. An <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenenumerated_structure_glosry.htm">enumerated structure</a> with the CDS enumerated type name is automatically declared, functioning like <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenenumerated_type_glosry.htm">ABAP enumerated types</a>.</li>
+<li>To create the types, you ...</li>
+<li>specify a list of enumerated constants that are assigned values as untyped literals. One component must be set as initial to establish the base type&#x27;s initial value.</li>
+<li>define a base type. Possible base types include <code>int1</code>, <code>int2</code>, <code>int4</code>, <code>char</code>, and <code>numc</code>, with the last two having a maximum length of 8.</li>
+<li>include <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_enum_type_anno.htm">annotations</a> if needed.</li>
+</ul>
+<div class="note">[!NOTE] - Enumerated types can also be specified in ABAP using the syntax `TYPES BEGIN OF ENUM`. See examples in the [Data Types and Data Objects](16_Data_Types_and_Objects.md) cheat sheet. - Find more information about RTTI, which is used in this and the previous examples, in the [Dynamic Programming](06_Dynamic_Programming.md) cheat sheet.</div>
+<p><strong>Example: CDS Enumerated Types</strong></p>
+<p>The following example creates a CDS enumerated type:</p>
+<pre><code>    @EndUserText.label: &#x27;Demo CDS enumerated type&#x27;
+    define type ZDEMO_ABAP_CDS_ENUM : abap.char(1) enum
+    {
+      enum_constant_1 = initial;
+      enum_constant_2 = &#x27;X&#x27;;
+      enum_constant_3 = &#x27;Y&#x27;;
+      enum_constant_4 = &#x27;Z&#x27;;
+    }</code></pre>
+<ul>
+<li>You have accessed your SAP BTP ABAP Environment in ADT.</li>
+<li>Create a CDS enumerated type</li>
+<li>In your target package, choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>Filter for <em>type</em> (under Core Data Services) and choose <em>Next</em> and walk through the wizard.</li>
+<li>As the type name, use <em>ZDEMO_ABAP_CDS_ENUM</em>.</li>
+<li>Insert the following code:</li>
+<li>Save and activate.</li>
+</ul>
+<pre><code>&quot;Using CDS enumerated types in ABAP, for example, to declare
+&quot;local types and data objects
+TYPES ty_cds_enum TYPE zdemo_abap_cds_enum.
+DATA dobj_w_enum_type TYPE zdemo_abap_cds_enum.
+
+&quot;The technical data type of an enumerated value is the base type
+&quot;of the enumerated type. You can use the base type of an enumerated
+&quot;type in special conversions using the constructor operator CONV.
+DATA dobj_c1 TYPE c LENGTH 1 VALUE &#x27;Y&#x27;.
+
+DATA(conv_enum_1) = CONV zdemo_abap_cds_enum( dobj_c1 ).
+&quot;An enumerated structure with the CDS enumerated type name is
+&quot;automatically declared. Therefore, you can access the constants
+&quot;with the component selector preceded by the CDS enumerated type
+&quot;name.
+ASSERT conv_enum_1 = zdemo_abap_cds_enum-enum_constant_3.
+
+&quot;Using a value that is not available in the CDS enumerated type
+dobj_c1 = &#x27;A&#x27;.
+TRY.
+    DATA(conv_enum_2) = CONV zdemo_abap_cds_enum( dobj_c1 ).
+  CATCH cx_sy_conversion_no_enum_value.
+    &quot;This example raises an exception.
+ENDTRY.
+
+&quot;Retrieving type information using RTTI
+DATA(tdo_cds_enum) = CAST cl_abap_enumdescr( cl_abap_typedescr=&gt;describe_by_name( `ZDEMO_ABAP_CDS_ENUM` ) ).
+DATA(type_category_cds_enum) = tdo_cds_enum-&gt;kind.
+DATA(type_kind_cds_enum) = tdo_cds_enum-&gt;type_kind.
+DATA(is_ddic_type_cds_enum) = tdo_cds_enum-&gt;is_ddic_type( ).
+DATA(base_kind_cds_enum) = tdo_cds_enum-&gt;base_type_kind.
+DATA(members_cds_enum) = tdo_cds_enum-&gt;members.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>CDS Entities Usable as Structured Types</h3>
+<ul>
+<li>Several <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_entity_glosry.htm">CDS entities</a> represent structured types usable in ABAP, however, they are not usable in DDIC objects.</li>
+<li>These include:</li>
+<li><a href="https://help.sap.com/docs/ABAP_Cloud/aaae421481034feab3e71dd9e0f643bf/100ab51935544f18b4f4be9b4abb91e8.html">CDS table entities</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_v2_view_glosry.htm">CDS view entities</a> for data modeling and selection</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_table_function_glosry.htm">CDS table functions</a> for data selection with AMDP</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_abstract_entity_glosry.htm">CDS abstract entities</a> for modeling structures, similar to DDIC structures but with advanced features for use in RAP</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_hierarchy_glosry.htm">CDS hierarchies</a> for retrieving hierarchical data nodes</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_custom_entity_glosry.htm">CDS custom entities</a> for implementing custom data retrieval with ABAP</li>
+<li>For an overview and additional details about CDS entities, see <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_view_entity.htm">here</a> and the <a href="https://help.sap.com/docs/abap-cloud/abap-data-models/abap-data-models?locale=en-US?version=sap_btp">ABAP Data Models Guide</a>.</li>
+</ul>
+<pre><code>&quot;Creating structured types and data objects using ABAP cheat sheet
+&quot;repository objects
+&quot;CDS view entity
+TYPES ty_struc_cds_ve TYPE zdemo_abap_fli_ve.
+DATA dobj_struc_cds_ve TYPE zdemo_abap_fli_ve.
+&quot;CDS abstract entity
+TYPES ty_struc_cds_abstr TYPE zdemo_abap_abstract_ent.
+DATA dobj_struc_cds_abstr TYPE zdemo_abap_abstract_ent.
+&quot;CDS table function
+TYPES ty_struc_cds_tabfunc TYPE zdemo_abap_table_function.
+DATA dobj_struc_cds_tabfunc TYPE zdemo_abap_table_function.
+
+&quot;Using CDS entities as data souces in ABAP SQL statements
+DATA itab_cds_ve TYPE TABLE OF zdemo_abap_fli_ve WITH EMPTY KEY.
+DATA itab_cds_tabfunc TYPE TABLE OF zdemo_abap_table_function WITH EMPTY KEY.
+
+SELECT * FROM zdemo_abap_fli_ve INTO TABLE @itab_cds_ve.
+SELECT * FROM zdemo_abap_table_function INTO TABLE @itab_cds_tabfunc.</code></pre>
+<div class="note">[!NOTE] - Some of the CDS entities can also be used as data sources in ABAP SQL statements, some cannot (for example, CDS custom entities). - [DDIC-based views](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_v1_view_glosry.htm) are obsolete and should not be used anymore.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>CRUD Operations Using CDS Artifacts</h3>
+<ul>
+<li>There are CDS artifacts that allow not only reading but also creating, updating, and deleting: Table entities and writable CDS view entities.</li>
+<li>Find example artifacts and an example class using various ABAP SQL statements in the <a href="03_ABAP_SQL.md#crud-operations-using-cds-artifacts">ABAP SQL</a> cheat sheet.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Excursions</h2>
+<h3>Built-in Database Functions</h3>
+<ul>
+<li>DDIC offers a variety of predefined functions for use in ABAP CDS and ABAP SQL.</li>
+<li>These functions include numeric functions for computations, string functions for string manipulation, and table functions for handling internal tables, among others.</li>
+<li>For additional information and code examples, refer to the <a href="24_Builtin_Functions.md">Built-In Functions</a> cheat sheet.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Finding Released Repository Objects in the System</h3>
+<p>In an SAP BTP ABAP environment and using ADT, you can find released repository objects in the <em>Project Explorer</em> view under <em>Released Objects</em>:</p>
+<p>!<a href="./files/released_APIs.png">Released APIs</a></p>
+<p>Programmatically retrieving information about which repository objects are released and available in the system:</p>
+<pre><code>SELECT ReleasedObjectType, ReleasedObjectName, ReleaseState
+  FROM i_apisforclouddevelopment
+  WHERE releasestate = &#x27;RELEASED&#x27;
+  ORDER BY ReleasedObjectType, ReleasedObjectName
+  INTO TABLE @DATA(released_apis).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Retrieving Repository Objects Information and Creating Repository Object Programmatically with XCO</h3>
+<p>Using the <a href="https://help.sap.com/docs/btp/sap-business-technology-platform/generation-apis">XCO library</a>, you can retrieve ABAP repository objects information and create the objects programmatically. The executable example (<a href="src/zcl_demo_abap_cloud_excursion.clas.abap">zcl_demo_abap_cloud_excursion</a>) of the <a href="19_ABAP_for_Cloud_Development.md">ABAP for Cloud Development</a> cheat sheet includes demo code snippets. The <a href="22_Released_ABAP_Classes.md">Released ABAP Classes</a> cheat sheet also includes a small selection of code snippets in that context. For more information, refer to the <a href="https://help.sap.com/docs/btp/sap-business-technology-platform/generation-apis">documentation</a>.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>More Information</h2>
+<ul>
+<li>ABAP Keyword Documentation (ABAP for Cloud Development)</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_dictionary.htm">Dictionary (DDIC)</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds.htm">Core Data Services (ABAP CDS)</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_tdl.htm">ABAP CDS - Type Definitions</a></li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencds_annotations_ktd_docu.htm">ABAP CDS - SAP Annotation Documentation</a></li>
+<li><a href="https://help.sap.com/docs/abap-cloud/abap-development-tools-user-guide/working-with-classic-objects-in-abap-dictionary?locale=en-US&amp;version=sap_btp">Working with Classic Objects in ABAP Dictionary</a></li>
+<li><a href="https://help.sap.com/docs/abap-cloud/abap-data-models/abap-data-models?locale=en-US?version=sap_btp">ABAP Data Models Guide</a></li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Executable Example</h2>
+<div class="note">[!NOTE] - The executable example uses both the created repository objects as described in this cheat sheet and some repository objects of the ABAP cheat sheet repository. The example explores and uses code snippets of this cheat sheet, emphasizing the use of global types in ABAP programs. - [Disclaimer](./README.md#%EF%B8%8F-disclaimer)</div>
+<p>Expand the following collapsible section for example code. To try it out, create a demo class named <code>zcl_demo_abap</code> and paste the code into it. After activation, choose <em>F9</em> in ADT to execute the class. The example is set up to display output in the console.</p>
+<p>&lt;details&gt; &lt;summary&gt;🟢 Click to expand for example code&lt;/summary&gt; &lt;!-- --&gt;</p>
+<pre><code>CLASS zcl_demo_abap DEFINITION
+      PUBLIC
+      FINAL
+      CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun.
+ENDCLASS.
+
+CLASS zcl_demo_abap IMPLEMENTATION.
+  METHOD if_oo_adt_classrun~main.
+
+    &quot;Populating demo database tables from the ABAP cheat sheet repository
+    zcl_demo_abap_aux=&gt;fill_dbtabs( ).
+
+    &quot;---------------------------------------------------
+    &quot;------------ Built-in dictionary types ------------
+    &quot;---------------------------------------------------
+
+    &quot;Built-in dictionary types are not directly usable in ABAP,
+    &quot;except for types specified in ABAP SQL.
+    &quot;The following example shows miscellaneous typed literals in
+    &quot;an ABAP SQL statement. Typed literals can be specified in read
+    &quot;positions where host variables are possible.
+    DATA(tmstamp) = CONV timestamp( &#x27;20240808112517&#x27; ).
+    DATA(str) = `Some string`.
+    SELECT SINGLE
+      FROM zdemo_abap_fli
+      FIELDS
+        carrid,
+        @str AS host_var,
+        char`X` AS flag,
+        int8`32984723948723` AS int8,
+        raw`11` AS raw,
+        numc`1234` AS numc,
+        utclong`2024-01-01T10:01:02,2` AS utc,
+        tims`101507` AS tims,
+        curr`173.95` AS curr,
+        &quot;Multiple cast expressions splitting a time stamp into date and time parts
+        CAST( CAST( div( @tmstamp, 1000000 ) AS CHAR ) AS DATS ) AS date,
+        CAST( substring( CAST( @tmstamp AS CHAR ), 9, 6 ) AS TIMS ) AS time,
+        &quot;Untyped literal
+        &#x27;ABAP&#x27; AS txt
+      WHERE fldate = datn`20240102`
+      INTO @DATA(misc_typed_literals).
+
+    out-&gt;write( data = misc_typed_literals name = `misc_typed_literals` ).
+
+    &quot;-----------------------------------------------------------
+    &quot;--------------- DDIC data elements/domains ----------------
+    &quot;-----------------------------------------------------------
+
+    &quot;Using DDIC data elements for local types and data objects
+
+    &quot;Data element based on a built-in dicitionary type
+    TYPES ty_dtel1 TYPE zdemo_abap_dtel_pr.
+    DATA char3_dtel TYPE zdemo_abap_dtel_pr.
+
+    &quot;Data element based on a domain
+    TYPES ty_dtel2 TYPE zdemo_abap_dtel_do.
+    DATA char1_dtel TYPE zdemo_abap_dtel_do.
+
+    &quot;Data element based on a reference type
+    TYPES ty_dtel3 TYPE zdemo_abap_dtel_ref.
+    DATA char10_dtel_ref TYPE zdemo_abap_dtel_do.
+
+    &quot;Using a data element in an explicit conversion
+    DATA(char3_dtel_inl) = CONV zdemo_abap_dtel_pr( &#x27;1234567890&#x27; ).
+    out-&gt;write( data = char3_dtel_inl name = `char3_dtel_inl` ).
+
+    &quot;Using RTTI to demonstrate the type mapping of built-in dicitionary
+    &quot;types (that serve as the types of the DDIC data elements) to ABAP types
+    &quot;The example data element ZDEMO_ABAP_DTEL_PR is typed with numc, length 5.
+    DATA(tdo_a) = CAST cl_abap_elemdescr( cl_abap_typedescr=&gt;describe_by_name( &#x27;ZDEMO_ABAP_DTEL_PR&#x27; ) ).
+    DATA(type_kind_a) = tdo_a-&gt;type_kind.
+    DATA(output_length_a) = tdo_a-&gt;output_length.
+    TYPES n5 TYPE n LENGTH 5.
+    DATA(applies_a) = tdo_a-&gt;applies_to_data( CONV n5( &#x27;12345&#x27; ) ).
+
+    &quot;The example data element ZDEMO_ABAP_DTEL_PR is based on a domain. The type used is char, length 1.
+    DATA(tdo_b) = CAST cl_abap_elemdescr( cl_abap_typedescr=&gt;describe_by_name( &#x27;ZDEMO_ABAP_DTEL_DO&#x27; ) ).
+    DATA(type_kind_b) = tdo_b-&gt;type_kind.
+    DATA(output_length_b) = tdo_b-&gt;output_length.
+    TYPES c1 TYPE c LENGTH 1.
+    DATA(applies_b) = tdo_b-&gt;applies_to_data( CONV c1( &#x27;A&#x27; ) ).
+
+    out-&gt;write( data = type_kind_a name = `type_kind_a` ).
+    out-&gt;write( data = output_length_a name = `output_length_a` ).
+    out-&gt;write( data = applies_a name = `applies_a` ).
+    out-&gt;write( data = type_kind_b name = `type_kind_b` ).
+    out-&gt;write( data = output_length_b name = `output_length_b` ).
+    out-&gt;write( data = applies_b name = `applies_b` ).
+
+    &quot;-----------------------------------------------------------
+    &quot;-------------------- DDIC structures ----------------------
+    &quot;-----------------------------------------------------------
+
+    &quot;Using DDIC structures to declare local types and data objects
+    TYPES ty_struc_flat TYPE zdemo_abap_struc_flat.
+    TYPES ty_struc_deep TYPE zdemo_abap_struc_deep.
+    DATA flat_struc1 TYPE ty_struc_flat.
+    DATA flat_struc2 TYPE zdemo_abap_struc_flat.
+    DATA deep_struc1 TYPE ty_struc_deep.
+    DATA deep_struc2 TYPE zdemo_abap_struc_deep.
+
+    &quot;Populating the demo structures
+    &quot;Flat structure
+    flat_struc1 = VALUE #( chars = &#x27;abc&#x27;
+                           num = 123
+                           cuky = &#x27;EUR&#x27;
+                           curr = &#x27;123.45&#x27;
+                           id  = &#x27;98765&#x27;
+                           flag = &#x27;X&#x27; ).
+
+    &quot;Deep structures including structures
+    &quot;Addressing the components of nested structures via the structure name
+    &quot;Note struc3: The include structure component in the DDIC structure is specified
+    &quot;with a suffix. When addressing the components via the structure name, the suffix
+    &quot;is not needed. Check the F2 information, which lists the individual components
+    &quot;with suffix.
+    deep_struc2 = VALUE #( bt_elem1 = &#x27;abcde&#x27;
+                           bt_elem2 = 123
+                           &quot;...
+                           dref1 = NEW #( &#x27;abc&#x27; )
+                           &quot;...
+                           struc2 = VALUE #( carrid = &#x27;XY&#x27; carrname = &#x27;XY Airways&#x27; )
+                           struc3 = VALUE #( carrid = &#x27;YZ&#x27; connid = &#x27;1234&#x27; )
+                           &quot;...
+                          ).
+
+    &quot;Addressing the components of included structures individually
+    DATA(deep_struc3) = VALUE zdemo_abap_struc_deep( bt_elem1 = &#x27;abcde&#x27;
+                                                     bt_elem2 = 123
+                                                     &quot;...
+                                                     dref1 = NEW #( &#x27;abc&#x27; )
+                                                     &quot;...
+                                                     &quot;Components referring to struc2
+                                                     carrid = &#x27;XY&#x27;
+                                                     carrname = &#x27;XY Airways&#x27;
+                                                     &quot;Components referring to struc3 (with suffixes)
+                                                     carrid_in = &#x27;YZ&#x27;
+                                                     connid_in = &#x27;1234&#x27;
+                                                     &quot;...
+                                                    ).
+
+    DATA(comp_val1) = deep_struc2-carrid.
+    DATA(comp_val2) = deep_struc2-struc2-carrid.
+    DATA(comp_val3) = deep_struc2-struc3-carrid.
+    ASSERT comp_val1 = comp_val2.
+    ASSERT comp_val1 &lt;&gt; comp_val3.
+
+    DATA(comp_val4) = deep_struc3-carrid.
+    DATA(comp_val5) = deep_struc3-struc2-carrid.
+    DATA(comp_val6) = deep_struc2-struc3-carrid.
+    DATA(comp_val7) = deep_struc3-carrid_in.
+    ASSERT comp_val4 = comp_val5.
+    ASSERT comp_val6 = comp_val7.
+    ASSERT comp_val4 &lt;&gt; comp_val6.
+
+    &quot;----------------------------------------------------
+    &quot;------------------ DDIC table types ----------------
+    &quot;----------------------------------------------------
+
+    &quot;Declaring internal tables and local table types based on
+    &quot;DDIC table types
+    TYPES ty_tab_elem TYPE zdemo_abap_tt_str.
+    TYPES ty_tab_struc TYPE zdemo_abap_tt_so.
+    DATA tab_elem1 TYPE ty_tab_elem.
+    DATA tab_elem2 TYPE zdemo_abap_tt_str.
+    DATA tab_struct1 TYPE ty_tab_struc.
+    DATA tab_struct2 TYPE zdemo_abap_tt_so.
+
+    &quot;Using RTTI to check whether the technical properties of the demo table
+    &quot;types are identical to those of the released table type string_table
+    DATA(applies) = CAST cl_abap_tabledescr( cl_abap_typedescr=&gt;describe_by_name( &#x27;ZDEMO_ABAP_TT_STR&#x27; ) )-&gt;applies_to_data( VALUE string_table( ) ).
+    ASSERT applies = &#x27;X&#x27;.
+
+    &quot;Using RTTI to retrieve table keys
+    &quot;The example table type zdemo_abap_tt_so is specified with a primary table with components
+    &quot;and secondary table key
+    DATA(tdo_table_type) = CAST cl_abap_tabledescr( cl_abap_typedescr=&gt;describe_by_name( &#x27;ZDEMO_ABAP_TT_SO&#x27; ) ).
+    DATA(table_keys) = tdo_table_type-&gt;get_keys( ).
+    out-&gt;write( data = table_keys name = `table_keys` ).
+
+    &quot;The example also specifies an alias name
+    DATA(table_key_aliases) = tdo_table_type-&gt;get_key_aliases( ).
+    out-&gt;write( data = table_key_aliases name = `table_key_aliases` ).
+
+    &quot;-------------------------------------------------------
+    &quot;-------------- Predefined types in DDIC ---------------
+    &quot;-------------------------------------------------------
+
+    &quot;Multiple predefined domains and data elements are available in the system
+    &quot;The following example demonstrates data elements for built-in dictionary types.
+    &quot;In these cases, the data elements have the same names as the built-in dictionary
+    &quot;types.
+    DATA a TYPE int1.
+    DATA b TYPE int2.
+    DATA c TYPE int4.
+    DATA d TYPE d16n.
+    DATA e TYPE d34n.
+    DATA f TYPE datn.
+    DATA g TYPE timn.
+    DATA h TYPE utcl.
+
+    &quot;Respective built-in DDIC types cannot be specified directly
+    &quot;in ABAP programs. So, the following data object declaration
+    &quot;using a built-in DDIC type is not possible.
+    &quot;DATA i type rawstring.
+
+    &quot;Note: The following type definition emphasizes that local
+    &quot;types hide global type names.
+    TYPES rawstring TYPE xstring.
+    DATA j TYPE rawstring.
+
+    &quot;Programmatically retrieving information about which released APIs are available
+    &quot;The following statement retrieves released data elements and domains.
+    SELECT ReleasedObjectType, ReleasedObjectName, ReleaseState
+      FROM i_apisforclouddevelopment
+      WHERE releasestate = &#x27;RELEASED&#x27;
+      AND ( ReleasedObjectType = &#x27;DTEL&#x27; OR ReleasedObjectType = &#x27;DOMA&#x27; )
+      ORDER BY ReleasedObjectType, ReleasedObjectName
+      INTO TABLE @DATA(released_dtel_doma).
+
+    &quot;Truth values
+    &quot;Using the data element abap_boolean as type in the data object declaration.
+    DATA is_true TYPE abap_boolean.
+
+    DATA(some_string) = `Hello#ABAP##World#`.
+    IF some_string CS `#`.
+      &quot;Using abap_true/abap_false from the released abap type pool as constant values
+      is_true = abap_true.
+    ELSE.
+      is_true = abap_false.
+    ENDIF.
+
+    out-&gt;write( data = is_true name = `is_true` ).
+
+    &quot;Many predefined data types are used in operand positions of ABAP statements
+
+    &quot;The RESULTS addition to the FIND statement can expect
+    &quot;the table type match_result_tab that contains search results.
+    DATA findings TYPE match_result_tab.
+    FIND ALL OCCURRENCES OF `#` IN some_string RESULTS findings.
+    ASSERT lines( findings ) = 4.
+    out-&gt;write( data = findings name = `findings` ).
+
+    &quot;Dynamic method call and specifying a parameter table of
+    &quot;type abap_parmbind_tab.
+    DATA(oref) = NEW zcl_demo_abap_objects( ).
+    &quot;Creating parameter table
+    DATA(ptab) = VALUE abap_parmbind_tab( ( name  = &#x27;I_OP&#x27;
+                                            kind  = cl_abap_objectdescr=&gt;exporting
+                                            value = NEW i( 3 ) )
+                                          ( name  = &#x27;R_TRIPLE&#x27;
+                                            kind  = cl_abap_objectdescr=&gt;returning
+                                            value = NEW i( ) ) ).
+
+    &quot;The example method triplse the value specified for i_op.
+    CALL METHOD oref-&gt;(&#x27;TRIPLE&#x27;) PARAMETER-TABLE ptab.
+    ASSERT ptab[ name = &#x27;R_TRIPLE&#x27; ]-value-&gt;* = 9.
+    out-&gt;write( data = ptab name = `ptab` ).
+
+    &quot;-------------------------------------------------------
+    &quot;------------------ DDIC database tables ---------------
+    &quot;-------------------------------------------------------
+
+    &quot;Clearing demo database tables
+    DELETE FROM zdemo_abap_tabl1.
+    DELETE FROM zdemo_abap_tabl2.
+
+    &quot;DDIC database tables represent structued types.
+    DATA struc_from_dbtab TYPE zdemo_abap_tabl1.
+
+    struc_from_dbtab = VALUE #( num  = 1
+                                chars = &#x27;abcde&#x27;
+                                id     = &#x27;12345&#x27;
+                                flag  = &#x27;X&#x27;
+                                str = `ABAP`
+                                cuky = &#x27;EUR&#x27;
+                                curr = &#x27;1.2&#x27;  ).
+
+    MODIFY zdemo_abap_tabl1 FROM @struc_from_dbtab.
+
+    DATA itab_from_dbtab TYPE TABLE OF zdemo_abap_tabl1 WITH EMPTY KEY.
+    SELECT * FROM zdemo_abap_tabl1 INTO TABLE @itab_from_dbtab.
+    out-&gt;write( data = itab_from_dbtab name = `itab_from_dbtab` ).
+
+    &quot;The following example DDIC database table specifies an included
+    &quot;DDIC structure
+
+    DATA itab_from_dbtab2 TYPE TABLE OF zdemo_abap_tabl2 WITH EMPTY KEY.
+    itab_from_dbtab2 = VALUE #( ( key_field = 1
+                                  chars = &#x27;abcde&#x27;
+                                  num  = 2
+                                  cuky = &#x27;EUR&#x27;
+                                  curr = &#x27;1.2&#x27;
+                                  id   = &#x27;12345&#x27;
+                                  flag = &#x27;X&#x27; )
+                                ( key_field = 3
+                                  chars = &#x27;fghij&#x27;
+                                  num  = 4
+                                  cuky = &#x27;USD&#x27;
+                                  curr = &#x27;3.4&#x27;
+                                  id   = &#x27;67890&#x27;
+                                  flag = &#x27;A&#x27; )
+                                ( key_field = 5
+                                  flag = &#x27;Y&#x27; ) ).
+
+    MODIFY zdemo_abap_tabl2 FROM TABLE @itab_from_dbtab2.
+
+    CLEAR itab_from_dbtab2.
+    SELECT * FROM zdemo_abap_tabl2 INTO TABLE @itab_from_dbtab2.
+    out-&gt;write( data = itab_from_dbtab2 name = `itab_from_dbtab2` ).
+
+    &quot;----------------------------------------------------
+    &quot;------------------ CDS simple types ----------------
+    &quot;----------------------------------------------------
+
+    &quot;Using CDS simple types in ABAP, for example, to declarie local
+    &quot;types and data objects
+    &quot;Elementary types/data objects
+    TYPES ty_cds_simple TYPE zdemo_abap_cds_type.
+    DATA dobj_w_simple_type TYPE zdemo_abap_cds_type.
+    &quot;Typing a structure component with a CDS simple type
+    DATA: BEGIN OF struc_w_st,
+            comp1 TYPE string,
+            comp2 TYPE i,
+            comp3 TYPE zdemo_abap_cds_type,
+          END OF struc_w_st.
+    &quot;Internal table with elementary line type represented by the
+    &quot;CDS simple type
+    DATA itab_w_st TYPE TABLE OF zdemo_abap_cds_type WITH EMPTY KEY.
+
+    &quot;Retrieving type information using RTTI
+    DATA(tdo_cds_simple_type) = CAST cl_abap_elemdescr( cl_abap_typedescr=&gt;describe_by_name( `ZDEMO_ABAP_CDS_TYPE` ) ).
+    DATA(type_category_cds_st) = tdo_cds_simple_type-&gt;kind.
+    DATA(type_kind_cds_st) = tdo_cds_simple_type-&gt;type_kind.
+    DATA(is_ddic_type_cds_st) = tdo_cds_simple_type-&gt;is_ddic_type( ).
+    &quot;If you use abap.char(5) as type in the CDS simple type, the following data object contains X.
+    TYPES c5 TYPE c LENGTH 5.
+    DATA(applies_to_data_cds_st) = tdo_cds_simple_type-&gt;applies_to_data( CONV c5( &#x27;abcde&#x27; ) ).
+
+    out-&gt;write( data = type_category_cds_st name = `type_category_cds_st` ).
+    out-&gt;write( data = type_kind_cds_st name = `type_kind_cds_st` ).
+    out-&gt;write( data = is_ddic_type_cds_st name = `is_ddic_type_cds_st` ).
+    out-&gt;write( data = applies_to_data_cds_st name = `applies_to_data_cds_st` ).
+
+    &quot;----------------------------------------------------
+    &quot;------------------ CDS enumerated types ------------
+    &quot;----------------------------------------------------
+
+    &quot;Using CDS enumerated types in ABAP, for example, to declare
+    &quot;local types and data objects
+    &quot;The example CDS enumerated type&#x27;s base type is specified with abap.char(1).
+    TYPES ty_cds_enum TYPE zdemo_abap_cds_enum.
+    DATA dobj_w_enum_type TYPE zdemo_abap_cds_enum.
+
+    &quot;The technical data type of an enumerated value is the base type
+    &quot;of the enumerated type. You can use the base type of an enumerated
+    &quot;type in special conversions using the constructor operator CONV.
+    DATA dobj_c1 TYPE c LENGTH 1 VALUE &#x27;Y&#x27;.
+
+    DATA(conv_enum_1) = CONV zdemo_abap_cds_enum( dobj_c1 ).
+    ASSERT conv_enum_1 = zdemo_abap_cds_enum-enum_constant_3.
+    out-&gt;write( data = conv_enum_1 name = `conv_enum_1` ).
+
+    &quot;Using a value that is not available in the CDS enumerated type
+    dobj_c1 = &#x27;A&#x27;.
+    TRY.
+        DATA(conv_enum_2) = CONV zdemo_abap_cds_enum( dobj_c1 ).
+      CATCH cx_sy_conversion_no_enum_value INTO DATA(enum_error).
+        out-&gt;write( data = enum_error-&gt;get_text( ) name = `enum_error-&gt;get_text( )` ).
+    ENDTRY.
+
+    &quot;Retrieving type information using RTTI
+    DATA(tdo_cds_enum) = CAST cl_abap_enumdescr( cl_abap_typedescr=&gt;describe_by_name( `ZDEMO_ABAP_CDS_ENUM` ) ).
+    DATA(type_category_cds_enum) = tdo_cds_enum-&gt;kind.
+    DATA(type_kind_cds_enum) = tdo_cds_enum-&gt;type_kind.
+    DATA(is_ddic_type_cds_enum) = tdo_cds_enum-&gt;is_ddic_type( ).
+    DATA(base_kind_cds_enum) = tdo_cds_enum-&gt;base_type_kind.
+    DATA(members_cds_enum) = tdo_cds_enum-&gt;members.
+
+    &quot;Although abap.char(1) is used as base type in the example CDS enumerated type,
+    &quot;the following data object is not type compliant.
+    DATA(applies_to_data_cds_enum1) = tdo_cds_enum-&gt;applies_to_data( abap_true ).
+    ASSERT applies_to_data_cds_enum1 IS INITIAL.
+    DATA(applies_to_data_cds_enum2) = tdo_cds_enum-&gt;applies_to_data( CONV zdemo_abap_cds_enum( &#x27;X&#x27; ) ).
+
+    out-&gt;write( data = type_category_cds_enum name = `type_category_cds_enum` ).
+    out-&gt;write( data = type_kind_cds_enum name = `type_kind_cds_enum` ).
+    out-&gt;write( data = is_ddic_type_cds_enum name = `is_ddic_type_cds_enum` ).
+    out-&gt;write( data = base_kind_cds_enum name = `base_kind_cds_enum` ).
+    out-&gt;write( data = members_cds_enum name = `members_cds_enum` ).
+    out-&gt;write( data = applies_to_data_cds_enum1 name = `applies_to_data_cds_enum1` ).
+    out-&gt;write( data = applies_to_data_cds_enum2 name = `applies_to_data_cds_enum2` ).
+
+    &quot;Some demo assertions regarding the example CDS enumerated type, which is usable as
+    &quot;enumerated structure in ABAP.
+    FIELD-SYMBOLS &lt;fs_enum&gt; TYPE data.
+    LOOP AT CAST cl_abap_enumdescr( cl_abap_typedescr=&gt;describe_by_name( `ZDEMO_ABAP_CDS_ENUM` ) )-&gt;members INTO DATA(enum_comps).
+      &quot;Dynamically assigning the enumerated constant to a field symbol
+      ASSIGN zdemo_abap_cds_enum-(enum_comps-name) TO &lt;fs_enum&gt;.
+      CASE enum_comps-name.
+        WHEN &#x27;ENUM_CONSTANT_1&#x27;.
+          ASSERT &lt;fs_enum&gt; = zdemo_abap_cds_enum-enum_constant_1.
+          ASSERT &lt;fs_enum&gt; = CONV zdemo_abap_cds_enum( &#x27;&#x27; ).
+          ASSERT enum_comps-value = &#x27;&#x27;.
+        WHEN &#x27;ENUM_CONSTANT_2&#x27;.
+          ASSERT &lt;fs_enum&gt; = zdemo_abap_cds_enum-enum_constant_2.
+          ASSERT &lt;fs_enum&gt; = CONV zdemo_abap_cds_enum( &#x27;X&#x27; ).
+          ASSERT enum_comps-value = &#x27;X&#x27;.
+        WHEN &#x27;ENUM_CONSTANT_3&#x27;.
+          ASSERT &lt;fs_enum&gt; = zdemo_abap_cds_enum-enum_constant_3.
+          ASSERT &lt;fs_enum&gt; = CONV zdemo_abap_cds_enum( &#x27;Y&#x27; ).
+          ASSERT enum_comps-value = &#x27;Y&#x27;.
+        WHEN &#x27;ENUM_CONSTANT_4&#x27;.
+          ASSERT &lt;fs_enum&gt; = zdemo_abap_cds_enum-enum_constant_4.
+          ASSERT &lt;fs_enum&gt; = CONV zdemo_abap_cds_enum( &#x27;Z&#x27; ).
+          ASSERT enum_comps-value = &#x27;Z&#x27;.
+      ENDCASE.
+    ENDLOOP.
+
+    &quot;----------------------------------------------------
+    &quot;----- CDS entities usable as structured types ------
+    &quot;----------------------------------------------------
+
+    &quot;Several CDS entities represent structured types that can be
+    &quot;used in ABAP. The example shows the creation of local data
+    &quot;types and objects based on CDS entities. Demo artifacts from
+    &quot;the ABAP cheat sheet repository are used.
+
+    &quot;CDS view entity
+    TYPES ty_struc_cds_ve TYPE zdemo_abap_fli_ve.
+    DATA dobj_struc_cds_ve TYPE zdemo_abap_fli_ve.
+    &quot;CDS abstract entity
+    TYPES ty_struc_cds_abstr TYPE zdemo_abap_abstract_ent.
+    DATA dobj_struc_cds_abstr TYPE zdemo_abap_abstract_ent.
+    &quot;CDS table function
+    TYPES ty_struc_cds_tabfunc TYPE zdemo_abap_table_function.
+    DATA dobj_struc_cds_tabfunc TYPE zdemo_abap_table_function.
+
+    &quot;Using CDS view entities and CDS table functions as data souces
+    &quot;in ABAP SQL statements
+    DATA itab_cds_ve TYPE TABLE OF zdemo_abap_fli_ve WITH EMPTY KEY.
+    DATA itab_cds_tabfunc TYPE TABLE OF zdemo_abap_table_function WITH EMPTY KEY.
+
+    SELECT * FROM zdemo_abap_fli_ve INTO TABLE @itab_cds_ve.
+    SELECT * FROM zdemo_abap_table_function INTO TABLE @itab_cds_tabfunc.
+
+    out-&gt;write( data = itab_cds_ve name = `itab_cds_ve` ).
+    out-&gt;write( data = itab_cds_tabfunc name = `itab_cds_tabfunc` ).
+
+  ENDMETHOD.
+ENDCLASS.</code></pre>
+<p>&lt;/details&gt;</p>
+</body>
+</html>

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13 Program Flow Logic - ABAP Cheat Sheet</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #95a5a6;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4, h5, h6 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+        }
+        .note {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #555;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+<p>&lt;a name=&quot;top&quot;&gt;&lt;/a&gt;</p>
+<h1>Program Flow Logic</h1>
+<ul>
+<li><a href="#program-flow-logic">Program Flow Logic</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#expressions-and-functions-for-conditions">Expressions and Functions for Conditions</a></li>
+<li><a href="#control-structures">Control Structures</a></li>
+<li><a href="#if-statements"><code>IF</code> Statements</a></li>
+<li><a href="#excursion-cond-operator">Excursion: <code>COND</code> Operator</a></li>
+<li><a href="#case-case-distinctions"><code>CASE</code>: Case Distinctions</a></li>
+<li><a href="#control-structures-using-case-type-of">Control Structures Using CASE TYPE OF</a></li>
+<li><a href="#excursion-switch-operator">Excursion: <code>SWITCH</code> Operator</a></li>
+<li><a href="#loops">Loops</a></li>
+<li><a href="#do-unconditional-loops"><code>DO</code>: Unconditional Loops</a></li>
+<li><a href="#interrupting-and-exiting-loops">Interrupting and Exiting Loops</a></li>
+<li><a href="#while-conditional-loops"><code>WHILE</code>: Conditional Loops</a></li>
+<li><a href="#loops-across-tables">Loops Across Tables</a></li>
+<li><a href="#calling-procedures">Calling Procedures</a></li>
+<li><a href="#methods-of-classes">Methods of Classes</a></li>
+<li><a href="#function-modules">Function Modules</a></li>
+<li><a href="#calling-function-modules">Calling Function Modules</a></li>
+<li><a href="#function-module-example">Function Module Example</a></li>
+<li><a href="#special-function-modules-in-standard-abap">Special Function Modules in Standard ABAP</a></li>
+<li><a href="#subroutines-in-standard-abap">Subroutines in Standard ABAP</a></li>
+<li><a href="#excursion-return">Excursion: RETURN</a></li>
+<li><a href="#interrupting-the-program-execution-with-wait-up-to-statements">Interrupting the Program Execution with WAIT UP TO Statements</a></li>
+<li><a href="#exceptions-and-runtime-errors">Exceptions and Runtime Errors</a></li>
+<li><a href="#executable-example">Executable Example</a></li>
+</ul>
+<p>This cheat sheet gathers information on program flow logic. Find more details <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_flow_logic.htm">here</a> in the ABAP Keyword Documentation.</p>
+<h2>Introduction</h2>
+<p>In ABAP, the flow of a program is controlled by <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencontrol_structure_glosry.htm">control structures</a>, <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenprocedure_glosry.htm">procedure</a> calls and the raising or handling of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenexception_glosry.htm">exceptions</a>.</p>
+<p>Using control structures as an example, you can determine the conditions for further processing of code, for example, if at all or how often a statement block should be executed. Control structures - as, for example, realized by an <code>IF ... ELSEIF ... ELSE ... ENDIF.</code> statement - can include multiple <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenstatement_block_glosry.htm">statement blocks</a> that are executed depending on conditions.</p>
+<p>In a very simple form, such an <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapif.htm"><code>IF</code></a> statement might look as follows:</p>
+<pre><code>DATA(num) = 1 + 1.
+
+&quot;A simple condition: Checking if the value of num is 2
+IF num = 2.
+  ... &quot;Statement block
+      &quot;Here goes some code that should be executed if the condition is true.
+ELSE.
+  ... &quot;Statement block
+      &quot;Here goes some code that should be executed if the condition is false.
+      &quot;For example, if num is 1, 8, 235, 0 etc., then do something else.
+ENDIF.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Expressions and Functions for Conditions</h2>
+<ul>
+<li>So, such control structures are executed depending on conditions as specified above: <code>... num = 2 ...</code> - a <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlogical_expression_glosry.htm">logical expression</a>.</li>
+<li>Control structures are generally controlled by logical expressions that define conditions for <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenoperand_glosry.htm">operands</a>.</li>
+<li>The result of such an expression is either true or false.</li>
+<li>Logical expressions are either single <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenrelational_expression_glosry.htm">relational expressions</a> or expressions combined from one or more logical expressions with Boolean operators like <code>NOT</code>, <code>AND</code> and <code>OR</code>.</li>
+</ul>
+<pre><code>&quot;Single relational expression
+IF num = 1.
+ ...
+ENDIF.
+
+&quot;Multiple expressions
+IF num = 1 AND flag = &#x27;X&#x27;.
+ ...
+ENDIF.
+
+IF num = 1 OR flag = &#x27;X&#x27;.
+ ...
+ENDIF.
+
+&quot;Multiple expressions can be parenthesized explicitly
+IF ( num = 1 AND flag = &#x27;X&#x27; ) OR ( num = 2 AND flag = &#x27;X&#x27; ).
+ ...
+ENDIF.</code></pre>
+<ul>
+<li>The components of such relational expressions can be <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencomparison_glosry.htm">comparisons</a> or <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenpredicate_glosry.htm">predicates</a>. Note that for <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abencomparison_expression_glosry.htm">comparison expressions</a>,</li>
+</ul>
+<p>the comparisons are carried out according to <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenlogexp_rules.htm">comparison rules</a>.</p>
+<p>The following code snippet shows a selection of possible expressions and operands of such expressions using a big <code>IF</code> statement. Certainly, such a huge statement is far from ideal. Here, the intention is to just cover many syntax options in one go for demonstration purposes. For more information on built-in functions, you can refer to the <a href="24_Builtin_Functions.md">Built-In Functions</a> cheat sheet.</p>
+<pre><code>&quot;Some declarations to be used in the IF statement below
+DATA(num) = 2.                    &quot;integer
+DATA(empty_string) = ``.          &quot;empty string
+DATA(flag) = &#x27;x&#x27;.
+DATA(dref) = NEW string( `ref` ). &quot;data reference variable
+
+&quot;Object reference variable
+DATA oref TYPE REF TO object.
+&quot;Creating an object and assigning it to the reference variable
+oref = NEW zcl_demo_abap_prog_flow_logic( ).
+
+&quot;Declaration of and assignment to a field symbol
+FIELD-SYMBOLS &lt;fs&gt; TYPE string.
+ASSIGN `hallo` TO &lt;fs&gt;.
+
+&quot;Creating an internal table of type string inline
+DATA(str_table) = VALUE string_table( ( `a` ) ( `b` ) ( `c` ) ).
+
+&quot;The following IF statement includes multiple expressions combined by AND to demonstrate different options
+
+&quot;Comparisons
+IF 2 = num    &quot;equal, alternative EQ
+AND 1 &lt;&gt; num  &quot;not equal, alternative NE
+AND 1 &lt; num   &quot;less than, alternative LT
+AND 3 &gt; num   &quot;greater than, alternative GT
+AND 2 &gt;= num  &quot;greater equal, alternative GE
+AND 2 &lt;= num  &quot;less equal, alternative LE
+
+&quot;Checks whether the content of an operand is within a closed interval
+AND num BETWEEN 1 AND 3
+AND NOT num BETWEEN 5 AND 7   &quot;NOT negates a logical expression
+AND ( num &gt;= 1 AND num &lt;= 3 ) &quot;Equivalent to &#x27;num BETWEEN 1 AND 3&#x27;;
+                              &quot;here, demonstrating the use of parentheses
+
+&quot;Comparison operators CO, CN ,CA, NA, CS, NS, CP, NP for character-like data types;
+&quot;see the cheat sheet on string processing
+
+&quot;Predicate Expressions
+AND empty_string IS INITIAL  &quot;Checks whether the operand is initial. The expression
+                             &quot;is true, if the operand contains its type-dependent initial value
+AND num IS NOT INITIAL       &quot;NOT negates
+
+AND dref IS BOUND  &quot;Checks whether a data reference variable contains a valid reference and
+                   &quot;can be dereferenced;
+                   &quot;Negation (IS NOT BOUND) is possible which is also valid for the following examples
+AND oref IS BOUND  &quot;Checks whether an object reference variable contains a valid reference
+
+&quot;IS INSTANCE OF checks whether for a
+&quot;a) non-initial object reference variable the dynamic type
+&quot;b) for an initial object reference variable the static type
+&quot;is more specific or equal to a comparison type.
+AND oref IS INSTANCE OF zcl_demo_abap_prog_flow_logic
+AND oref IS INSTANCE OF if_oo_adt_classrun
+
+AND &lt;fs&gt; IS ASSIGNED  &quot;Checks whether a memory area is assigned to a field symbol
+
+&quot;See the predicate expression IS SUPPLIED in the executable example.
+&quot;It is available in method implementations and checks whether a formal parameter
+&quot;of a procedure is filled or requested.
+
+&quot;Predicate function: Some examples
+AND contains( val = &lt;fs&gt; pcre = `\D` )  &quot;Checks whether a certain value is contained;
+                                        &quot;the example uses the pcre parameter for regular expressions;
+                                        &quot;it checks whether there is any non-digit character contained
+AND matches( val = &lt;fs&gt; pcre = `ha.+` ) &quot;Compares a search range of the argument for the val parameter;
+                                        &quot;the example uses the pcre parameter for regular expressions;
+                                        &quot;it checks whether the value matches the pattern &#x27;ha&#x27;
+                                        &quot;and a sequence of any characters
+
+&quot;Predicate functions for table-like arguments
+&quot;Checks whether a line of an internal table specified in the table expression
+&quot;exists and returns the corresponding truth value.
+AND line_exists( str_table[ 2 ] )
+
+&quot;Predicative method call
+&quot;The result of the relational expression is true if the result of the functional method call
+&quot;is not initial and false if it is initial. The data type of the result of the functional method call,
+&quot;i. e. the return value of the called function method, is arbitrary.
+&quot;A check is made for the type-dependent initial value.
+AND check_is_supplied( )
+&quot;It is basically the short form of such a predicate expression:
+AND check_is_supplied( ) IS NOT INITIAL
+
+&quot;Boolean Functions
+&quot;Determine the truth value of a logical expression specified as an argument;
+&quot;the return value has a data type dependent on the function and expresses
+&quot;the truth value of the logical expression with a value of this type.
+
+&quot;Function boolc: Returns a single-character character string of the type string.
+&quot;If the logical expression is true, X is returned. False: A blank is returned.
+&quot;Not to be compared with the constants abap_true and abap_false in relational expressions,
+&quot;since the latter convert from c to string and ignore any blanks. Note: If the logical
+&quot;expression is false, the result of boolc does not meet the condition IS INITIAL since
+&quot;a blank and no empty string is returned. If this is desired, the function xsdbool
+&quot;can be used instead of boolc.
+AND boolc( check_is_supplied( ) ) = &#x27;X&#x27;
+
+&quot;Result has the same ABAP type as abap_bool.
+AND xsdbool( check_is_supplied( ) ) = abap_true
+
+&quot;Examples for possible operands
+
+&quot;Data objects as shown in the examples above
+AND 2 = 2
+AND num = 2
+
+&quot;Built-in functions
+AND to_upper( flag ) = &#x27;X&#x27;
+AND NOT to_lower( flag ) = &#x27;X&#x27;
+
+&quot;Numeric functions
+AND ipow( base = num exp = 2 ) = 4
+
+&quot;Functional methods
+&quot;Assume such a method exists having one return value
+AND addition( num1 = 1 num2 = 1 ) = 2
+
+&quot;Calculation expressions
+AND 4 - 3 + 1 = num
+
+&quot;String expressions
+AND `ha` &amp;&amp; `llo` = &lt;fs&gt;
+
+&quot;Constructor expression
+AND VALUE i( ) = 0
+AND VALUE string_table( ( `a` ) ( `b` ) ( `c` ) ) = str_table
+
+&quot;Table expression
+AND str_table[ 2 ] = `b`.
+
+  ... &quot;All of the logical expressions are true.
+
+ELSE.
+
+  ... &quot;At least one of the logical expressions is false.
+
+ENDIF.</code></pre>
+<div class="note">[!NOTE] Logical expressions and functions can also be used in other ABAP statements.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Control Structures</h2>
+<h3><code>IF</code> Statements</h3>
+<ul>
+<li>As already shown above, <code>IF</code> statements define statement blocks that can be included in <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenbranch_glosry.htm">branches</a>.</li>
+<li>The statement blocks are executed depending on conditions.</li>
+<li>A maximum of one statement block is executed.</li>
+<li>The check is carried out from top to bottom. The statement block after the first logical expression that is true is executed.</li>
+<li>If none of the logical expressions are true, the statement block after the <code>ELSE</code> statement is executed.</li>
+<li><code>ELSE</code> and <code>ELSEIF</code> statements are optional. However, it is recommended that you specify an <code>ELSE</code> so that at least one statement block is executed.</li>
+<li>If the end of the executed statement block is reached or if no statement block has been executed, the processing is continued after <code>ENDIF.</code>.</li>
+</ul>
+<pre><code>DATA(abap) = `ABAP`.
+FIND `AB` IN abap.
+IF sy-subrc = 0.
+  &quot;found
+  ...
+ELSE.
+  &quot;not found
+  ...
+ENDIF.
+
+&quot;IF statement with multiple included ELSEIF statements
+DATA(current_utc_time) = cl_abap_context_info=&gt;get_system_time( ).
+DATA greetings TYPE string.
+
+IF current_utc_time BETWEEN &#x27;050000&#x27; AND &#x27;115959&#x27;.
+  greetings = |Good morning, it&#x27;s { current_utc_time TIME = ISO }.|.
+ELSEIF current_utc_time BETWEEN &#x27;120000&#x27; AND &#x27;175959&#x27;.
+  greetings = |Good afternoon, it&#x27;s { current_utc_time TIME = ISO }.|.
+ELSEIF current_utc_time BETWEEN &#x27;180000&#x27; AND &#x27;215959&#x27;.
+  greetings =  |Good evening, it&#x27;s { current_utc_time TIME = ISO }.|.
+ELSE.
+  greetings = |Good night, it&#x27;s { current_utc_time TIME = ISO }.|.
+ENDIF.
+</code></pre>
+<pre><code>DATA(num) = 1.
+DATA(flag) = &#x27;X&#x27;.
+
+IF num = 1.
+
+  IF flag = &#x27;X&#x27;.
+   ...
+   ELSE.
+    ...
+  ENDIF.
+
+ELSE.
+
+  ... &quot;statement block, e. g.
+      &quot;ASSERT 1 = 0.
+      &quot;Not to be executed in this example.
+
+ENDIF.</code></pre>
+<p>Control structures can be nested.</p>
+<div class="note">[!NOTE] - Control structures can be nested. It is recommended that you do not include more than 5 nested control structures since the code will get really hard to understand. Better go for outsourcing functionality into methods to reduce nested control structures. - Keep the number of consecutive control structures low. - If you are convinced that a specified logical expression must always be true, you might include a statement like `ASSERT 1 = 0.` to go sure - as implied in the example's `ELSE` statement above. However, an `ELSE` statement that is never executed might be a hint that logical expressions might partly be redundant.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Excursion: <code>COND</code> Operator</h4>
+<ul>
+<li>The conditional operator <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconditional_expression_cond.htm"><code>COND</code></a> can also be used to implement branches in operand positions that are based on logical expressions.</li>
+<li>Such conditional expressions have a result that is dependent on the logical expressions.</li>
+<li>The result&#x27;s data type is specified after <code>COND</code> right before the first parenthesis. It can also be the <code>#</code> character as a symbol for the operand type if the type can be derived from the context.</li>
+<li>All operands specified after <code>THEN</code> must be convertible to the result&#x27;s data type.</li>
+<li>See also the <a href="05_Constructor_Expressions.md">Constructor Expressions</a> cheat sheet for more information and examples.</li>
+</ul>
+<pre><code>DATA greetings_cond TYPE string.
+DATA(current_utc_time_cond) = cl_abap_context_info=&gt;get_system_time( ).
+greetings_cond = COND #( WHEN current_utc_time_cond BETWEEN &#x27;050000&#x27; AND &#x27;115959&#x27; THEN |Good morning, it&#x27;s { current_utc_time_cond TIME = ISO }.|
+                         WHEN current_utc_time_cond BETWEEN &#x27;120000&#x27; AND &#x27;175959&#x27; THEN |Good afternoon, it&#x27;s { current_utc_time_cond TIME = ISO }.|
+                         WHEN current_utc_time_cond BETWEEN &#x27;180000&#x27; AND &#x27;215959&#x27; THEN |Good evening, it&#x27;s { current_utc_time_cond TIME = ISO }.|
+                         ELSE |Good night, it&#x27;s { current_utc_time_cond TIME = ISO }.| ).
+</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3><code>CASE</code>: Case Distinctions</h3>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcase.htm"><code>CASE</code></a> statements are used for case distinctions.</li>
+<li>Such statements can also contain multiple statement blocks of which a maximum of one is executed depending on the value of the operand specified after <code>CASE</code>.</li>
+<li>The check is carried out from top to bottom. If the content of an operand specified after <code>WHEN</code> matches the content specified after <code>CASE</code>, the statement block is executed. Constant values should be specified as operands.</li>
+<li>The <code>WHEN</code> statement can include more than one operand using the syntax <code>WHEN op1 OR op2 OR op3 ...</code>.</li>
+<li>If no matches are found, the statement block is executed after the statement <code>WHEN OTHERS.</code> which is optional.</li>
+<li>If the end of the executed statement block is reached or no statement block is executed, the processing continues after <code>ENDCASE.</code>.</li>
+</ul>
+<pre><code>&quot;Getting a random number
+DATA(random_num) = cl_abap_random_int=&gt;create( seed = cl_abap_random=&gt;seed( )
+                                               min  = 1
+                                               max  = 5 )-&gt;get_next( ).
+DATA num TYPE string.
+
+CASE random_num.
+  WHEN 1.
+    num = `The number is 1.`.
+  WHEN 2.
+    num = `The number is 2.`.
+  WHEN 3 OR 4.
+    num = `The number is either 3 or 4.`.
+  WHEN OTHERS.
+    num = `The number is not between 1 and 4.`.
+ENDCASE.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Control Structures Using CASE TYPE OF</h4>
+<p>Special control structure introduced by <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcase_type.htm"><code>CASE TYPE OF</code></a>: Checks the type of object reference variables. An object reference variable with the static type of a class or an interface must be specified after <code>CASE TYPE OF</code>.</p>
+<pre><code>&quot;The example shows the retrieval of type information at runtime (RTTI).
+&quot;For more information on RTTI, refer to the Dynamic Programming cheat
+&quot;sheet. The result of the method call is a type description object
+&quot;that points to one of the classes specified.
+DATA stringtab TYPE TABLE OF string WITH EMPTY KEY.
+DATA(type_description) = cl_abap_typedescr=&gt;describe_by_data( stringtab ).
+
+CASE TYPE OF type_description.
+  WHEN TYPE cl_abap_elemdescr.
+    ...
+  WHEN TYPE cl_abap_refdescr.
+    ...
+  WHEN TYPE cl_abap_structdescr.
+    ...
+  WHEN TYPE cl_abap_tabledescr.
+    &quot;This is the class the type description object points to for 
+    &quot;the example data object.
+    ...
+  WHEN OTHERS.
+    ...
+ENDCASE.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Excursion: <code>SWITCH</code> Operator</h4>
+<p>The conditional operator <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenconditional_expression_switch.htm"><code>SWITCH</code></a> can also be used to make case distinctions in operand positions. As mentioned above for <code>COND</code>, a result is constructed. The same criteria apply for <code>SWITCH</code> as for <code>COND</code> regarding the type. See also the ABAP Keyword Documentation and the <a href="05_Constructor_Expressions.md">Constructor Expressions</a> cheat sheet for more information and examples.</p>
+<pre><code>DATA(random_num_switch) = cl_abap_random_int=&gt;create( seed = cl_abap_random=&gt;seed( )
+                                                      min  = 1
+                                                      max  = 5 )-&gt;get_next( ).
+
+DATA(num_switch) = SWITCH #( random_num_switch
+                             WHEN 1 THEN `The number is 1.`
+                             WHEN 2 THEN `The number is 2.`
+                             WHEN 3 OR 4 THEN `The number is either 3 or 4.`
+                             ELSE `The number is not between 1 and 4.` ).</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Loops</h3>
+<h4><code>DO</code>: Unconditional Loops</h4>
+<ul>
+<li>A statement block specified between <code>DO</code> and <code>ENDDO</code> is carried out multiple times.</li>
+<li>The loop is exited when a statement to terminate the loop is reached (<code>EXIT</code>, see further down). Otherwise, it is executed endlessly.</li>
+</ul>
+<pre><code>  DATA str_a TYPE string.
+  DO.
+    str_a &amp;&amp;= sy-index.
+    IF sy-index = 5.
+      EXIT.
+    ENDIF.
+  ENDDO.
+  &quot;str_a: 12345</code></pre>
+<ul>
+<li>To restrict the loop passes, you can use the <code>TIMES</code> addition and specify the maximum number of loop passes.</li>
+</ul>
+<pre><code>  DATA str_b TYPE string.
+  DO 9 TIMES.
+    str_b &amp;&amp;= sy-index.
+  ENDDO.
+  &quot;str_b: 123456789</code></pre>
+<ul>
+<li>The value of the system field <code>sy-index</code> within the statement block contains the number of previous loop passes including the current pass.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Interrupting and Exiting Loops</h4>
+<p>The following ABAP keywords are available for interrupting and exiting loops:</p>
+<table>
+<thead><tr>
+<th>Keyword</th>
+<th>Syntax</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcontinue.htm"><code>CONTINUE</code></a></td>
+<td><code>CONTINUE.</code></td>
+<td>The current loop pass is terminated immediately and the program flow is continued with the next loop pass.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapcheck_loop.htm"><code>CHECK</code></a></td>
+<td><code>CHECK log_exp.</code></td>
+<td>Conditional termination. If the logical expression <code>log_exp</code> is false, the current loop pass is terminated immediately and the program flow is continued with the next loop pass.</td>
+</tr>
+<tr>
+<td><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapexit_loop.htm"><code>EXIT</code></a></td>
+<td><code>EXIT.</code></td>
+<td>The loop is terminated completely. The program flow resumes after the closing statement of the loop.</td>
+</tr>
+</tbody>
+</table>
+<pre><code>*&amp;---------------------------------------------------------------------*
+*&amp; CONTINUE
+*&amp;---------------------------------------------------------------------*
+
+DATA str_c TYPE string.
+DO 15 TIMES.
+  &quot;Continue with the next loop pass if the number is even
+  &quot;Terminating the loop pass and continuing with the next loop pass if the condition specified
+  &quot;with the IF statement is true (if the number is even)
+  IF sy-index MOD 2 = 0.
+    CONTINUE.
+  ELSE.
+    str_c = |{ str_c }{ COND #( WHEN str_c IS NOT INITIAL THEN `, ` ) }{ sy-index }|.
+  ENDIF.
+ENDDO.
+&quot;str_c: 1, 3, 5, 7, 9, 11, 13, 15
+
+*&amp;---------------------------------------------------------------------*
+*&amp; CHECK
+*&amp;---------------------------------------------------------------------*
+
+DATA str_d TYPE string.
+DO 15 TIMES.
+  &quot;Terminating the loop pass and continuing with the next loop pass if the condition is
+  &quot;true (if the number is odd)
+  CHECK sy-index MOD 2 = 0.
+  str_d = |{ str_d }{ COND #( WHEN str_d IS NOT INITIAL THEN `, ` ) }{ sy-index }|.
+ENDDO.
+&quot;str_d: 2, 4, 6, 8, 10, 12, 14
+
+&quot;CHECK NOT
+DATA str_e TYPE string.
+DO 15 TIMES.
+  &quot;Here, it is checked whether the sy-index value is not an even number
+  CHECK NOT sy-index MOD 2 = 0.
+  str_e = |{ str_e }{ COND #( WHEN str_e IS NOT INITIAL THEN `, ` ) }{ sy-index }|.
+ENDDO.
+&quot;str_e: 1, 3, 5, 7, 9, 11, 13, 15
+
+*&amp;---------------------------------------------------------------------*
+*&amp; EXIT
+*&amp;---------------------------------------------------------------------*
+
+DATA str_f TYPE string.
+DO 15 TIMES.
+  &quot;Terminating the entire loop
+  IF sy-index = 7.
+    EXIT.
+  ELSE.
+    str_f = |{ str_f }{ COND #( WHEN str_f IS NOT INITIAL THEN `, ` ) }{ sy-index }|.
+  ENDIF.
+ENDDO.
+&quot;str_f: 1, 2, 3, 4, 5, 6</code></pre>
+<div class="note">[!NOTE] - [`RETURN`](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapreturn.htm) statements immediately terminate the current processing block. However, according to the [guidelines (F1 docu for standard ABAP)](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenexit_procedure_guidl.htm), `RETURN` should only be used to exit procedures like methods. - `EXIT` and `CHECK` might also be used for exiting procedures. However, their use inside loops is recommended.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4><code>WHILE</code>: Conditional Loops</h4>
+<ul>
+<li>Conditional loops introduced by <code>WHILE</code> and ended by <code>ENDWHILE</code> are repeated as long as a logical expression is true.</li>
+<li>These loops can also be exited using the statements mentioned above.</li>
+<li>Like in <code>DO</code> loops, the system field <code>sy-index</code> contains the number of previous loop passes including the current pass.</li>
+<li>Also check the conditional loops options using <code>FOR ... WHILE</code> with a constructor expression in the <a href="05_Constructor_Expressions.md">Constructor Expressions</a> cheat sheet.</li>
+</ul>
+<pre><code>DATA int_itab TYPE TABLE OF i WITH EMPTY KEY.
+
+WHILE lines( int_itab ) = 5.
+  int_itab = VALUE #( BASE int_itab ( sy-index ) ).
+ENDWHILE.
+
+&quot;Content of int_itab:
+&quot;1
+&quot;2
+&quot;3
+&quot;4
+&quot;5
+
+&quot;The following string replacement example uses a WHILE
+&quot;statement for demo purposes - instead of using a REPLACE ALL 
+&quot;OCCURRENCES statement or the replace function to replace all 
+&quot;occurrences. The WHILE loop exits when there are no more &#x27;#&#x27; 
+&quot;characters to be replaced in the string. The value of the data 
+&quot;object, which is checked in the logical expression, is then set 
+&quot;to make the logical expression false.
+DATA(str_to_replace) = `Lorem#ipsum#dolor#sit#amet`.
+DATA(subrc) = 0.
+DATA(counter) = 0.
+WHILE subrc = 0.
+  REPLACE `#` IN str_to_replace WITH ` `.
+  IF sy-subrc &lt;&gt; 0.
+    subrc = 1.
+  ELSE.
+    counter += 1.
+  ENDIF.
+ENDWHILE.
+
+&quot;str_to_replace: Lorem ipsum dolor sit amet
+&quot;counter: 4</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Loops Across Tables</h4>
+<p>Further keywords for defining loops are as follows. They are not dealt with here since they are covered in other ABAP cheat sheets.</p>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abaploop_at_itab.htm"><code>LOOP ... ENDLOOP</code></a> statements are meant for loops across internal tables. See also the cheat sheet on internal tables.</li>
+<li>In contrast to the loops above, the system field <code>sy-index</code> is not set. Instead, the system field <code>sy-tabix</code> is set and which contains the table index of the current table line in the loop pass.</li>
+<li><code>FOR</code> loops: You can also realize loops using iteration expressions with <code>VALUE</code> and <code>REDUCE</code>. For more information, refer to the <a href="05_Constructor_Expressions.md">Constructor Expressions</a> cheat sheet.</li>
+<li><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapselect.htm"><code>SELECT ... ENDSELECT</code></a> statements loop across the result set of a data source access. See also the cheat sheet on ABAP SQL.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Calling Procedures</h2>
+<p><a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenprocedure_glosry.htm">Procedures</a> can be explicitly called within an <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_program_glosry.htm">ABAP program</a>, thereby influencing the program flow logic.</p>
+<h3>Methods of Classes</h3>
+<p>In modern ABAP programs, classes and methods are the way to go for modularization purposes (instead of <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenfunction_module_glosry.htm">function modules</a> and <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abensubroutine_glosry.htm">subroutines</a> in most cases; the latter is only available in Standard ABAP). Note that methods and calling methods are described in the context of the <a href="04_ABAP_Object_Orientation.md">ABAP Object Orientation cheat sheet</a>. Find more information and examples there.</p>
+<div class="note">[!NOTE] Find information on [events](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenevent_glosry.htm) in the [ABAP Object Orientation](04_ABAP_Object_Orientation.md#events) cheat sheet.</div>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Function Modules</h3>
+<div class="note">[!NOTE] In [ABAP for Cloud Development](https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenabap_for_cloud_dev_glosry.htm), function modules can technically be used, but they are not recommended for new implementations. Many features available in standard ABAP, such as various includes, are not compatible with ABAP for Cloud Development (for example, [dynpro](https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abendynpro_glosry.htm)-related functionality).</div>
+<p>Function modules ...</p>
+<pre><code>  FUNCTION ... .
+    ...
+  ENDFUNCTION.</code></pre>
+<ul>
+<li>are reusable cross-program procedures (i.e. processing blocks callable via an ABAP statement).</li>
+<li>are organized and implemented within function pools.</li>
+<li>are the precursor technology of public methods in global classes.</li>
+<li>are implemented (i.e. their functionality is implemented) between the following statements:</li>
+<li>have a parameter interface that&#x27;s similar to ABAP classes. Note: In ADT, the parameter interface of a function module is defined in ABAP pseudo syntax. These statements are not compiled like genuine ABAP statements and are not subject to the regular ABAP syntax checks. Find more information on the parameter interface in the <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abenfunction.htm">ABAP Keyword Documentation</a>.</li>
+<li>are called using <code>CALL FUNCTION</code> statements.</li>
+</ul>
+<p>Function pools ...</p>
+<ul>
+<li>serve as a framework for function modules and are organized in include programs.</li>
+<li>The main program is implicitly created, while subordinate include programs are automatically generated, each with specific prefixes and suffixes.</li>
+<li>can contain multiple function modules. They can hold up to 99 function modules.</li>
+<li>are loaded when one of its function modules is called.</li>
+<li>are introduced by the <code>FUNCTION-POOL</code> statement.</li>
+</ul>
+<h4>Calling Function Modules</h4>
+<pre><code>CALL FUNCTION func params.</code></pre>
+<p>Syntax to call function modules:</p>
+<ul>
+<li><code>func</code>: Character-like data object (for example, a literal) that contains the name of a function module in uppercase letters</li>
+<li>Since all function modules have unique names, there is no need to specify the function pool.</li>
+<li><code>params</code>: Parameter list or table</li>
+<li>Incorrectly provided function module names or parameters are not checked until runtime</li>
+<li>Unlike method calls, you cannot specify inline declarations as actual parameters.</li>
+<li>Regarding dynamic function module calls: Static and dynamic function module calls are syntactically identical. In a static call, the function module is specified as a character literal or a constant, with parameters passed statically. Conversely, in a dynamic call, the function module&#x27;s name is specified in a variable, with parameters passed dynamically. For dynamic calls, you can utilize the <code>CL_ABAP_DYN_PRG</code> as shown in the <a href="22_Released_ABAP_Classes.md">Released ABAP Classes</a> cheat sheet.</li>
+<li>When a function module call is made, the system field <code>sy-subrc</code> is set to 0. If a non-class-based exception is raised and a value is assigned to handle it, this value updates <code>sy-subrc</code>.</li>
+</ul>
+<pre><code>&quot;Handling non-class-based exception
+DATA it TYPE some_table_type.
+CALL FUNCTION &#x27;SOME_FUNCTION_MODULE_A&#x27;
+  EXPORTING
+    param_a = &#x27;somevalue&#x27;
+  IMPORTING
+    param_b = it
+  EXCEPTIONS
+    not_found = 4.
+
+IF sy-subrc &lt;&gt; 0.
+   ...
+ENDIF.
+
+&quot;Handling class-based exception
+TRY.
+    CALL FUNCTION &#x27;SOME_FUNCTION_MODULE_B&#x27;
+      EXPORTING
+          param_c = &#x27;somevalue&#x27;
+      IMPORTING
+          param_d = it.
+  CATCH cx_some_exception INTO DATA(exc).
+    ...
+ENDTRY.
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Dynamic function method calls
+*&amp;---------------------------------------------------------------------*
+
+&quot;Function module name contained in a variable
+DATA(func_name) = &#x27;SOME_FUNCTION_MODULE_C&#x27;.
+
+CALL FUNCTION func_name ...
+
+&quot;For parameters in a parameter table, use the addition ... PARAMETER-TABLE ptab ...
+&quot;ptab: Sorted table of type abap_func_parmbind_tab (line type abap_func_parmbind)
+&quot;For exceptions, use the addition ... EXCEPTION-TABLE ...
+DATA(ptab) = VALUE abap_func_parmbind_tab( ... ).
+
+CALL FUNCTION func_name PARAMETER-TABLE ptab.</code></pre>
+<p>Example function module calls with parameter passing and exception handling:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Function Module Example</h4>
+<p>Expand the following section to get a simple executable example:</p>
+<p>&lt;details&gt; &lt;summary&gt;🟢 Click to expand for more information and example code&lt;/summary&gt; &lt;!-- --&gt;</p>
+<p>The following example demonstrates a simple function module:</p>
+<ul>
+<li>The implementation in the function module represents a calculator. In the function module call, you specify two numbers and an operator.</li>
+<li>The example includes static function module calls, and a dynamic function module call using the <code>PARAMETER-TABLE</code> addition.</li>
+</ul>
+<p>To get started quickly with copiable code snippets, you can proceed as follows.</p>
+<ul>
+<li>In ADT, you can, for example, right-click the package in which you want to create the function pool and module.</li>
+<li>Choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>In the input field, enter <em>function</em>, select <em>ABAP Function Group</em> (which is the function pool), and choose <em>Next</em>.</li>
+<li>Make entries in the <em>Name</em> (e.g. <code>Z_DEMO_ABAP_TEST_FUNC_P</code>) and <em>Description Field</em> (e.g. <em>Demo function group</em>) fields, and choose <em>Next</em>.</li>
+<li>If prompted, select a transport request and choose <em>Finish</em>.</li>
+</ul>
+<ul>
+<li>In ADT, you can, for example, right-click the package in which you have created the function pool.</li>
+<li>Choose <em>New -&gt; Other ABAP Repository Object</em>.</li>
+<li>In the input field, enter <em>function</em>, select <em>ABAP Function Module</em>, and choose <em>Next</em>.</li>
+<li>Make entries in the <em>Name</em> (e.g. <code>Z_DEMO_ABAP_TEST_FUNC_M</code>), <em>Description Field</em> (e.g. <em>Demo function module</em>), and <em>Function Group</em> (e.g. the previously created <code>Z_DEMO_ABAP_TEST_FUNC_P</code>) fields and choose <em>Next</em>.</li>
+<li>If prompted, select a transport request and choose <em>Finish</em>.</li>
+<li>The function module is created and can be filled with an implementation.</li>
+<li>You can copy and paste the code below to have a sample implementation.</li>
+</ul>
+<ul>
+<li>In ADT, you can run the class by choosing <em>F9</em>. Some output is displayed in the ADT console, demonstrating the result of function module calls.</li>
+</ul>
+<ol>
+</ol>
+<p>Code for the function module <code>Z_DEMO_ABAP_TEST_FUNC_M</code>:</p>
+<pre><code>FUNCTION z_demo_abap_test_func_m
+  IMPORTING
+    num1 TYPE i
+    operator TYPE string
+    num2 TYPE i
+  EXPORTING
+    result TYPE string
+  RAISING
+    cx_sy_arithmetic_error.
+
+
+
+
+
+  &quot;ABAP &#x27;allows&#x27; zero division if both operands are 0.
+  IF num1 = 0 AND num2 = 0.
+    RAISE EXCEPTION TYPE cx_sy_zerodivide.
+  ENDIF.
+
+  DATA op TYPE c LENGTH 1.
+  op = condense( val = operator to = `` ).
+
+  result = SWITCH #( op
+                     WHEN &#x27;+&#x27; THEN |{ num1 } + { num2 } = { num1 + num2 STYLE = SIMPLE }|
+                     WHEN &#x27;-&#x27; THEN |{ num1 } - { num2 } = { num1 - num2 STYLE = SIMPLE }|
+                     WHEN &#x27;*&#x27; THEN |{ num1 } * { num2 } = { num1 * num2 STYLE = SIMPLE }|
+                     WHEN &#x27;/&#x27; THEN |{ num1 } / { num2 } = { CONV decfloat34( num1 / num2 ) STYLE = SIMPLE }|
+                     ELSE `Use one of the operators + - * /` ).
+
+ENDFUNCTION.</code></pre>
+<p>Code for the class <code>ZCL_DEMO_ABAP_FUNC_TEST</code> that can be run in ADT choosing <em>F9</em>:</p>
+<pre><code>CLASS zcl_demo_abap_func_test DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zcl_demo_abap_func_test IMPLEMENTATION.
+  METHOD if_oo_adt_classrun~main.
+
+    &quot;Calling a function module
+    &quot;For handling a possible wrong operator in the example, you may want to implement
+    &quot;a separate exception. The simple example just catches calculation errors
+    &quot;and uses a data object of type string for storing the calculation result.
+    DATA calculation_result TYPE string.
+
+    TRY.
+        CALL FUNCTION &#x27;Z_DEMO_ABAP_TEST_FUNC_M&#x27;
+          EXPORTING
+            num1     = 1
+            operator = `+`
+            num2     = 2
+          IMPORTING
+            result   = calculation_result.
+      CATCH cx_sy_arithmetic_error INTO DATA(exc).
+        calculation_result = exc-&gt;get_text( ).
+    ENDTRY.
+
+    out-&gt;write( calculation_result &amp;&amp; |\n\n| ).
+
+    &quot;More calculation examples; calculations are stored in a table
+    DATA calculation_result_table TYPE string_table.
+
+    TYPES: BEGIN OF s,
+             num1     TYPE i,
+             operator TYPE string,
+             num2     TYPE i,
+           END OF s,
+           it_type TYPE TABLE OF s WITH EMPTY KEY.
+    DATA(itab) = VALUE it_type( ( num1 = 10 operator = `-` num2 = 12 )
+                                ( num1 = 15 operator = `*` num2 = 4 )
+                                ( num1 = 7 operator = `/` num2 = 2 )
+                                ( num1 = 1 operator = `/` num2 = 0 )
+                                ( num1 = 0 operator = `/` num2 = 0 )
+                                ( num1 = 9999999 operator = `*` num2 = 9999999 ) ).
+
+    LOOP AT itab INTO DATA(wa).
+      TRY.
+          CALL FUNCTION &#x27;Z_DEMO_ABAP_TEST_FUNC_M&#x27;
+            EXPORTING
+              num1     = wa-num1
+              operator = wa-operator
+              num2     = wa-num2
+            IMPORTING
+              result   = calculation_result.
+        CATCH cx_sy_arithmetic_error INTO exc.
+          calculation_result = |{ wa-num1 } { wa-operator } { wa-num2 } -&gt; Error: { exc-&gt;get_text( ) }|.
+      ENDTRY.
+      APPEND calculation_result TO calculation_result_table.
+    ENDLOOP.
+
+    out-&gt;write( calculation_result_table ).
+    out-&gt;write( |\n\n\n| ).
+
+*&amp;---------------------------------------------------------------------*
+*&amp; Dynamic function module call
+*&amp;---------------------------------------------------------------------*
+
+    DATA(func_name) = &#x27;Z_DEMO_ABAP_TEST_FUNC_M&#x27;.
+    DATA(ptab) = VALUE abap_func_parmbind_tab( ( name  = &#x27;NUM1&#x27;
+                                                 kind  = abap_func_exporting
+                                                 value = NEW i( 3 ) )
+                                               ( name  = &#x27;OPERATOR&#x27;
+                                                 kind  = abap_func_exporting
+                                                 value = NEW string( `+` ) )
+                                               ( name  = &#x27;NUM2&#x27;
+                                                 kind  = abap_func_exporting
+                                                 value = NEW i( 5 ) )
+                                               ( name  = &#x27;RESULT&#x27;
+                                                 kind  = abap_func_importing
+                                                 value = NEW string( ) ) ).
+
+    CALL FUNCTION func_name PARAMETER-TABLE ptab.
+
+    out-&gt;write( data = ptab name = `ptab` ).
+  ENDMETHOD.
+
+ENDCLASS.</code></pre>
+<p>&lt;/details&gt;</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h4>Special Function Modules in Standard ABAP</h4>
+<p>Special function modules exist in <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenstandard_abap_glosry.htm">Standard ABAP</a> (and not in ABAP for Cloud Development), and for which special properties are specified in the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenfunction_builder_glosry.htm">Function Builder</a>:</p>
+<ul>
+<li>Update function modules:</li>
+<li>Typically contain modifying database accesses and can be used to register for later execution</li>
+<li>Are called with <code>CALL FUNCTION ... IN UPDATE TASK</code></li>
+<li>Find more information <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapcall_function_update.htm">here</a> (note that the links in this section refer to the ABAP Keyword Documentation for Standard ABAP) and in the SAP LUW cheat sheet</li>
+<li>Remote function calls (RFC):</li>
+<li>Remote-enabled function modules are called using the <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenrfc_interface_glosry.htm">RFC interface</a></li>
+<li>You can make these calls within the same system or a different one, determined by an <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenrfc_dest_glosry.htm">RFC destination</a>. Find more information <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenrfc.htm">here</a></li>
+<li>The calls can be ...</li>
+<li>synchronous (<a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abensrfc_glosry.htm">sRFC</a>): The calling program waits for the remote function to finish processing; called using <code>CALL FUNCTION ... DESTINATION</code></li>
+<li>asynchronous (<a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenarfc_glosry.htm">aRFC</a>): A remote function call that proceeds without waiting for the remotely called function to finish processing; called using <code>CALL FUNCTION ... STARTING NEW TASK</code></li>
+<li>transactional</li>
+<li>transactional calls (<a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abentrfc_2_glosry.htm">tRFC</a>) are related to the concept of the SAP LUW. tRFC is considered obsolete.</li>
+<li>Successor technology: Background RFC (<a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenbgrfc_glosry.htm">bgRFC</a>), executed with the statement <code>CALL FUNCTION ... IN BACKGROUND UNIT</code>. Find more information <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abapcall_function_background_unit.htm">here</a>.</li>
+<li>The newer background Processing Framework (<a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenbgpf_glosry.htm">bgPF</a>) encapsulates bgRFC to execute time-consuming methods asynchronously. Find more information <a href="https://help.sap.com/docs/abap-cloud/abap-concepts/background-processing-framework">here</a>.</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Subroutines in Standard ABAP</h3>
+<ul>
+<li>Obsolete procedures you may find in older ABAP programs. Before ABAP Objects was introduced, subroutines were mainly used for local modularization.</li>
+<li>They are implemented between the statements <code>FORM</code> and <code>ENDFORM</code>.</li>
+<li>Called using <code>PERFORM</code> statements</li>
+<li>Find more information <a href="https://help.sap.com/doc/abapdocu_latest_index_htm/latest/en-US/index.htm?file=abenabap_subroutines.htm">here</a>. The <a href="17_SAP_LUW.md">SAP LUW cheat sheet example</a> also uses subroutines in the context of an SAP LUW (these subroutines are called using <code>PERFORM ... ON COMMIT</code> and <code>... ROLLBACK</code>).</li>
+</ul>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h3>Excursion: RETURN</h3>
+<p>Regarding the exiting of procedures, note the hint mentioned above. The use of <code>RETURN</code> is recommended.</p>
+<pre><code>res = some_expr.
+RETURN.</code></pre>
+<pre><code>RETURN some_expr.</code></pre>
+<p><code>RETURN</code> terminates the current processing block. Usually, the statement is intended for leaving processing blocks early. In case of functional methods, i.e. methods that have one returning parameter, the <code>RETURN</code> statement can also be specified with an expression. In doing so, the following statement can also be specified as follows: Here, the expression result is passed to the returning parameter without naming it explicitly. As an expression, you can specify a constructor expression (and using type inference with <code>#</code> means using the type of the returning parameter).</p>
+<pre><code>CLASS zcl_demo_abap DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC.
+  PUBLIC SECTION.
+    INTERFACES: if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+    CLASS-METHODS multiply
+      IMPORTING num1          TYPE i
+                num2          TYPE i
+      RETURNING VALUE(result) TYPE i.
+ENDCLASS.
+CLASS zcl_demo_abap IMPLEMENTATION.
+  METHOD if_oo_adt_classrun~main.
+    DATA(res1) = multiply( num1 = 2 num2 = 3 ).
+    DATA(res2) = multiply( num1 = 10 num2 = 10 ).
+    DATA(res3) = multiply( num1 = 99999999 num2 = 99999999 ).
+    out-&gt;write( res1 ). &quot;6
+    out-&gt;write( res2 ). &quot;100
+    out-&gt;write( res3 ). &quot;0
+  ENDMETHOD.
+  METHOD multiply.
+    TRY.        
+        &quot;result = num1 * num2.
+        RETURN num1 * num2.
+      CATCH cx_sy_arithmetic_error.
+        RETURN VALUE #( ).
+    ENDTRY.
+  ENDMETHOD.
+ENDCLASS.</code></pre>
+<p>Example:</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Interrupting the Program Execution with WAIT UP TO Statements</h2>
+<p>Using <a href="https://help.sap.com/doc/abapdocu_cp_index_htm/CLOUD/en-US/index.htm?file=abapwait_up_to.htm"><code>WAIT UP TO</code></a> statements, you can interrupt the program execution by a specified number of seconds.</p>
+<pre><code>&quot;First retrieval of the current time stamp
+DATA(ts1) = utclong_current( ).
+...
+WAIT UP TO 1 SECONDS.
+...
+WAIT UP TO 3 SECONDS.
+...
+&quot;Second retrieval of the current time stamp after the WAIT statements
+DATA(ts2) = utclong_current( ).
+&quot;Calculating the difference of the two time stamps
+cl_abap_utclong=&gt;diff( EXPORTING high     = ts2
+                                 low      = ts1
+                        IMPORTING seconds = DATA(seconds) ).
+
+&quot;The value of the &#x27;seconds&#x27; data object holding the delta of the time stamps 
+&quot;should be greater than 4.
+ASSERT seconds &gt; 4.</code></pre>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Exceptions and Runtime Errors</h2>
+<p>Exceptions and runtime errors affect the program flow. Find an overview in the <a href="27_Exceptions.md">Exceptions and Runtime Errors</a> cheat sheet.</p>
+<p>&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;#top&quot;&gt;⬆️ back to top&lt;/a&gt;&lt;/p&gt;</p>
+<h2>Executable Example</h2>
+<p><a href="./src/zcl_demo_abap_prog_flow_logic.clas.abap">zcl_demo_abap_prog_flow_logic</a></p>
+<div class="note">[!NOTE] - The executable example ... - covers the following topics, among others: - Control structures with `IF`, `CASE`, and `TRY` - Excursions: `COND` and `SWITCH` operators - Expressions and functions for conditions - Predicate expression with `IS SUPPLIED` - Loops with `DO`, `WHILE`, and `LOOP` - Terminating loop passes - Handling exceptions - The steps to import and run the code are outlined [here](README.md#-getting-started-with-the-examples). - [Disclaimer](./README.md#%EF%B8%8F-disclaimer)</div>
+</body>
+</html>
